@@ -37,6 +37,9 @@ book:
         - data_on_display_ls04_histograms.qmd
         - data_on_display_ls05_boxplots.qmd
 
+resources:
+  - CNAME
+
 format:
   PrettyPDF-pdf:
     keep-tex: true
