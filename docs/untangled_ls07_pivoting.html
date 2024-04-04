@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 15&nbsp; Pivoting data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./untangled_ls08_advanced_pivoting.html" rel="next">
+<link href="./untangled_ls06_group_by_other_verbs.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./untangled_ls01_select_rename.html">Data Manipulation</a></li><li class="breadcrumb-item"><a href="./untangled_ls07_pivoting.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">15.1</span> Intro</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">15.2</span> Learning Objectives</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">15.3</span> Packages</a></li>
+  <li><a href="#what-do-wide-and-long-mean" id="toc-what-do-wide-and-long-mean" class="nav-link" data-scroll-target="#what-do-wide-and-long-mean"><span class="header-section-number">15.4</span> What do wide and long mean?</a></li>
+  <li><a href="#when-should-you-use-wide-vs-long-data" id="toc-when-should-you-use-wide-vs-long-data" class="nav-link" data-scroll-target="#when-should-you-use-wide-vs-long-data"><span class="header-section-number">15.5</span> When should you use wide vs long data?</a></li>
+  <li><a href="#pivoting-wide-to-long" id="toc-pivoting-wide-to-long" class="nav-link" data-scroll-target="#pivoting-wide-to-long"><span class="header-section-number">15.6</span> Pivoting wide to long</a></li>
+  <li><a href="#pivoting-long-to-wide" id="toc-pivoting-long-to-wide" class="nav-link" data-scroll-target="#pivoting-long-to-wide"><span class="header-section-number">15.7</span> Pivoting long to wide</a></li>
+  <li><a href="#why-is-long-data-better-for-analysis" id="toc-why-is-long-data-better-for-analysis" class="nav-link" data-scroll-target="#why-is-long-data-better-for-analysis"><span class="header-section-number">15.8</span> Why is long data better for analysis?</a>
+  <ul class="collapse">
+  <li><a href="#filtering-grouped-data" id="toc-filtering-grouped-data" class="nav-link" data-scroll-target="#filtering-grouped-data"><span class="header-section-number">15.8.1</span> Filtering grouped data</a></li>
+  <li><a href="#summarizing-grouped-data" id="toc-summarizing-grouped-data" class="nav-link" data-scroll-target="#summarizing-grouped-data"><span class="header-section-number">15.8.2</span> Summarizing grouped data</a></li>
+  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting"><span class="header-section-number">15.8.3</span> Plotting</a></li>
+  </ul></li>
+  <li><a href="#pivoting-can-be-hard" id="toc-pivoting-can-be-hard" class="nav-link" data-scroll-target="#pivoting-can-be-hard"><span class="header-section-number">15.9</span> Pivoting can be hard</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">15.10</span> Wrap up</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions"><span class="header-section-number">15.11</span> Solutions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="intro" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="intro"><span class="header-section-number">15.1</span> Intro</h2>
+<p>Pivoting or reshaping is a data manipulation technique that involves re-orienting the rows and columns of a dataset. This is sometimes required to make data easier to analyze, or to make data easier to understand.</p>
+<p>In this lesson, we will cover how to effectively pivot data using <code>pivot_longer()</code> and <code>pivot_wider()</code> from the <code>tidyr</code> package.</p>
+</section>
+<section id="learning-objectives" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">15.2</span> Learning Objectives</h2>
+<ul>
+<li><p>You will understand what wide data format is, and what long data format is.</p></li>
+<li><p>You will know how to pivot long data to wide data using <code>pivot_long()</code></p></li>
+<li><p>You will know how to pivot wide data to long data using <code>pivot_wider()</code></p></li>
+<li><p>You will understand why the long data format is easier for plotting and wrangling in R.</p></li>
+</ul>
+</section>
+<section id="packages" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="packages"><span class="header-section-number">15.3</span> Packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, outbreaks, janitor, rio, here, knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="what-do-wide-and-long-mean" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="what-do-wide-and-long-mean"><span class="header-section-number">15.4</span> What do wide and long mean?</h2>
+<p>The terms wide and long are best understood in the context of example datasets. Let’s take a look at some now.</p>
+<p>Imagine that you have three patients from whom you collect blood pressure data on three days.</p>
+<p>You can record the data in a wide format like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/wide_patients.jpg" class="img-fluid figure-img" width="500"></p>
+<figcaption class="figure-caption">Fig: wide dataset for a timeseries of patients.</figcaption>
+</figure>
+</div>
+<p>Or you could record the data in a long format as so :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/long_patients.jpg" class="img-fluid figure-img" width="200"></p>
+<figcaption class="figure-caption">Fig: long dataset for a timeseries of patients.</figcaption>
+</figure>
+</div>
+<p>Take a minute to study the two datasets to make sure you understand the relationship between them.</p>
+<p>In the wide dataset, each observational unit (each patient) occupies only one row. And each measurement. (blood pressure day 1, blood pressure day 2…) is in a separate column.</p>
+<p>In the long dataset, on the other hand, each observational unit (each patient) occupies multiple rows, with one row for each measurement.</p>
+<hr>
+<p>Here is another example with mock data, in which the observational units are countries:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/long_country.png" class="img-fluid figure-img" width="200"></p>
+<figcaption class="figure-caption">Fig: long dataset where the unique observation unit is a country.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/wide_country.png" class="img-fluid figure-img" width="300"></p>
+<figcaption class="figure-caption">Fig: the equivalent wide dataset</figcaption>
+</figure>
+</div>
+<hr>
+<p>The examples above are both time-series datasets, because the measurements are repeated across time (day 1, day 2 and so on). But the concepts of long and wide are relevant to other kinds of data too, not just time series data.</p>
+<p>Consider the example below, showing the number of patients in different units of three hospitals:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/wide_wards.jpg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Fig: wide dataset, where each hospital is an observational unit</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/long_wards.jpg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Fig: the equivalent long dataset</figcaption>
+</figure>
+</div>
+<p>In the wide dataset, again, each observational unit (each hospital) occupies only one row, with the repeated measurements for that unit (number of patients in different rooms) spread across two columns.</p>
+<p>In the long dataset, each observational unit is spread over multiple lines.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Vocab">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vocab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The “observational units”, sometimes called “statistical units” of a dataset are the primary entities or items described by the columns in that dataset.</p>
+<p>In the first example, the observational/statistical units were patients; in the second example, countries, and in the third example, hospitals.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the mock dataset created below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>temperatures <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">country =</span> <span class="fu">c</span>(<span class="st">"Sweden"</span>, <span class="st">"Denmark"</span>, <span class="st">"Norway"</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">avgtemp.1994 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avgtemp.1995 =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avgtemp.1996 =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>temperatures</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  country avgtemp.1994 avgtemp.1995 avgtemp.1996
+1  Sweden            1            3            5
+2 Denmark            2            4            6
+3  Norway            3            5            7</code></pre>
+</div>
+</div>
+<p>Is this data in a wide or long format?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Enter the string "wide" or the string "long"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Assign your answer to the object Q_data_type</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Q_data_type <span class="ot">&lt;-</span> <span class="st">"_____"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Then run the provided CHECK function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="when-should-you-use-wide-vs-long-data" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="when-should-you-use-wide-vs-long-data"><span class="header-section-number">15.5</span> When should you use wide vs long data?</h2>
+<p>The truth is: it really depends on what you want to do! The wide format is great for <em>displaying data</em> because it’s easy to visually compare values this way. Long data is best for some data analysis tasks, like grouping and plotting.</p>
+<p>It will therefore be essential for you to know how to switch from one format to the other easily. Switching from the wide to the long format, or the other way around, is called <strong>pivoting</strong>.</p>
+</section>
+<section id="pivoting-wide-to-long" class="level2" data-number="15.6">
+<h2 data-number="15.6" class="anchored" data-anchor-id="pivoting-wide-to-long"><span class="header-section-number">15.6</span> Pivoting wide to long</h2>
+<p>To practice pivoting from a wide to a long format, we’ll consider data from <a href="https://www.gapminder.org">Gapminder</a> on the <strong>number of infant deaths</strong> in specific countries over several years.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://www.gapminder.org">Gapminder</a> is a good source of rich, health-relevant datasets. You are encouraged to peruse their collections.</p>
+</div>
+</div>
+<p>Below, we read in and view this data on infant deaths:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/gapminder_infant_deaths.csv"</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  country              x2010 x2011 x2012 x2013 x2014 x2015
+  &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 Afghanistan          74600 72000 69500 67100 64800 62700
+2 Angola               79100 76400 73700 71200 69000 67200
+3 Albania                420   384   354   331   313   301
+4 United Arab Emirates   683   687   686   681   672   658
+5 Argentina             9550  9230  8860  8480  8100  7720</code></pre>
+</div>
+</div>
+<p>We observe that each observational unit (each country) occupies only one row, with the repeated measurements spread out across multiple columns. Hence this dataset is in a wide format.</p>
+<p>To convert to a long format, we can use a convenient function <code>pivot_longer</code>. Within <code>pivot_longer</code> we define, using the <code>cols</code> argument, which columns we want to pivot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> x2010<span class="sc">:</span>x2015)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  country     name  value
+  &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt;
+1 Afghanistan x2010 74600
+2 Afghanistan x2011 72000
+3 Afghanistan x2012 69500
+4 Afghanistan x2013 67100
+5 Afghanistan x2014 64800</code></pre>
+</div>
+</div>
+<p>Very easy!</p>
+<p>We can observe that the resulting long format dataset has each country occupying 5 rows (one per year between 2010 and 2015). The years are indicated in the variable <code>names</code>, and all the death count values occupy a single variable, <code>values</code>.</p>
+<p>A useful way to think about this transformation is that the infant deaths values used to be in matrix format (2 dimensions; 2D), but they are now in a vector format (1 dimension; 1D).</p>
+<p>This long dataset will be much more handy for many data analysis procedures.</p>
+<p>As a good data analyst, you may find the default names of the variables, <code>names</code> and <code>values</code>, to be unsatisfactory; they do not adequately describe what the variables contain. Not to worry; you can give custom column names, using the arguments <code>names_to</code> and <code>values_to</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> x2010<span class="sc">:</span>x2015,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"year"</span>, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"deaths_count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  country     year  deaths_count
+  &lt;chr&gt;       &lt;chr&gt;        &lt;dbl&gt;
+1 Afghanistan x2010        74600
+2 Afghanistan x2011        72000
+3 Afghanistan x2012        69500
+4 Afghanistan x2013        67100
+5 Afghanistan x2014        64800</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notice that the long format is more informative than the original wide format. Why? Because of the informative column name “deaths_count”. In the wide format, unless the CSV is named something like <code>count_infant_deaths</code>, or someone tells you “these are the counts of infant deaths per country and per year”, you have no idea what the numbers in the cells represent.</p>
+</div>
+</div>
+<p>You may also want to remove the <code>x</code> in front of each year. This can be achieved with the convenient <code>parse_number()</code> function from the {readr} package (part of the tidyverse), which extracts numbers from strings:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> x2010<span class="sc">:</span>x2015,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"year"</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"deaths_count"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">parse_number</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  country      year deaths_count
+  &lt;chr&gt;       &lt;dbl&gt;        &lt;dbl&gt;
+1 Afghanistan  2010        74600
+2 Afghanistan  2011        72000
+3 Afghanistan  2012        69500
+4 Afghanistan  2013        67100
+5 Afghanistan  2014        64800</code></pre>
+</div>
+</div>
+<p>Great! Now we have a clean, long dataset.</p>
+<p>For later use, let’s now store this data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_long <span class="ot">&lt;-</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> x2010<span class="sc">:</span>x2015,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"year"</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"deaths_count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For this practice question, you will use the <code>euro_births_wide</code> dataset from <a href="https://ec.europa.eu/eurostat/databrowser/view/tps00204/default/table">Eurostat</a>. It shows the annual number of births in 50 European countries:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>euro_births_wide <span class="ot">&lt;-</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/euro_births_wide.csv"</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(euro_births_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  country   x2015  x2016  x2017  x2018  x2019  x2020  x2021
+  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 Belgium  122274 121896 119690 118319 117695 114350 118349
+2 Bulgaria  65950  64984  63955  62197  61538  59086  58678
+3 Czechia  110764 112663 114405 114036 112231 110200 111793
+4 Denmark   58205  61614  61397  61476  61167  60937  63473
+5 Germany  737575 792141 784901 787523 778090 773144 795492</code></pre>
+</div>
+</div>
+<p>The data is in a wide format. Convert it to a long format data frame that has the following column names: “country”, “year” and “births_count”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Q_euro_births_long <span class="ot">&lt;-</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  euro_births_wide <span class="sc">%&gt;%</span> <span class="co"># complete the code with your answer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pivoting-long-to-wide" class="level2" data-number="15.7">
+<h2 data-number="15.7" class="anchored" data-anchor-id="pivoting-long-to-wide"><span class="header-section-number">15.7</span> Pivoting long to wide</h2>
+<p>Now you know how to pivot from wide to long with <code>pivot_longer()</code>. How about going the other way, from long to wide? For this, you can use the fittingly-named <code>pivot_wider()</code> function.</p>
+<p>But before we consider how to use this function to manipulate long data, let’s first consider <em>where</em> you’re likely to run into long data.</p>
+<p>While wide data tends to come from external sources (as we have seen above), long data on the other hand, is likely to be created by <em>you</em> while data wrangling, especially in the course of <code>group_by()</code>-<code>summarize()</code> manipulations.</p>
+<p>Let’s see an example of this now.</p>
+<p>We will use a dataset of patient records from an Ebola outbreak in Sierra Leone in 2014. Below we extract this data from the {outbreaks} package and perform some simplifying manipulations on it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ebola <span class="ot">&lt;-</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  outbreaks<span class="sc">::</span>ebola_sierraleone_2014 <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">year</span>(date_of_onset)) <span class="sc">%&gt;%</span> <span class="co"># extract the year from the date</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">patient_id =</span> id, district, <span class="at">year_of_onset =</span> year) <span class="co"># select and rename</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ebola</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  patient_id district year_of_onset
+       &lt;int&gt; &lt;fct&gt;            &lt;dbl&gt;
+1          1 Kailahun          2014
+2          2 Kailahun          2014
+3          3 Kailahun          2014
+4          4 Kailahun          2014
+5          5 Kailahun          2014</code></pre>
+</div>
+</div>
+<p>Each row corresponds to one patient, and we have each patient’s id number, their district and the year in which they contracted Ebola.</p>
+<p>Now, consider the following grouped summary of the <code>ebola</code> dataset, which counts the number of patients recorded in each district in each year:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cases_per_district_per_year <span class="ot">&lt;-</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  ebola <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(district) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(year_of_onset) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>cases_per_district_per_year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  district year_of_onset     n
+  &lt;fct&gt;            &lt;dbl&gt; &lt;int&gt;
+1 Bo                2014   397
+2 Bo                2015   209
+3 Bombali           2014  1070
+4 Bombali           2015   120
+5 Bonthe            2014     7</code></pre>
+</div>
+</div>
+<p>The output of this grouped operation is a quintessentially “long” dataset! Each observational unit (each district) occupies multiple rows (two rows per district, to be exact), with one row for each measurement (each year).</p>
+<p>So, as you now see, long data often can arrive as an output of grouped summaries, among other data manipulations.</p>
+<p>Now, let’s see how to convert such long data into a wide format with <code>pivot_wider()</code>.</p>
+<p>The code is quite straightforward:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cases_per_district_per_year <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> n, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> year_of_onset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  district `2014` `2015`
+  &lt;fct&gt;     &lt;int&gt;  &lt;int&gt;
+1 Bo          397    209
+2 Bombali    1070    120
+3 Bonthe        7     77
+4 Kailahun    535     35
+5 Kambia      127    294</code></pre>
+</div>
+</div>
+<p>As you can see, <code>pivot_wider()</code> has two important arguments: <code>values_from</code> and <code>names_from</code>. The <code>values_from</code> argument defines which values will become the core of the wide data format (in other words: which 1D vector will become a 2D matrix). In our case, these values were in the <code>n</code> variable. And <code>names_from</code> identifies which variable to use to define column names in the wide format. In our case, this was the <code>year_of_onset</code> variable.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You might also want to have the <em>years</em> be your primary observational/statistical unit, with each year occupying one row. This can be carried out similarly to the above example, but the <code>district</code> variable will be provided as an argument to <code>names_from</code>, instead of <code>year_of_onset</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cases_per_district_per_year <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> n, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> district)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 15
+  year_of_onset    Bo Bombali Bonthe Kailahun Kambia Kenema Koinadugu  Kono
+          &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;  &lt;int&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;     &lt;int&gt; &lt;int&gt;
+1          2014   397    1070      7      535    127    641       142   328
+2          2015   209     120     77       35    294    139        15   223
+# ℹ 6 more variables: Moyamba &lt;int&gt;, `Port Loko` &lt;int&gt;, Pujehun &lt;int&gt;,
+#   Tonkolili &lt;int&gt;, `Western Rural` &lt;int&gt;, `Western Urban` &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Here the unique observation units (our rows) are now the years (2014, 2015).</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>population</code> dataset from the <code>tidyr</code> package shows the populations of 219 countries over time.</p>
+<p>Pivot this data into a wide format. Your answer should have 20 columns and 219 rows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Q_population_widen <span class="ot">&lt;-</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span>population</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="why-is-long-data-better-for-analysis" class="level2" data-number="15.8">
+<h2 data-number="15.8" class="anchored" data-anchor-id="why-is-long-data-better-for-analysis"><span class="header-section-number">15.8</span> Why is long data better for analysis?</h2>
+<p>Above we mentioned that long data is best for a majority of data analysis tasks. Now we can justify why. In the sections below, we will go through a few common operations that you will need to do with long data, in each case you will observe that similar manipulations on wide data would be quite tricky.</p>
+<section id="filtering-grouped-data" class="level3" data-number="15.8.1">
+<h3 data-number="15.8.1" class="anchored" data-anchor-id="filtering-grouped-data"><span class="header-section-number">15.8.1</span> Filtering grouped data</h3>
+<p>First, let’s talk about filtering grouped data, which is very easy to do on long data, but difficult on wide data.</p>
+<p>Here is an example with the infant deaths dataset. Imagine that we want to answer the following question: <strong>For each country, which year had the highest number of child deaths?</strong></p>
+<p>This is how we would do so with the long format of the data :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_long <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(deaths_count <span class="sc">==</span> <span class="fu">max</span>(deaths_count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   country [5]
+  country              year  deaths_count
+  &lt;chr&gt;                &lt;chr&gt;        &lt;dbl&gt;
+1 Afghanistan          x2010        74600
+2 Angola               x2010        79100
+3 Albania              x2010          420
+4 United Arab Emirates x2011          687
+5 Argentina            x2010         9550</code></pre>
+</div>
+</div>
+<p>Easy right? We can easily see, for example, that Afghanistan had its highest infant death count in 2010, and the United Arab Emirates had its highest death count in 2011.</p>
+<hr>
+<p>If you wanted to do the same thing with wide data, it would be much more difficult. You could try an approach like this with <code>rowwise()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">max_count =</span> <span class="fu">max</span>(x2010, x2011, x2012, x2013, x2014, x2015))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+# Rowwise: 
+  country              x2010 x2011 x2012 x2013 x2014 x2015 max_count
+  &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 Afghanistan          74600 72000 69500 67100 64800 62700     74600
+2 Angola               79100 76400 73700 71200 69000 67200     79100
+3 Albania                420   384   354   331   313   301       420
+4 United Arab Emirates   683   687   686   681   672   658       687
+5 Argentina             9550  9230  8860  8480  8100  7720      9550</code></pre>
+</div>
+</div>
+<p>This almost works—we have, for each country, we have the maximum number of child deaths reported—but we still don’t know which year is attached to that value in <code>max_count</code>. We would have to take that value and index it back to its respective year column somehow… what a hassle! There are solutions to find this but all are very painful. Why make your life complicated when you can just pivot to long format and use the beauty of <code>group_by()</code> and <code>filter()</code>?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here we used a special {dplyr} function: <code>rowwise()</code>. <code>rowwise()</code> allows further operations to be applied <em>per-row</em> . It is equivalent to creating one group for each row (<code>group_by(row_number())</code>).</p>
+<p>Without <code>rowwise()</code> you would get this :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">max_count =</span> <span class="fu">max</span>(x2010, x2011, x2012, x2013, x2014, x2015))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  country              x2010 x2011 x2012 x2013 x2014 x2015 max_count
+  &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 Afghanistan          74600 72000 69500 67100 64800 62700   1170000
+2 Angola               79100 76400 73700 71200 69000 67200   1170000
+3 Albania                420   384   354   331   313   301   1170000
+4 United Arab Emirates   683   687   686   681   672   658   1170000
+5 Argentina             9550  9230  8860  8480  8100  7720   1170000</code></pre>
+</div>
+</div>
+<p>…the maximum count over ALL rows in the dataset.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For this practice question, you will perform a grouped filter on the long format <code>population</code> dataset from the <code>tidyr</code> package. Use <code>group_by()</code> and <code>filter()</code> to obtain a dataset that shows the maximum population recorded for each country, and the year in which that maximum population was recorded.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Q_population_max <span class="ot">&lt;-</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  population </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summarizing-grouped-data" class="level3" data-number="15.8.2">
+<h3 data-number="15.8.2" class="anchored" data-anchor-id="summarizing-grouped-data"><span class="header-section-number">15.8.2</span> Summarizing grouped data</h3>
+<p>Grouped summaries are also difficult to perform on wide data. For example, considering again the <code>infant_deaths_long</code> dataset, if you want to ask: <strong>For each country, what was the mean number of infant deaths and the standard deviation (variation) in deaths ?</strong></p>
+<p>With long data it is simple:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_long <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_deaths =</span> <span class="fu">mean</span>(deaths_count), </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_deaths =</span> <span class="fu">sd</span>(deaths_count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  country             mean_deaths sd_deaths
+  &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;
+1 Afghanistan             68450    4466.   
+2 Albania                   350.     45.2  
+3 Algeria                 21033.    484.   
+4 Angola                  72767.   4513.   
+5 Antigua and Barbuda        10.7     0.816</code></pre>
+</div>
+</div>
+<p>With wide data, on the other hand, finding the mean is less intuitive…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_deaths =</span> <span class="fu">sum</span>(x2010, x2011, x2012, </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                           x2013, x2014, x2015, <span class="at">na.rm =</span> T)<span class="sc">/</span><span class="dv">6</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+# Rowwise: 
+  country              x2010 x2011 x2012 x2013 x2014 x2015 mean_deaths
+  &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
+1 Afghanistan          74600 72000 69500 67100 64800 62700      68450 
+2 Angola               79100 76400 73700 71200 69000 67200      72767.
+3 Albania                420   384   354   331   313   301        350.
+4 United Arab Emirates   683   687   686   681   672   658        678.
+5 Argentina             9550  9230  8860  8480  8100  7720       8657.</code></pre>
+</div>
+</div>
+<p>And finding the standard deviation would be very difficult. (We can’t think of any way to achieve this, actually.)</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For this practice question, you will again work with the long format <code>population</code> dataset from the <code>tidyr</code> package.</p>
+<p>Use <code>group_by()</code> and <code>summarize()</code> to obtain, for each country, the maximum reported population, the minimum reported population, and the mean reported population across the years available in the data. Your data should have four columns, “country”, “max_population”, “min_population” and “mean_population”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Q_population_summaries <span class="ot">&lt;-</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  population</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting" class="level3" data-number="15.8.3">
+<h3 data-number="15.8.3" class="anchored" data-anchor-id="plotting"><span class="header-section-number">15.8.3</span> Plotting</h3>
+<p>Finally, one of the data analysis tasks that is MOST hindered by wide formats is plotting. You may not yet have any prior knowledge of {ggplot} and how to plot so we will see the figures without going in depth with the code. What you need to remember is: many plots with with ggplot are also only possible with long-format data</p>
+<p>Consider again the infant_deaths data <code>infant_deaths_long</code>. We will plot the number of deaths for Belgium per year:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_long <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Belgium"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> deaths_count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="untangled_ls07_pivoting_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The plotting works because we can give the variable <code>year</code> for the x-axis. In the long format, <code>year</code> is a variable variable of its own. In the wide format, each there would be no such variable to pass to the x axis.</p>
+<hr>
+<p>Another plot that would not be possible without a long format:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>infant_deaths_long <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">30</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> deaths_count, <span class="at">group =</span> country, <span class="at">color =</span> country)) <span class="sc">+</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="untangled_ls07_pivoting_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Once again, the reason is the same, we need to tell the plot what to use as an x-axis and a y-axis and it is necessary to have these variables in their own columns (as organized in the long format).</p>
+</section>
+</section>
+<section id="pivoting-can-be-hard" class="level2" data-number="15.9">
+<h2 data-number="15.9" class="anchored" data-anchor-id="pivoting-can-be-hard"><span class="header-section-number">15.9</span> Pivoting can be hard</h2>
+<p>We have mostly looked at very simple examples of pivoting here, but in the wild, pivoting can be very difficult to do accurately. This is because the data you are working with may not have all the information necessary for a successful pivot, or the data may contain errors that prevent you from pivoting correctly.</p>
+<p>When you run into such cases, we recommend looking at the <a href="https://tidyr.tidyverse.org/articles/pivot.html">official documentation</a> of pivoting from the <code>tidyr</code> team, as it is quite rich in examples. You could also post your questions about pivoting on forums like Stack Overflow.</p>
+</section>
+<section id="wrap-up" class="level2" data-number="15.10">
+<h2 data-number="15.10" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">15.10</span> Wrap up</h2>
+<p>You have now explored different datasets and how they are either in a long or wide format. In the end, it’s just about how you present the information. Sometimes one format will be more convenient, and other times another could be best. Now, you are no longer limited by the format of your data: don’t like it? change it !</p>
+<p></p><div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/kendavidn.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/kendavidn/" target="_blank">KENE DAVID NWOSU </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>Passionate about world improvement</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/lolovanco.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/lolovanco" target="_blank">LAURE VANCAUWENBERGHE </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>A firm believer in science for good, striving to ally programming, health and education</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/camille.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/camille/" target="_blank">CAMILLE BEATRICE VALERA </a> </name> <br> <label>Project Manager and Scientific Collaborator, The GRAPH Network</label> <p></p></li></ul></div><p></p>
+</section>
+<section id="solutions" class="level2" data-number="15.11">
+<h2 data-number="15.11" class="anchored" data-anchor-id="solutions"><span class="header-section-number">15.11</span> Solutions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_data_type</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  "Wide"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_euro_births_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  euro_births_wide %&gt;% 
+      pivot_longer(2:8, 
+                   names_to = "year", 
+                   values_to = "births_count")</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_population_widen</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  tidyr::population %&gt;% 
+      pivot_wider(names_from = year,
+                   values_from = population)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_population_max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  tidyr::population %&gt;% 
+    group_by(country) %&gt;% 
+    filter(population == max(population)) %&gt;% 
+    ungroup()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_population_summaries</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  population %&gt;% 
+  group_by(country) %&gt;% 
+  summarise(max_population = max(population), 
+            min_population = min(population), 
+            mean_population = mean(population))</code></pre>
+</div>
+</div>
+<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution Share Alike</a> license. <a class="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">     <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./untangled_ls06_group_by_other_verbs.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./untangled_ls08_advanced_pivoting.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

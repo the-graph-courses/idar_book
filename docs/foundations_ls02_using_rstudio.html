@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 2&nbsp; Using RStudio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundations_ls03_coding_basics.html" rel="next">
+<link href="./foundations_ls01_setting_up.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="site_libs/proj4js-2.3.15/proj4.js"></script>
+<link href="site_libs/highcharts-9.3.1/css/motion.css" rel="stylesheet">
+<script src="site_libs/highcharts-9.3.1/highcharts.js"></script>
+<script src="site_libs/highcharts-9.3.1/highcharts-3d.js"></script>
+<script src="site_libs/highcharts-9.3.1/highcharts-more.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/stock.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/map.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/data.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/exporting.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/offline-exporting.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/drilldown.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/item-series.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/overlapping-datalabels.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/annotations.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/export-data.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/funnel.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/heatmap.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/treemap.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/sankey.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/dependency-wheel.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/organization.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/solid-gauge.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/streamgraph.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/sunburst.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/vector.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/wordcloud.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/xrange.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/tilemap.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/venn.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/gantt.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/timeline.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/parallel-coordinates.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/bullet.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/coloraxis.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/dumbbell.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/lollipop.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/series-label.js"></script>
+<script src="site_libs/highcharts-9.3.1/plugins/motion.js"></script>
+<script src="site_libs/highcharts-9.3.1/custom/reset.js"></script>
+<script src="site_libs/highcharts-9.3.1/modules/boost.js"></script>
+<script src="site_libs/highchart-binding-0.9.4/highchart.js"></script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundations_ls01_setting_up.html">Foundations</a></li><li class="breadcrumb-item"><a href="./foundations_ls02_using_rstudio.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">2.1</span> Learning objectives</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2.2</span> Introduction</a></li>
+  <li><a href="#the-rstudio-panes" id="toc-the-rstudio-panes" class="nav-link" data-scroll-target="#the-rstudio-panes"><span class="header-section-number">2.3</span> The RStudio panes</a>
+  <ul class="collapse">
+  <li><a href="#sourceeditor" id="toc-sourceeditor" class="nav-link" data-scroll-target="#sourceeditor"><span class="header-section-number">2.3.1</span> Source/Editor</a></li>
+  <li><a href="#console" id="toc-console" class="nav-link" data-scroll-target="#console"><span class="header-section-number">2.3.2</span> Console</a></li>
+  <li><a href="#environment" id="toc-environment" class="nav-link" data-scroll-target="#environment"><span class="header-section-number">2.3.3</span> Environment</a></li>
+  <li><a href="#history" id="toc-history" class="nav-link" data-scroll-target="#history"><span class="header-section-number">2.3.4</span> History</a></li>
+  <li><a href="#files" id="toc-files" class="nav-link" data-scroll-target="#files"><span class="header-section-number">2.3.5</span> Files</a></li>
+  <li><a href="#plots" id="toc-plots" class="nav-link" data-scroll-target="#plots"><span class="header-section-number">2.3.6</span> Plots</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">2.3.7</span> Packages</a></li>
+  <li><a href="#viewer" id="toc-viewer" class="nav-link" data-scroll-target="#viewer"><span class="header-section-number">2.3.8</span> Viewer</a></li>
+  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help"><span class="header-section-number">2.3.9</span> Help</a></li>
+  </ul></li>
+  <li><a href="#rstudio-options" id="toc-rstudio-options" class="nav-link" data-scroll-target="#rstudio-options"><span class="header-section-number">2.4</span> RStudio options</a></li>
+  <li><a href="#command-palette" id="toc-command-palette" class="nav-link" data-scroll-target="#command-palette"><span class="header-section-number">2.5</span> Command palette</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up"><span class="header-section-number">2.6</span> Wrapping up</a></li>
+  <li><a href="#further-resources" id="toc-further-resources" class="nav-link" data-scroll-target="#further-resources"><span class="header-section-number">2.7</span> Further resources</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">2.8</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<section id="learning-objectives" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">2.1</span> Learning objectives</h2>
+<ol type="1">
+<li><p>You can identify and use the following tabs in RStudio: Source, Console, Environment, History, Files, Plots, Packages, Help and Viewer.</p></li>
+<li><p>You can modify RStudio’s interface options to suit your needs.</p></li>
+</ol>
+</section>
+<section id="introduction" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2.2</span> Introduction</h2>
+<p>Now that you have access to R &amp; RStudio, let’s go on a quick tour of the RStudio interface, your digital home for a long time to come.</p>
+<p>We will cover a lot of territory quickly. Do not panic. You are not expected to remember it all this. Rather, you will see these topics again and again throughout the course, and you will naturally assimilate them that way.</p>
+<p>You can also refer back to this lesson as you progress.</p>
+<p>The goal here is simply to make you aware of the tools at your disposal within RStudio.</p>
+<hr>
+<p>To get started, you need to open the RStudio application:</p>
+<ul>
+<li><p>If you are working with RStudio Cloud, go to <a href="https://rstudio.cloud">rstudio.cloud</a>, log in, then click on the “r_intro” project that you created in the last lesson. (If you do not see this, simply create a new R project using the “New Project” icon at the top right).</p></li>
+<li><p>If you are working on your local computer, go to your applications folder and double click on the RStudio icon. Or you search for this application from your Start Menu (Windows), or through Spotlight (Mac).</p></li>
+</ul>
+</section>
+<section id="the-rstudio-panes" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="the-rstudio-panes"><span class="header-section-number">2.3</span> The RStudio panes</h2>
+<p>By default, RStudio is arranged into four window panes.</p>
+<p>If you only see three panes, open a new script with <code>File &gt; New File &gt; R Script</code> . This should reveal one more pane.</p>
+<p><img src="images/new_r_script.jpg" width="451" height="71"></p>
+<p>Before we go any further, we will rearrange these panes to improve the usability of the interface.</p>
+<p>To do this, in the RStudio menu at the top of the screen, select <code>Tools &gt; Global Options</code> to bring up RStudio’s options. Then under <code>Pane Layout</code>, adjust the pane arrangement. The arrangement we recommend is shown below.</p>
+<p><img src="images/rstudio_pane_layout.png" class="img-fluid" width="403"></p>
+<p>At the top left pane is the Source tab, and at the top right pane, you should have the Console tab.</p>
+<p>Then at the bottom left pane, no tab options should checked—this section should be left empty, with the drop-down saying just “TabSet”.</p>
+<p>Finally, at the bottom right pane, you should check the following tabs: Environment, History, Files, Plots, Packages, Help and Viewer.</p>
+<hr>
+<p>Great, now you should have an RStudio window that looks something like this:</p>
+<p><img src="images/rstudio_four_panes_rearranged.jpg" class="img-fluid" width="488"></p>
+<hr>
+<p>The top-left pane is where you will do most of the coding. Make this larger by clicking on its maximize icon:</p>
+<p><img src="images/maximize_icon.jpg" class="img-fluid" width="353"></p>
+<hr>
+<p>Note that you can drag the bar that separates the window panes to resize them.</p>
+<p><img src="images/drag_to_resize_panes.png" class="img-fluid" width="231"></p>
+<hr>
+<p>Now let’s look at each of the RStudio tabs one by one. Below is a summary image of what we will discuss:</p>
+<p><img src="images/rstudio_panes_detail.jpg" class="img-fluid"></p>
+<section id="sourceeditor" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="sourceeditor"><span class="header-section-number">2.3.1</span> Source/Editor</h3>
+<p><img src="images/rstudio_editor.png" class="img-fluid" width="469"></p>
+<p>The source or editor is where your R “scripts” go. A script is a text document where you write and save code.</p>
+<p>Because this is where you will do most of your coding, it is important that you have a lot of visual space. That is why we rearranged the RStudio pane layout above—to give the Editor more space.</p>
+<p>Now let’s see how to use this Editor.</p>
+<hr>
+<p>First, <strong>open a new script</strong> under the File menu if one is not yet open: <code>File &gt; New File &gt; R Script</code>. In the script, type the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"excited for R!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To <strong>run code</strong>, place your cursor anywhere in the code, then hit <code>Command</code> + <code>Enter</code> on macOS, or <code>Control</code> + <code>Enter</code> on Windows.</p>
+<p>This should send the code to the Console and run it.</p>
+<hr>
+<p>You can also <strong>run multiple lines at once</strong>. To try this, add a second line to your script, so that it now reads:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"excited for R!"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"and RStudio!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now drag your cursor to highlight both lines and press <code>Command</code>/<code>Control</code> + <code>Enter</code>.</p>
+<p>To <strong>run the entire script</strong>, you can use <code>Command</code>/<code>Control</code> + <code>A</code> to select all code, then press <code>Command</code>/<code>Control</code> + <code>Enter</code>. Try this now. Deselect your code, then try to the shortcut to select all.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is also a ‘Run’ button at the top right of the source panel ( <img src="images/run_icon.jpg" class="img-fluid" width="37"> ), with which you can run code (either the current line, or all highlighted code). But you should try to use the keyboard shortcut instead.</p>
+</div>
+</div>
+<hr>
+<p>To <strong>open the script in a new window</strong>, click on the third icon in the toolbar directly above the script.</p>
+<p><img src="images/rstudio_pop_out_icon.png" class="img-fluid" width="329"></p>
+<p>To put the window back, click on the same button on the now-external window.</p>
+<hr>
+<p>Next, <strong>save the script.</strong> Hit <code>Command</code>/<code>Control</code> + <code>S</code> to bring up the Save dialog box. Give it a file name like “rstudio_intro”.</p>
+<ul>
+<li><p>If you are working with RStudio cloud, the file will be saved in your project folder.</p></li>
+<li><p>If you are working on your local computer, save the file in an easy-to-locate part of your computer, perhaps your desktop. (Later on we will think about the “proper” way to organize and store scripts).</p></li>
+</ul>
+<hr>
+<p>You can <strong>view data frames</strong> (which are like spreadsheets in R) in the same pane. To observe this, type and run the code below on a new line in your script:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(women)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice the uppercase “V” in <code>View()</code>.</p>
+<p><img src="images/rstudio_view_data_frame.png" class="img-fluid" width="234"></p>
+<p><code>women</code> is the name of a dataset that comes loaded with R. It gives the average heights and weights for American women aged 30–39.</p>
+<p>You can click on the “x” icon to the right of the “women” tab to close this data viewer.</p>
+<hr>
+</section>
+<section id="console" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="console"><span class="header-section-number">2.3.2</span> Console</h3>
+<p>The <em>console</em>, at the bottom left, is where <strong>code is executed</strong>. You can type code directly here, but it will not be saved.</p>
+<p>Type a random piece of code (maybe a calculation like <code>3 + 3</code>) and press ‘Enter’.</p>
+<p><img src="images/rstudio_console.png" class="img-fluid" width="594"></p>
+<p>If you place your cursor on the last line of the console, and you press the <strong>up arrow</strong>, you can go back to the last code that was run. Keep pressing it to cycle to the previous lines.</p>
+<p>To run any of these previous lines, press <em>Enter</em>.</p>
+</section>
+<section id="environment" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="environment"><span class="header-section-number">2.3.3</span> Environment</h3>
+<p><img src="images/environment_tab.png" class="img-fluid" width="527"></p>
+<p>At the top right of the RStudio Window, you should see the <strong>Environment</strong> tab.</p>
+<p>The Environment tab shows datasets and other objects that are loaded into R’s working memory, or “workspace”.</p>
+<p>To explore this tab, let’s import a dataset into your environment from the web. Type the code below into your script and run it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ebola_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://tinyurl.com/ebola-data-sample"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You don’t need to understand exactly what the code above is doing for now. We just want to quickly show you the basic features of the Environment pane; we’ll look at data importing in detail later.</p>
+<p>Also, if you do not have active internet access, the code above will not run. You can skip this section and move to the “History” tab.</p>
+</div>
+</div>
+<p>You have now imported the dataset and stored it in an <em>object</em> named <code>ebola_data</code>. (You could have named the object anything you want.)</p>
+<p>Now that the dataset is stored by R, you should be able to see it in the Environment pane. If you click on the blue drop-down icon beside the object’s name in the Environment tab to reveal a summary.</p>
+<p><img src="images/rstudio_explore_object_dropdown.png" class="img-fluid" width="351"></p>
+<p>Try clicking directly on the <code>ebola_data</code> dataset from the Environment tab. This opens it in a ‘View’ tab.</p>
+<hr>
+<p>You can <strong>remove an object from the workspace</strong> with the <code>rm()</code> function. Type and run the following in a new line on your R script.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that the <code>ebola_data</code> object no longer shows up in your environment after having run that code.</p>
+<p>The broom icon, at the top of the Environment pane can also be used to clear your workspace.</p>
+<p><img src="images/broom_icon.png" class="img-fluid"></p>
+<p>To practice using it, try re-running the line above that imports the Ebola dataset, then clear the object using the broom icon.</p>
+</section>
+<section id="history" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="history"><span class="header-section-number">2.3.4</span> History</h3>
+<p>Next, the <strong>History</strong> tab shows previous commands you have run.</p>
+<p><img src="images/history_tab.png" class="img-fluid" width="470"></p>
+<p>You can click a line to highlight it, then send it to the console or to your script with the “To Console” and “To Source” icons at the top of this tab.</p>
+<p>To select multiple lines, use the “Shift-click” method: click the first item you want to select, then hold down the “Shift” key and click the last item you want to select.</p>
+<p>Finally, notice that there is a search bar at the top right of the History pane where you can search for past commands that you have run.</p>
+</section>
+<section id="files" class="level3" data-number="2.3.5">
+<h3 data-number="2.3.5" class="anchored" data-anchor-id="files"><span class="header-section-number">2.3.5</span> Files</h3>
+<p>Next, the <strong>Files</strong> tab. This shows the files and folders in the folder you are working in.</p>
+<p><img src="images/rstudio_files.png" class="img-fluid"></p>
+<p>The tab allows you to interact with your computer’s file system.</p>
+<p>Try playing with some of the buttons here, to see what they do. You should try at least the following:</p>
+<ul>
+<li><p>Make a new folder</p></li>
+<li><p>Delete that folder</p></li>
+<li><p>Make a new R Script</p></li>
+<li><p>Rename that script</p></li>
+</ul>
+</section>
+<section id="plots" class="level3" data-number="2.3.6">
+<h3 data-number="2.3.6" class="anchored" data-anchor-id="plots"><span class="header-section-number">2.3.6</span> Plots</h3>
+<p>Next, the <strong>Plots</strong> tab. This is where figures that are generated by R will show up. Try creating a simple plot with the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(women)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/rstudio_plots.png" class="img-fluid"></p>
+<p>That code creates a plot of the two variables in the <code>women</code> dataset. You should see this figure in the Plots tab.</p>
+<p>Now, test out the buttons at the top of this tab to explore what they do. In particular, try to export a plot to your computer.</p>
+</section>
+<section id="packages" class="level3" data-number="2.3.7">
+<h3 data-number="2.3.7" class="anchored" data-anchor-id="packages"><span class="header-section-number">2.3.7</span> Packages</h3>
+<p>Next, let’s look at the <strong>Packages</strong> tab.</p>
+<p><img src="images/packages_tab.png" class="img-fluid" width="419"></p>
+<p>Packages are collections of R code that extend the functionality of R. We will discuss packages in detail in a future lesson.</p>
+<p>For now, it is important to know that to use a package, you need to <em>install</em> then <em>load</em> it. Packages need to be installed only once, but must be loaded in each new R session.</p>
+<p>All the package names you see (in blue font) are packages that are installed on your system. And packages with a checkmark are packages which are <em>loaded</em> in the current session.</p>
+<p>You can install a package with the Install button of the Packages tab.</p>
+<p><img src="images/rstudio_install_package_icon.png" class="img-fluid" width="348"></p>
+<p>But it is better to install and load packages with R code, rather than the Install button. Let’s try this. Type and run the code below to install the {highcharter} package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"highcharter"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(highcharter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first line installs the package. The second line <em>loads</em> the package from your package library.</p>
+<p>Because you only need to install a package once, you can now remove the installation line from your script.</p>
+<hr>
+<p>Now that the {highcharter} package has been installed and loaded, you can use the functions that come in the package. To try this, type and run the code below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>highcharter<span class="sc">::</span><span class="fu">hchart</span>(women<span class="sc">$</span>weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo </code></pre>
+</div>
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6f419e037183144728f3" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-6f419e037183144728f3">{"x":{"hc_opts":{"chart":{"reflow":true,"zoomType":"x"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"tooltip":{"formatter":"function() { return  this.point.name + '<br/>' + this.y; }"},"series":[{"data":[{"x":110,"y":3,"name":"(100, 120]"},{"x":130,"y":6,"name":"(120, 140]"},{"x":150,"y":5,"name":"(140, 160]"},{"x":170,"y":1,"name":"(160, 180]"}],"type":"column","pointRange":20,"groupPadding":0,"pointPadding":0,"borderWidth":0}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":["hc_opts.tooltip.formatter"],"jsHooks":[]}</script>
+</div>
+</div>
+<p>This code uses the <code>hchart()</code> <em>function</em> from the {highcharter} package to plot an interactive histogram showing the distribution of weights in the <code>women</code> dataset.</p>
+<p>(Of course, you may not yet know what a function is. We’ll get to this soon.)</p>
+</section>
+<section id="viewer" class="level3" data-number="2.3.8">
+<h3 data-number="2.3.8" class="anchored" data-anchor-id="viewer"><span class="header-section-number">2.3.8</span> Viewer</h3>
+<p>Notice that the histogram above shows up in a <strong>Viewer</strong> tab. This tab allows you to preview HTML files and interactive objects.</p>
+</section>
+<section id="help" class="level3" data-number="2.3.9">
+<h3 data-number="2.3.9" class="anchored" data-anchor-id="help"><span class="header-section-number">2.3.9</span> Help</h3>
+<p>Lastly, the <strong>Help</strong> tab shows the documentation for different R objects. Try typing out and running each line below to see what this documentation looks like.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>?hchart</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>?women</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>?read.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/example_help_page.png" class="img-fluid" width="451"></p>
+<p>Help files are not always very easy to understand for beginners, but with time they will become more useful.</p>
+</section>
+</section>
+<section id="rstudio-options" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="rstudio-options"><span class="header-section-number">2.4</span> RStudio options</h2>
+<p>RStudio has a number of useful options for changing it’s look and functionality. Let’s try these. You may not understand all the changes made for now. That’s fine.</p>
+<p>In the RStudio menu at the top of the screen, select <code>Tools &gt; Global Options</code> to bring up RStudio’s options.</p>
+<ul>
+<li><p>Now, under <code>Appearance</code>, choose your ideal theme. (We like the “Crimson Editor” and “Tomorrow Night” themes.)</p>
+<p><img src="images/rstudio_themes.png" class="img-fluid" width="530"></p></li>
+<li><p>Under <code>Code &gt; Display</code>, check “Highlight R function calls”. What this does is give your R <em>functions</em> a unique color, improving readability. You will understand this later.</p></li>
+<li><p>Also under <code>Code &gt; Display</code>, check “Rainbow parentheses”. What this does is make your “nested parentheses” easier to read by giving each pair a unique color.</p>
+<p><img src="images/options_highlight_function_rainbow_parentheses.jpg" class="img-fluid" width="446"></p>
+<p><img src="images/highlight_r_function_calls.jpg" width="460" height="66"></p>
+<p><img src="images/rainbow_parentheses.jpg" class="img-fluid" width="361"></p></li>
+<li><p>Finally under <code>General &gt; Basic</code>, <strong>uncheck</strong> the box that says <strong>“Restore .RData into workspace at startup”</strong>. You don’t want to restore any data to your workspace (or <em>environment)</em> when you start RStudio. Starting with a clean workspace each time is less likely to lead to errors.</p>
+<p>This also means that you never want to <strong>“save your workspace to .RData on exit”</strong>, so set this to <strong>Never</strong>.</p></li>
+</ul>
+</section>
+<section id="command-palette" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="command-palette"><span class="header-section-number">2.5</span> Command palette</h2>
+<p>The Rstudio command palette gives instant, searchable access to many of the RStudio menu options and settings that we have seen so far.</p>
+<p>The palette can be invoked with the keyboard shortcut <code>Ctrl</code> + <code>Shift</code> + <code>P</code> (<code>Cmd</code> + <code>Shift</code> + <code>P</code> on macOS).</p>
+<p>It’s also available on the <em>Tools</em> menu (<em>Tools</em> -&gt; <em>Show Command Palette</em>).</p>
+<p><img src="images/command_palette.jpg" class="img-fluid" width="527"></p>
+<p>Try using it to:</p>
+<ul>
+<li><p>Create a new script (Search “new script” and click on the relevant option)</p></li>
+<li><p>Rename a script (Search “rename” and click on the relevant option)</p></li>
+</ul>
+</section>
+<section id="wrapping-up" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="wrapping-up"><span class="header-section-number">2.6</span> Wrapping up</h2>
+<p>Congratulations! You are now a new citizen of RStudio.</p>
+<p>Of course, you have only scratched the surface of RStudio functionality. As you advance in your R journey, you will discover new features, and you will hopefully grow to love the wonderful integrated development environment (IDE) that is RStudio. One good place to start is the official RStudio IDE <a href="https://thegraphcourses.org/wp-content/uploads/2022/03/rstudio-IDE-cheatsheet.pdf">cheatsheet</a>.</p>
+<p>Below is one section of that sheet:</p>
+<p><img src="images/rstudio_cheatsheet.png" class="img-fluid"></p>
+<p>See you in the next lesson!</p>
+</section>
+<section id="further-resources" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="further-resources"><span class="header-section-number">2.7</span> Further resources</h2>
+<ol type="1">
+<li><a href="https://www.dataquest.io/blog/rstudio-tips-tricks-shortcuts/">23 RStudio Tips, Tricks, and Shortcuts</a></li>
+</ol>
+<p></p><div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/kendavidn.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/kendavidn/" target="_blank">KENE DAVID NWOSU </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>Passionate about world improvement</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/ondieki.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/ondieki" target="_blank">LAMECK AGASA </a> </name> <br> <label>Statistician/Data Scientist</label> <p></p></li></ul></div><p></p>
+</section>
+<section id="references" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="references"><span class="header-section-number">2.8</span> References</h2>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li>“Rstudio Cheatsheets.” <em>RStudio</em>, <a href="https://www.rstudio.com/resources/cheatsheets/." class="uri">https://www.rstudio.com/resources/cheatsheets/.</a></li>
+<li>“Chapter 1 Getting Started: Data Skills for Reproducible Research.” <em>Chapter 1 Getting Started | Data Skills for Reproducible Research</em>, <a href="https://psyteachr.github.io/reprores-v2/intro.html." class="uri">https://psyteachr.github.io/reprores-v2/intro.html.</a></li>
+</ul>
+<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution Share Alike</a> license. <a class="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">     <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundations_ls01_setting_up.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundations_ls03_coding_basics.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

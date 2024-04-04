@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 3&nbsp; Coding basics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundations_ls04_data_dive_ebola_sierra_leone.html" rel="next">
+<link href="./foundations_ls02_using_rstudio.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundations_ls01_setting_up.html">Foundations</a></li><li class="breadcrumb-item"><a href="./foundations_ls03_coding_basics.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="header-section-number">3.2</span> Comments</a></li>
+  <li><a href="#r-s-a-calculator" id="toc-r-s-a-calculator" class="nav-link" data-scroll-target="#r-s-a-calculator"><span class="header-section-number">3.3</span> R s a calculator</a></li>
+  <li><a href="#formatting-code" id="toc-formatting-code" class="nav-link" data-scroll-target="#formatting-code"><span class="header-section-number">3.4</span> Formatting code</a></li>
+  <li><a href="#objects-in-r" id="toc-objects-in-r" class="nav-link" data-scroll-target="#objects-in-r"><span class="header-section-number">3.5</span> Objects in R</a>
+  <ul class="collapse">
+  <li><a href="#create-an-object" id="toc-create-an-object" class="nav-link" data-scroll-target="#create-an-object"><span class="header-section-number">3.5.1</span> Create an object</a></li>
+  <li><a href="#what-is-an-object" id="toc-what-is-an-object" class="nav-link" data-scroll-target="#what-is-an-object"><span class="header-section-number">3.5.2</span> What is an object?</a></li>
+  <li><a href="#datasets-are-objects-too" id="toc-datasets-are-objects-too" class="nav-link" data-scroll-target="#datasets-are-objects-too"><span class="header-section-number">3.5.3</span> Datasets are objects too</a></li>
+  <li><a href="#rename-an-object" id="toc-rename-an-object" class="nav-link" data-scroll-target="#rename-an-object"><span class="header-section-number">3.5.4</span> Rename an object</a></li>
+  <li><a href="#overwrite-an-object" id="toc-overwrite-an-object" class="nav-link" data-scroll-target="#overwrite-an-object"><span class="header-section-number">3.5.5</span> Overwrite an object</a></li>
+  <li><a href="#working-with-objects" id="toc-working-with-objects" class="nav-link" data-scroll-target="#working-with-objects"><span class="header-section-number">3.5.6</span> Working with objects</a></li>
+  <li><a href="#some-errors-with-objects" id="toc-some-errors-with-objects" class="nav-link" data-scroll-target="#some-errors-with-objects"><span class="header-section-number">3.5.7</span> Some errors with objects</a></li>
+  <li><a href="#naming-objects" id="toc-naming-objects" class="nav-link" data-scroll-target="#naming-objects"><span class="header-section-number">3.5.8</span> Naming objects</a></li>
+  </ul></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">3.6</span> Functions</a>
+  <ul class="collapse">
+  <li><a href="#basic-function-syntax" id="toc-basic-function-syntax" class="nav-link" data-scroll-target="#basic-function-syntax"><span class="header-section-number">3.6.1</span> Basic function syntax</a></li>
+  <li><a href="#nesting-functions" id="toc-nesting-functions" class="nav-link" data-scroll-target="#nesting-functions"><span class="header-section-number">3.6.2</span> Nesting functions</a></li>
+  </ul></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">3.7</span> Packages</a>
+  <ul class="collapse">
+  <li><a href="#a-first-example-the-tableone-package" id="toc-a-first-example-the-tableone-package" class="nav-link" data-scroll-target="#a-first-example-the-tableone-package"><span class="header-section-number">3.7.1</span> A first example: the {tableone} package</a></li>
+  <li><a href="#full-signifiers" id="toc-full-signifiers" class="nav-link" data-scroll-target="#full-signifiers"><span class="header-section-number">3.7.2</span> Full signifiers</a></li>
+  <li><a href="#pacmanp_load" id="toc-pacmanp_load" class="nav-link" data-scroll-target="#pacmanp_load"><span class="header-section-number">3.7.3</span> pacman::p_load()</a></li>
+  </ul></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up"><span class="header-section-number">3.8</span> Wrapping up</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers"><span class="header-section-number">3.9</span> Answers</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<section id="learning-objectives" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<ol type="1">
+<li><p>You can write comments in R.</p></li>
+<li><p>You can create section headers in RStudio.</p></li>
+<li><p>You know how to use R as a calculator.</p></li>
+<li><p>You can create, overwrite and manipulate R objects.</p></li>
+<li><p>You understand the basic rules for naming R objects.</p></li>
+<li><p>You understand the syntax for calling R functions.</p></li>
+<li><p>You know how to nest multiple functions.</p></li>
+<li><p>You can use install and load add-on R packages and call functions from these packages.</p></li>
+</ol>
+</section>
+<section id="introduction" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
+<p>In the last lesson, you learned how to use RStudio, the wonderful integrated development environment (IDE) that makes working with R much easier. In this lesson, you will learn the basics of using R itself.</p>
+<p>To get started, open RStudio, and open a new script with <code>File &gt; New File &gt; R Script</code> on the RStudio menu.</p>
+<p><img src="images/new_r_script.jpg" width="451" height="71"></p>
+<p>Next, <strong>save the script</strong> with <code>File &gt; Save</code> on the RStudio menu or by using the shortcut <code>Command</code>/<code>Control</code> + <code>S</code> . This should bring up the Save File dialog box. Save the file with a name like “coding_basics”.</p>
+<p>You should now type all the code from this lesson into that script.</p>
+</section>
+<section id="comments" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="comments"><span class="header-section-number">3.2</span> Comments</h2>
+<p>There are two main types of text in an R script: commands and comments. A command is a line or lines of R code that instructs R to do something (e.g.&nbsp;<code>2 + 2</code>)</p>
+<p>A comment is text that is ignored by the computer.</p>
+<p>Anything that follows a <code>#</code> symbol (pronounced “hash” or “pound”) on a given line is a comment. Try typing out and running the code below to see this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## A comment</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="co"># Another comment</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 + 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since they are ignored by the computer, comments are meant for <em>humans.</em> They help you and others keep track of what your code is doing. Use them often! Like your mother always says, “too much everything is bad, except for R comments”.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 1</strong></p>
+<p>True or False: both code chunks below are valid ways to comment code:?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## add two numbers</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="co"># add two numbers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Note:</strong> All question answers can be found at the end of the lesson.</p>
+</div>
+</div>
+<p>A fantastic use of comments is to separate your scripts into sections. If you put four dashes after a comment, RStudio will create a new section in your code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## New section ----</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This has two nice benefits. Firstly, you can click on the little arrow beside the section header to fold, or collapse, that section of code:</p>
+<p><img src="images/section_folder_icon.jpg" class="img-fluid" width="171"></p>
+<p>Second, you can click on the “Outline” icon at the top right of the Editor to view and navigate through all the contents in your script:</p>
+<p><img src="images/rstudio_outline.jpg" class="img-fluid" width="194"></p>
+</section>
+<section id="r-s-a-calculator" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="r-s-a-calculator"><span class="header-section-number">3.3</span> R s a calculator</h2>
+<p>R works as a calculator, and obeys the correct order of operations. Type and run the following expressions and observe their output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="dv">2</span> <span class="co"># two times two </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span> <span class="co"># two divided by two</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">^</span> <span class="dv">2</span> <span class="co"># two raised to the power of two</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">2</span>   <span class="co"># this is evaluated following the order of operations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">100</span>)   <span class="co"># square root</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>The square root command shown on the last line is a good example of an R <em>function</em>, where <code>100</code> is the <em>argument</em> to the function. You will see more functions soon.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We hope you remember the shortcut to run code!</p>
+<p>To <strong>run a single line of code</strong>, place your cursor anywhere on that line, then hit <code>Command</code> + <code>Enter</code> on macOS, or <code>Control</code> + <code>Enter</code> on Windows.</p>
+<p>To <strong>run multiple lines</strong>, drag your cursor to highlight the relevant lines then again press <code>Command</code>/<code>Control</code> + <code>Enter</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 2</strong></p>
+<p>In the following expression, which sign is evaluated first by R, the minus or the division?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="formatting-code" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="formatting-code"><span class="header-section-number">3.4</span> Formatting code</h2>
+<p>R does not care how you choose to space out your code.</p>
+<p>For the math operations we did above, all the following would be valid code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">+</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>                <span class="sc">+</span>                   <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>Similarly, for the <code>sqrt()</code> function used above, any of these would be valid:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(    <span class="dv">100</span>     )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## you can even space the command out over multiple lines</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(  </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">100</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>But of course, you should try to space out your code in sensible ways. What exactly is “sensible”? Well, it may be hard for you to know at the moment. Over time, as you read other people’s code, you will learn that there are certain R <em>conventions</em> for code spacing and formatting.</p>
+<p>In the meantime, you can ask RStudio to help format your code for you. To do this, highlight any section of code you want to reformat, and, on the RStudio menu, go to <code>Code &gt; Reformat Code</code>, or use the shortcut <code>Shift</code> + <code>Command/Control</code> + <code>A</code>.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Watch Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Watch Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Stuck on the + sign</strong></p>
+<p>If you run an incomplete line of code, R will print a <code>+</code> sign to indicate that it is waiting for you to finish the code.</p>
+<p>For example, if you run the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>you will not get the output you expect (10). Rather the console will <code>sqrt(</code> and a <code>+</code> sign:</p>
+<p><img src="images/sqrt_missing_parenth.jpg" width="80" height="34"></p>
+<p>R is waiting for you complete the closing parenthesis. You can complete the code and get rid of the <code>+</code> by just entering the missing parenthesis:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="er">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/sqrt_completed_parenth.jpg" width="105" height="49"></p>
+<p>Alternatively, press the escape key, <code>ESC</code> while your cursor is in the console to start over.</p>
+</div>
+</div>
+</section>
+<section id="objects-in-r" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="objects-in-r"><span class="header-section-number">3.5</span> Objects in R</h2>
+<section id="create-an-object" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="create-an-object"><span class="header-section-number">3.5.1</span> Create an object</h3>
+<p>When you run code as we have been doing above, the result of the command (or its <em>value</em>) is simply displayed in the console—it is not stored anywhere.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="co"># R prints this result, 4, but does not store it </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>To store a value for future use, assign it to an <em>object</em> with the <em>assignment operator<strong>,</strong></em> <code>&lt;-</code> :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>my_obj <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="co"># assign the result of `2 + 2 ` to the object called `my_obj`</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>my_obj <span class="co"># print my_obj</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>The assignment operator, <code>&lt;-</code> , is made of the ‘less than’ sign, <code>&lt;</code> , and a minus, <code>-</code>. You will use it thousands of times over your R lifetime, so please don’t type it manually! Instead, use RStudio’s shortcut, <strong><code>alt</code></strong> + <strong><code>-</code></strong> (<strong>alt</strong> AND <strong>minus</strong>) on Windows or <strong><code>option</code></strong> + <strong><code>-</code></strong> (<strong>option</strong> AND <strong>minus</strong>) on macOS.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Also note that you can use the <em>equals</em> sign, <code>=</code>, for assignment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>my_obj <span class="ot">=</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But this is not commonly used by the R community (mostly for historical reasons), so we discourage it too. Follow the convention and use <code>&lt;-</code>.</p>
+</div>
+</div>
+<p>Now that you’ve created the object <code>my_obj</code>, R knows all about it and will keep track of it during this R session. You can view any created objects in the <em>Environment</em> tab of RStudio.</p>
+<p><img src="images/rstudio_environment_object.png" class="img-fluid" width="312"></p>
+</section>
+<section id="what-is-an-object" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="what-is-an-object"><span class="header-section-number">3.5.2</span> What is an object?</h3>
+<p>So what exactly is an object? Think of it as a named bucket that can contain anything. When you run the code below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>my_obj <span class="ot">&lt;-</span> <span class="dv">20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>you are telling R, “put the number 20 inside a bucket named ‘my_obj’”.</p>
+<p><img src="images/my_obj_20.jpg" class="img-fluid" width="156"></p>
+<p>Once the code is run, we would say, in R terms, that “the value of object called <code>my_obj</code> is 20”.</p>
+<hr>
+<p>And if you run this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>first_name <span class="ot">&lt;-</span> <span class="st">"Joanna"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>you are instructing R to “put the value ‘Joanna’ inside the bucket called ‘first_name’”.</p>
+<p><img src="images/object_first_name_joanna.jpg" class="img-fluid" width="235"></p>
+<p>Once the code is run, we would say, in R terms, that “the value of the <code>first_name</code> object is Joanna”.</p>
+<hr>
+<p>Note that R evaluates the code <em>before</em> putting it inside the bucket.</p>
+<p>So, before when we ran this code,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>my_obj <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>R firsts does the calculation of <code>2 + 2</code>, then stores the result, 4, inside the object.</p>
+<p><img src="images/object_two_plus_two.jpg" class="img-fluid" width="223"></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 3</strong></p>
+<p>Consider the code chunk below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span>  <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What is the value of the <code>result</code> object created?</p>
+<p>A. <code>2 + 2 + 2</code></p>
+<p>B. numeric</p>
+<p>C. 6</p>
+</div>
+</div>
+</section>
+<section id="datasets-are-objects-too" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="datasets-are-objects-too"><span class="header-section-number">3.5.3</span> Datasets are objects too</h3>
+<p>So far, you have been working with very simple objects. You may be thinking “Where are the spreadsheets and datasets? Why are we writing <code>my_obj &lt;- 2 + 2</code>? Is this a primary school maths class?!”</p>
+<p>Be patient.</p>
+<p>We want you to get familiar with the concept of an R object because once you start dealing with real datasets, these will also be stored as R objects.</p>
+<p>Let’s see a preview of this now. Type out the code below to download a dataset on Ebola cases that we stored on Google Drive and put it in the object <code>ebola_sierra_leone_data</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://tinyurl.com/ebola-data-sample"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone_data <span class="co"># print ebola_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age sex    status date_of_onset date_of_sample district
+1 167  55   M confirmed    2014-06-15     2014-06-21   Kenema
+2 129  41   M confirmed    2014-06-13     2014-06-18 Kailahun
+3 270  12   F confirmed    2014-06-28     2014-07-03 Kailahun
+4 187  NA   F confirmed    2014-06-19     2014-06-24 Kailahun
+5  85  20   M confirmed    2014-06-08     2014-06-24 Kailahun</code></pre>
+</div>
+</div>
+<p>This data contains a sample of patient information from the 2014-2016 Ebola outbreak in Sierra Leone.</p>
+<hr>
+<p>Because you can store datasets as objects, its very easy to work with multiple datasets at the same time.</p>
+<p>Below, we import and view another dataset from the web:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>diabetes_china <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://tinyurl.com/diabetes-china"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Because the dataset above is quite large, it may be helpful to look at it in the data viewer:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(diabetes_china)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that both datasets now appear in your <em>Environment</em> tab.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Rather than reading data from an internet drive as we did above, it is more likely that you will have the data on your computer, and you will want to read it into R from your there. We will cover this in a future lesson.</p>
+<p>Later in the course, we will also show you how to store and read data from a web service like Google Drive, which is nice for easy portability.</p>
+</div>
+</div>
+</section>
+<section id="rename-an-object" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="rename-an-object"><span class="header-section-number">3.5.4</span> Rename an object</h3>
+<p>You sometimes want to rename an object. It is not possible to do this directly.</p>
+<p>To rename an object, you make a copy of the object with a new name, and delete the original.</p>
+<p>For example, maybe we decide that the name of the <code>ebola_sierra_leone_data</code> object is too long. To change it to the shorter “ebola_data” run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>ebola_data <span class="ot">&lt;-</span> ebola_sierra_leone_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This has copied the contents from the <code>ebola_sierra_leone_data</code> <em>bucket</em> to a new <code>ebola_data</code> <em>bucket</em>.</p>
+<p>You can now get rid of the old <code>ebola_sierra_leone_data</code> bucket with the <code>rm()</code> function, which stands for “remove”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(ebola_sierra_leone_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="overwrite-an-object" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="overwrite-an-object"><span class="header-section-number">3.5.5</span> Overwrite an object</h3>
+<p>Overwriting an object is like changing the <em>contents</em> of a <em>bucket</em>.</p>
+<p>For example, previously we ran this code to store the value “Joanna” inside the <code>first_name</code> object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>first_name <span class="ot">&lt;-</span> <span class="st">"Joanna"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To change this to a different, simply re-run the line with a different value:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>first_name <span class="ot">&lt;-</span> <span class="st">"Luigi"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can take a look at the Environment tab to observe the change.</p>
+</section>
+<section id="working-with-objects" class="level3" data-number="3.5.6">
+<h3 data-number="3.5.6" class="anchored" data-anchor-id="working-with-objects"><span class="header-section-number">3.5.6</span> Working with objects</h3>
+<p>Most of your time in R will be spent manipulating R objects. Let’s see some quick examples.</p>
+<p>You can run simple commands on objects. For example, below we store the value <code>100</code> in an object and then take the square root of the object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>my_number <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(my_number)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>R “sees” <code>my_number</code> as the number 100, and so is able to evaluate it’s square root.</p>
+<hr>
+<p>You can also combine existing objects to create new objects. For example, type out the code below to add <code>my_number</code> to itself, and store the result in a new object called <code>my_sum</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>my_sum <span class="ot">&lt;-</span> my_number <span class="sc">+</span> my_number</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What should be the value of <code>my_sum</code>? First take a guess, then check it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To check the value of an object, such as <code>my_sum</code>, you can type and run just the code <code>my_sum</code> in the Console or the Editor. Alternatively, you can simply highlight the value <code>my_sum</code> in the existing code and press <code>Command/Control</code> + <code>Enter</code>.</p>
+</div>
+</div>
+<hr>
+<p>But of course, most of your analysis will involve working with <em>data</em> objects, such as the <code>ebola_data</code> object we created previously.</p>
+<p>Let’s see a very simple example of how to interact with a data object; we will tackle it properly in the next lesson.</p>
+<p>To get a table of the different sex distribution of patients in the <code>ebola_data</code> object, we can run the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ebola_data<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  F   M 
+124  76 </code></pre>
+</div>
+</div>
+<p>The dollar sign symbol, <code>$</code>, above allowed us subset to a specific column.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 4</strong></p>
+<ol type="a">
+<li>Consider the code below. What is the value of the <code>answer</code> object?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>eight <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>answer <span class="ot">&lt;-</span> eight <span class="sc">-</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="a">
+<li>Use <code>table()</code> to make a table with the distribution of patients across districts in the <code>ebola_data</code> object.</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="some-errors-with-objects" class="level3" data-number="3.5.7">
+<h3 data-number="3.5.7" class="anchored" data-anchor-id="some-errors-with-objects"><span class="header-section-number">3.5.7</span> Some errors with objects</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>first_name <span class="ot">&lt;-</span> <span class="st">"Luigi"</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>last_name <span class="ot">&lt;-</span> <span class="st">"Fenway"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>full_name <span class="ot">&lt;-</span> first_name <span class="sc">+</span> last_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Error in first_name + last_name : non-numeric argument to binary operator</code></pre>
+<p>The error message tells you that these objects are not numbers and therefore cannot be added with <code>+</code>. This is a fairly common error type, caused by trying to do inappropriate things to your objects. Be careful about this.</p>
+<p>In this particular case, we can use the function <code>paste()</code> to put these two objects together:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>full_name <span class="ot">&lt;-</span> <span class="fu">paste</span>(first_name, last_name)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>full_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Luigi Fenway"</code></pre>
+</div>
+</div>
+<hr>
+<p>Another error you’ll get a lot is <code>Error: object 'XXX' not found</code>. For example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>my_number <span class="ot">&lt;-</span> <span class="dv">48</span> <span class="co"># define `my_obj`</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>My_number <span class="sc">+</span> <span class="dv">2</span> <span class="co"># attempt to add 2 to `my_obj`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Error: object 'My_number' not found</code></pre>
+<p>Here, R returns an error message because we haven’t created (or <em>defined</em>) the object <code>My_obj</code> yet. (Recall that R is case-sensitive.)</p>
+<hr>
+<p>When you first start learning R, dealing with errors can be frustrating. They’re often difficult to understand (e.g.&nbsp;what exactly does “<em>non-numeric argument to binary operator</em>” mean?).</p>
+<p>Try Googling any error messages you get and browsing through the first few results. This will lead you to forums (e.g.&nbsp;stackoverflow.com) where other R learners have complained about the same error. Here you may find explanations of, and solutions to, your problems.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 5</strong></p>
+<ol type="a">
+<li>The code below returns an error. Why?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>my_first_name <span class="ot">&lt;-</span> <span class="st">"Kene"</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>my_last_name <span class="ot">&lt;-</span> <span class="st">"Nwosu"</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>my_first_name <span class="sc">+</span> my_last_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="a">
+<li>The code below returns an error. Why? (Look carefully)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>my_1st_name <span class="ot">&lt;-</span> <span class="st">"Kene"</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>my_last_name <span class="ot">&lt;-</span> <span class="st">"Nwosu"</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(my_Ist_name, my_last_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="naming-objects" class="level3" data-number="3.5.8">
+<h3 data-number="3.5.8" class="anchored" data-anchor-id="naming-objects"><span class="header-section-number">3.5.8</span> Naming objects</h3>
+<blockquote class="blockquote">
+<p>There are only <strong><em>two hard things</em></strong> in Computer Science: cache invalidation and <strong><em>naming things</em></strong>.</p>
+<p>— Phil Karlton.</p>
+</blockquote>
+<p>Because much of your work in R involves interacting with objects you have created, picking intelligent names for these objects is important.</p>
+<p>Naming objects is difficult because names should be both <strong>short</strong> (so that you can type them quickly) and <strong>informative</strong> (so that you can easily remember what is inside the object), and these two goals are often in conflict.</p>
+<p>So names that are too long, like the one below, are bad because they take forever to type.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>sample_of_the_ebola_outbreak_dataset_from_sierra_leone_in_2014</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And a name like <code>data</code> is bad because it is not informative; the name does not give a good idea of what the object is.</p>
+<p>As you write more R code, you will learn how to write short and informative names.</p>
+<hr>
+<p>For names with multiple words, there are a few conventions for how to separate the words:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>snake_case <span class="ot">&lt;-</span> <span class="st">"Snake case uses underscores"</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>period.case <span class="ot">&lt;-</span> <span class="st">"Period case uses periods"</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>camelCase <span class="ot">&lt;-</span> <span class="st">"Camel case capitalizes new words (but not the first word)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We recommend snake_case, which uses all lower-case words, and separates words with <code>_</code>.</p>
+<hr>
+<p>Note too that there are some limitations on objects’ names:</p>
+<ul>
+<li><p>names must start with a letter. So <code>2014_data</code> is not a valid name (because it starts with a number).</p></li>
+<li><p>names can only contain letters, numbers, periods (<code>.</code>) and underscores (<code>_</code>). So <code>ebola-data</code> or <code>ebola~data</code> or <code>ebola data</code> with a space are not valid names.</p></li>
+</ul>
+<p>If you really want to use these characters in your object names, you can enclose the names in backticks:</p>
+<pre><code>`ebola-data`
+`ebola~data`
+`ebola data`</code></pre>
+<p>All of the above are valid R object names. For example, type and run the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">ebola~data</span><span class="st">`</span> <span class="ot">&lt;-</span> ebola_data</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">ebola~data</span><span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But in general you should avoid using backticks to rescue bad object names. Just write proper names.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 6</strong></p>
+<p>In the code chunk below, we are attempting to take the top 20 rows of the <code>ebola_data</code> table. All but one of these lines has an error. Which line will run properly?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>20_top_rows <span class="ot">&lt;-</span> <span class="fu">head</span>(ebola_data, <span class="dv">20</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>twenty<span class="sc">-</span>top<span class="sc">-</span>rows <span class="ot">&lt;-</span> <span class="fu">head</span>(ebola_data, <span class="dv">20</span>)</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>top_20_rows <span class="ot">&lt;-</span> <span class="fu">head</span>(ebola_data, <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="functions" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="functions"><span class="header-section-number">3.6</span> Functions</h2>
+<p>Much of your work in R will involve calling <em>functions</em>.</p>
+<p>You can think of each function as a machine that takes in some input (or <em>arguments</em>) and returns some output.</p>
+<p><img src="images/apple_slicing_function_analogy.png" class="img-fluid" width="610"></p>
+<p>So far you have already seen many functions, including, <code>sqrt()</code>, <code>paste()</code> and <code>plot()</code>. Run the lines below to refresh your memory:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">100</span>)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">"I am number"</span>, <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(women)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="basic-function-syntax" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="basic-function-syntax"><span class="header-section-number">3.6.1</span> Basic function syntax</h3>
+<p>The standard way to call a function is to provide a <em>value</em> for each <em>argument</em>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">function_name</span>(<span class="at">argument1 =</span> <span class="st">"value"</span>, <span class="at">argument2 =</span> <span class="st">"value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s demonstrate this with the <code>head()</code> function, which returns the first few elements of an object.</p>
+<p>To return the first three rows of the Ebola dataset, you run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="at">x =</span> ebola_data, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age sex    status date_of_onset date_of_sample district
+1 167  55   M confirmed    2014-06-15     2014-06-21   Kenema
+2 129  41   M confirmed    2014-06-13     2014-06-18 Kailahun
+3 270  12   F confirmed    2014-06-28     2014-07-03 Kailahun</code></pre>
+</div>
+</div>
+<p>In the code above, <code>head()</code> takes in two arguments:</p>
+<ul>
+<li><p><code>x</code> , the object of interest, and</p></li>
+<li><p><code>n</code>, the number of elements to return.</p></li>
+</ul>
+<p>We can also swap the order of the arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">x =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age sex    status date_of_onset date_of_sample district
+1 167  55   M confirmed    2014-06-15     2014-06-21   Kenema
+2 129  41   M confirmed    2014-06-13     2014-06-18 Kailahun
+3 270  12   F confirmed    2014-06-28     2014-07-03 Kailahun</code></pre>
+</div>
+</div>
+<hr>
+<p>If you put the argument values in the right order, you can skip typing their names. So the following two lines of code are equivalent and both run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="at">x =</span> ebola_data, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age sex    status date_of_onset date_of_sample district
+1 167  55   M confirmed    2014-06-15     2014-06-21   Kenema
+2 129  41   M confirmed    2014-06-13     2014-06-18 Kailahun
+3 270  12   F confirmed    2014-06-28     2014-07-03 Kailahun</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ebola_data, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age sex    status date_of_onset date_of_sample district
+1 167  55   M confirmed    2014-06-15     2014-06-21   Kenema
+2 129  41   M confirmed    2014-06-13     2014-06-18 Kailahun
+3 270  12   F confirmed    2014-06-28     2014-07-03 Kailahun</code></pre>
+</div>
+</div>
+<p>But if the argument values are in the wrong order, you will get an error if you do not type the argument names. Below, the first line runs but the second does not run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">x =</span> ebola_data)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="dv">3</span>, ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(To see the “correct order” for the arguments, take a look at the help file for the <code>head()</code> function)</p>
+<hr>
+<p>Some function arguments can be skipped altogether, because they have <em>default</em> values.</p>
+<p>For example, with <code>head()</code>, the default value of <code>n</code> is 6, so running just <code>head(ebola_data)</code> will return the first 6 rows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age sex    status date_of_onset date_of_sample district
+1 167  55   M confirmed    2014-06-15     2014-06-21   Kenema
+2 129  41   M confirmed    2014-06-13     2014-06-18 Kailahun
+3 270  12   F confirmed    2014-06-28     2014-07-03 Kailahun
+4 187  NA   F confirmed    2014-06-19     2014-06-24 Kailahun
+5  85  20   M confirmed    2014-06-08     2014-06-24 Kailahun
+6 277  30   F confirmed    2014-06-29     2014-07-01   Kenema</code></pre>
+</div>
+</div>
+<p>To see the arguments to a function, press the <strong>Tab</strong> key when your cursor is inside the function’s parentheses:</p>
+<p><img src="images/head_definition_help.png" class="img-fluid"></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 7</strong></p>
+<p>In the code lines below, we are attempting to take the top 6 rows of the <code>women</code> dataset (which is built into R). Which line is invalid?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(women)</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(women, <span class="dv">6</span>)</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="at">x =</span> women, <span class="dv">6</span>)</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="at">x =</span> women, <span class="at">n =</span> <span class="dv">6</span>)</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="dv">6</span>, women)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(If you are not sure, just try typing and running each line. Remember that the goal here is for you to gain some practice.)</p>
+</div>
+</div>
+<hr>
+<p>Let’s spend some time playing with another function, the <code>paste()</code> function, which we already saw above, This function is a bit special because it can take in any number of input arguments.</p>
+<p>So you could have two arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">"Luigi"</span>, <span class="st">"Fenway"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Luigi Fenway"</code></pre>
+</div>
+</div>
+<p>Or four arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">"Luigi"</span>, <span class="st">"Fenway"</span>, <span class="st">"Luigi"</span>, <span class="st">"Fenway"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Luigi Fenway Luigi Fenway"</code></pre>
+</div>
+</div>
+<p>And so on up to infinity.</p>
+<p>And as you might recall, we can also <code>paste()</code> named objects:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>first_name <span class="ot">&lt;-</span> <span class="st">"Luigi"</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">"My name is"</span>, first_name, <span class="st">"and my last name is"</span>, last_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "My name is Luigi and my last name is Fenway"</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Pro Tip">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pro Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Functions like <code>paste()</code> can take in many values because they have a special argument, an ellipsis: <code>…</code> If you consult the help file for the paste function, you will see this:</p>
+<p><img src="images/paste_ellipsis.jpg" class="img-fluid" width="432"></p>
+</div>
+</div>
+<p>Another useful argument for <code>paste()</code> is called <code>sep</code>. It tells R what character to use to separate the terms:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">"Luigi"</span>, <span class="st">"Fenway"</span>, <span class="at">sep =</span> <span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Luigi-Fenway"</code></pre>
+</div>
+</div>
+</section>
+<section id="nesting-functions" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="nesting-functions"><span class="header-section-number">3.6.2</span> Nesting functions</h3>
+<p>The output of a function can be immediately taken in by another function. This is called function nesting.</p>
+<p>For example, the function <code>tolower()</code> converts a string to lower case.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tolower</span>(<span class="st">"LUIGI"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "luigi"</code></pre>
+</div>
+</div>
+<p>You can take the output of this and pass it directly into another function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">tolower</span>(<span class="st">"LUIGI"</span>), <span class="st">"is my name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "luigi is my name"</code></pre>
+</div>
+</div>
+<hr>
+<p>Without this option of nesting, you would have to assign an intermediate object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>my_lowercase_name <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="st">"LUIGI"</span>)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(my_lowercase_name, <span class="st">"is my name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "luigi is my name"</code></pre>
+</div>
+</div>
+<p>Function nesting will come in very handy soon.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 8</strong></p>
+<p>The code chunks below are all examples of function nesting. One of the lines has an error. Which line is it, and what is the error?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">head</span>(women))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">sqrt</span>(<span class="dv">9</span>), <span class="st">"plus 1 is"</span>, <span class="fu">sqrt</span>(<span class="dv">16</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">tolower</span>(<span class="st">"LUIGI"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="packages" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="packages"><span class="header-section-number">3.7</span> Packages</h2>
+<p>As we mentioned previously, R is wonderful because it is user extensible: anyone can create a software <em>package</em> that adds new functionality. Most of R’s power comes from these packages.</p>
+<p>In the previous lesson, you installed and loaded the {highcharter} package using the <code>install.packages()</code> and <code>library()</code> functions. Let’s learn a bit more about packages now.</p>
+<section id="a-first-example-the-tableone-package" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="a-first-example-the-tableone-package"><span class="header-section-number">3.7.1</span> A first example: the {tableone} package</h3>
+<p>Let’s now install and use another R package, called <code>tableone</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tableone"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tableone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that you only need to install a package once, but you have to load it with <code>library()</code> each time you want to use it. This means that you should generally run the <code>install.packages()</code> line directly from the console, rather than typing it into your script.</p>
+<hr>
+<p>The package eases the construction of “Table 1”, i.e.&nbsp;a table with characteristics of the study sample that is commonly found in biomedical research papers.</p>
+<p>The simplest use case is summarizing the whole dataset. You can just feed in the data frame to the <code>data</code> argument of the main workhorse function <code>CreateTableOne()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CreateTableOne</span>(<span class="at">data =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                        
+                         Overall       
+  n                         200        
+  id (mean (SD))         146.00 (82.28)
+  age (mean (SD))         33.12 (17.85)
+  sex = M (%)                76 (38.0) 
+  status = suspected (%)     18 ( 9.0) 
+  date_of_onset (%)                    
+     2014-05-18               1 ( 0.5) 
+     2014-05-20               1 ( 0.5) 
+     2014-05-21               1 ( 0.5) 
+     2014-05-22               2 ( 1.0) 
+     2014-05-23               1 ( 0.5) 
+     2014-05-24               2 ( 1.0) 
+     2014-05-26               8 ( 4.0) 
+     2014-05-27               7 ( 3.5) 
+     2014-05-28               1 ( 0.5) 
+     2014-05-29               9 ( 4.5) 
+     2014-05-30               4 ( 2.0) 
+     2014-05-31               2 ( 1.0) 
+     2014-06-01               2 ( 1.0) 
+     2014-06-02               1 ( 0.5) 
+     2014-06-03               1 ( 0.5) 
+     2014-06-05               1 ( 0.5) 
+     2014-06-06               5 ( 2.5) 
+     2014-06-07               3 ( 1.5) 
+     2014-06-08               4 ( 2.0) 
+     2014-06-09               1 ( 0.5) 
+     2014-06-10              22 (11.0) 
+     2014-06-11               1 ( 0.5) 
+     2014-06-12               7 ( 3.5) 
+     2014-06-13              15 ( 7.5) 
+     2014-06-14               8 ( 4.0) 
+     2014-06-15               3 ( 1.5) 
+     2014-06-16               1 ( 0.5) 
+     2014-06-17               4 ( 2.0) 
+     2014-06-18               5 ( 2.5) 
+     2014-06-19               8 ( 4.0) 
+     2014-06-20               7 ( 3.5) 
+     2014-06-21               2 ( 1.0) 
+     2014-06-22               1 ( 0.5) 
+     2014-06-23               2 ( 1.0) 
+     2014-06-24               8 ( 4.0) 
+     2014-06-25               6 ( 3.0) 
+     2014-06-26              10 ( 5.0) 
+     2014-06-27               9 ( 4.5) 
+     2014-06-28              17 ( 8.5) 
+     2014-06-29               7 ( 3.5) 
+  date_of_sample (%)                   
+     2014-05-23               1 ( 0.5) 
+     2014-05-25               1 ( 0.5) 
+     2014-05-26               1 ( 0.5) 
+     2014-05-27               2 ( 1.0) 
+     2014-05-28               1 ( 0.5) 
+     2014-05-29               2 ( 1.0) 
+     2014-05-31               9 ( 4.5) 
+     2014-06-01               6 ( 3.0) 
+     2014-06-02               1 ( 0.5) 
+     2014-06-03               9 ( 4.5) 
+     2014-06-04               4 ( 2.0) 
+     2014-06-05               1 ( 0.5) 
+     2014-06-06               2 ( 1.0) 
+     2014-06-07               2 ( 1.0) 
+     2014-06-10               2 ( 1.0) 
+     2014-06-11               4 ( 2.0) 
+     2014-06-12               3 ( 1.5) 
+     2014-06-13               3 ( 1.5) 
+     2014-06-14               1 ( 0.5) 
+     2014-06-15              21 (10.5) 
+     2014-06-16               1 ( 0.5) 
+     2014-06-17               5 ( 2.5) 
+     2014-06-18              13 ( 6.5) 
+     2014-06-19               9 ( 4.5) 
+     2014-06-21               8 ( 4.0) 
+     2014-06-22               7 ( 3.5) 
+     2014-06-23               6 ( 3.0) 
+     2014-06-24               6 ( 3.0) 
+     2014-06-25               3 ( 1.5) 
+     2014-06-27               5 ( 2.5) 
+     2014-06-28               2 ( 1.0) 
+     2014-06-29               8 ( 4.0) 
+     2014-06-30               6 ( 3.0) 
+     2014-07-01               4 ( 2.0) 
+     2014-07-02              16 ( 8.0) 
+     2014-07-03              13 ( 6.5) 
+     2014-07-04               2 ( 1.0) 
+     2014-07-05               2 ( 1.0) 
+     2014-07-06               1 ( 0.5) 
+     2014-07-08               3 ( 1.5) 
+     2014-07-12               1 ( 0.5) 
+     2014-07-14               1 ( 0.5) 
+     2014-07-17               1 ( 0.5) 
+     2014-07-21               1 ( 0.5) 
+  district (%)                         
+     Bo                       4 ( 2.0) 
+     Kailahun               146 (73.0) 
+     Kenema                  41 (20.5) 
+     Kono                     2 ( 1.0) 
+     Port Loko                2 ( 1.0) 
+     Western Urban            5 ( 2.5) </code></pre>
+</div>
+</div>
+<p>You can see there are 200 patients in this dataset, the mean age is 33 and 38% of the sample of the sample is male, among other details.</p>
+<p>Very cool! (One problem is that the package is assuming that the date variables are categorical; because of this the output table is much too long!)</p>
+<p>The point of this demonstration of {tableone} is to show you that there is a lot of power in external R packages. This is a big strength of working with R, an open-source language with a vibrant ecosystem of contributors. Thousands of people are working right now on packages that may be helpful to you one day.</p>
+<p>You can Google search “Cool R packages” and browse through the answers if you are eager to learn about more R packages.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You may have noticed that we embrace package names in curly braces, e.g.&nbsp;{tableone}. This is just a styling convention among R users/teachers. The braces do not <em>mean</em> anything.</p>
+</div>
+</div>
+</section>
+<section id="full-signifiers" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="full-signifiers"><span class="header-section-number">3.7.2</span> Full signifiers</h3>
+<p>The <em>full signifier</em> of a function includes both the package name and the function name: <code>package::function()</code>.</p>
+<p>So for example, instead of writing:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CreateTableOne</span>(<span class="at">data =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We could write this function with its full signifier, <code>package::function()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>tableone<span class="sc">::</span><span class="fu">CreateTableOne</span>(<span class="at">data =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You usually do not need to use these full signifiers in your scripts. But there are some situations where it is helpful:</p>
+<p>The most common reason is that you want to make it very clear which package a function comes from.</p>
+<p>Secondly, you sometimes want to avoid needing to run <code>library(package)</code> before accessing the functions in a package. That is, you want to use a function from a package without first loading that package from the library. In that case, you can use the full signifier syntax.</p>
+<p>So the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>tableone<span class="sc">::</span><span class="fu">CreateTableOne</span>(<span class="at">data =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>is equivalent to:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tableone)</span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CreateTableOne</span>(<span class="at">data =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 9</strong></p>
+<p>Consider the code below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>tableone<span class="sc">::</span><span class="fu">CreateTableOne</span>(<span class="at">data =</span> ebola_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Which of the following is a correct interpretation of what this code means:</p>
+<p>A. The code applies the <code>CreateTableOne</code> function from the {tableone} package on the <code>ebola_data</code> object.</p>
+<p>B. The code applies the <code>CreateTableOne</code> argument from the {tableone} function on the <code>ebola_data</code> package.</p>
+<p>C. The code applies the <code>CreateTableOne</code> function from the {tableone} package on the <code>ebola_data</code> package.</p>
+</div>
+</div>
+</section>
+<section id="pacmanp_load" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="pacmanp_load"><span class="header-section-number">3.7.3</span> pacman::p_load()</h3>
+<p>Rather than use two separate functions, <code>install.packages()</code> then <code>library()</code>, to install then load packages, you can use a single function, <code>p_load()</code>, from the {pacman} package to automatically install a package if it is not yet installed, <em>and</em> load the package. We encourage this approach in the rest of this course.</p>
+<p>Install {pacman} now by running this in your console:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From now on, when you are introduced to a new package, you can simply use, <code>pacman::p_load(package_name)</code> to both install and load the package:</p>
+<p>Try this now for the <code>outbreaks</code> package, which we will use soon:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(outbreaks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p>Now we have a small problem. The wonderful function <code>pacman::p_load()</code> automatically installs and loads packages.</p>
+<p>But it would be nice to have some code that automatically installs the {pacman} package itself, if it is missing on a user’s computer.</p>
+<p>But if you put the <code>install.packages()</code> line in a script, like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(here, rmarkdown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>you will waste a lot of time. Because every time a user opens and runs a script, it will <em>reinstall</em> {pacman}, which can take a while. Instead we need code that first <em>checks whether pacman is not yet installed</em> and installs it if this is not the case.</p>
+<p>We can do this with the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You do not have to understand it at the moment, as it uses some syntax that you have not yet learned. Just note that in future chapters, we will often start a script with code like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(here, rmarkdown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first line will install {pacman} if it is not yet installed. The second line will use <code>p_load()</code> function from {pacman} to load the remaining packages (and <code>pacman::p_load()</code> installs any packages that are not yet installed).</p>
+<p>Phew! Hope your head is still intact.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question 10</strong></p>
+<p>At the start of an R script, we would like to install and load the package called {janitor}. Which of the following code chunks do we recommend you have in your script?</p>
+<ol type="A">
+<li></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="A">
+<li></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"janitor"</span>)</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="A">
+<li></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"janitor"</span>)</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wrapping-up" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="wrapping-up"><span class="header-section-number">3.8</span> Wrapping up</h2>
+<p>With your new knowledge of R objects, R functions and the packages that functions come from, you are ready, believe it or not, to do basic data analysis in R. We’ll jump into this head first in the next lesson. See you there!</p>
+</section>
+<section id="answers" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="answers"><span class="header-section-number">3.9</span> Answers</h2>
+<ol type="1">
+<li><p>True.</p></li>
+<li><p>The division sign is evaluated first.</p></li>
+<li><p>The answer is C. The code <code>2 + 2 + 2</code> gets evaluated before it is stored in the object.</p></li>
+<li><p>a. The value is 1. The code evaluates to <code>9-8</code>.</p>
+<p>b. table(ebola_data$district)</p></li>
+<li><p>a. You cannot add two character strings. Adding only works for numbers.</p>
+<p>b. <code>my_1st_name</code> is typed with the number 1 initially, but in the <code>paste()</code> command, it is typed with the letter “I”.</p></li>
+<li><p>The third line is the only line with a valid object name: <code>top_20_rows</code></p></li>
+<li><p>The last line, <code>head(6, women)</code>, is invalid because the arguments are in the wrong order and they are not named.</p></li>
+<li><p>The third code chunk has a problem. It attempts to find the square root of a character, which is impossible.</p></li>
+<li><p>The first line, A, is the correct interpretation.</p></li>
+<li><p>The first code chunk is the recommended way to install and load the package {janitor}</p></li>
+</ol>
+<p></p><div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/kendavidn.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/kendavidn/" target="_blank">KENE DAVID NWOSU </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>Passionate about world improvement</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/ondieki.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/ondieki" target="_blank">LAMECK AGASA </a> </name> <br> <label>Statistician/Data Scientist</label> <p></p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/olivia.png" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/keioli" target="_blank">OLIVIA KEISER </a> </name> <br> <label>Head of division of Infectious Diseases and Mathematical Modelling, University of Geneva</label> <p></p></li></ul></div><p></p>
+<section id="references" class="level3 unlisted unnumbered">
+<h3 class="unlisted unnumbered anchored" data-anchor-id="references">References</h3>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li><p>“<a href="File:Apple" class="uri">File:Apple</a> slicing function.png.” <em>Wikimedia Commons, the free media repository</em>. 1 Oct 2021, 04:26 UTC. 20 Mar 2022, 17:27 &lt;<a href="https://commons.wikimedia.org/w/index.php?title=File:Apple_slicing_function.png&amp;oldid=594767630" class="uri">https://commons.wikimedia.org/w/index.php?title=File:Apple_slicing_function.png&amp;oldid=594767630</a>&gt;.</p></li>
+<li><p>“PsyteachR | Data Skills for Reproducible Research.” 2021. Github.io. 2021. <a href="https://psyteachr.github.io/reprores-v2/index.html." class="uri">https://psyteachr.github.io/reprores-v2/index.html.</a></p></li>
+<li><p>Douglas, Alex, Deon Roos, Francesca Mancini, Ana Couto, and David Lusseau. 2022. “An Introduction to R.” Intro2r.com. January 27, 2022. <a href="https://intro2r.com/." class="uri">https://intro2r.com/.</a></p></li>
+</ul>
+<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution Share Alike</a> license. <a class="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">     <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundations_ls02_using_rstudio.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

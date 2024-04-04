@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 12&nbsp; Conditional mutating</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./untangled_ls05_groupby_summarize.html" rel="next">
+<link href="./untangled_ls03_mutate.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./untangled_ls01_select_rename.html">Data Manipulation</a></li><li class="breadcrumb-item"><a href="./untangled_ls04_conditional_mutate.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">12.1</span> Introduction</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">12.2</span> Learning objectives</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">12.3</span> Packages</a></li>
+  <li><a href="#datasets" id="toc-datasets" class="nav-link" data-scroll-target="#datasets"><span class="header-section-number">12.4</span> Datasets</a></li>
+  <li><a href="#reminder-relational-operators-comparators-in-r" id="toc-reminder-relational-operators-comparators-in-r" class="nav-link" data-scroll-target="#reminder-relational-operators-comparators-in-r"><span class="header-section-number">12.5</span> Reminder: relational operators (comparators) in R</a></li>
+  <li><a href="#introduction-to-case_when" id="toc-introduction-to-case_when" class="nav-link" data-scroll-target="#introduction-to-case_when"><span class="header-section-number">12.6</span> Introduction to <code>case_when()</code></a></li>
+  <li><a href="#the-true-default-argument" id="toc-the-true-default-argument" class="nav-link" data-scroll-target="#the-true-default-argument"><span class="header-section-number">12.7</span> The <code>TRUE</code> default argument</a></li>
+  <li><a href="#matching-nas-with-is.na" id="toc-matching-nas-with-is.na" class="nav-link" data-scroll-target="#matching-nas-with-is.na"><span class="header-section-number">12.8</span> Matching NA’s with <code>is.na()</code></a></li>
+  <li><a href="#keeping-default-values-of-a-variable" id="toc-keeping-default-values-of-a-variable" class="nav-link" data-scroll-target="#keeping-default-values-of-a-variable"><span class="header-section-number">12.9</span> Keeping default values of a variable</a></li>
+  <li><a href="#multiple-conditions-on-a-single-variable" id="toc-multiple-conditions-on-a-single-variable" class="nav-link" data-scroll-target="#multiple-conditions-on-a-single-variable"><span class="header-section-number">12.10</span> Multiple conditions on a single variable</a></li>
+  <li><a href="#multiple-conditions-on-multiple-variables" id="toc-multiple-conditions-on-multiple-variables" class="nav-link" data-scroll-target="#multiple-conditions-on-multiple-variables"><span class="header-section-number">12.11</span> Multiple conditions on multiple variables</a></li>
+  <li><a href="#order-of-priority-of-conditions-in-case_when" id="toc-order-of-priority-of-conditions-in-case_when" class="nav-link" data-scroll-target="#order-of-priority-of-conditions-in-case_when"><span class="header-section-number">12.12</span> Order of priority of conditions in <code>case_when()</code></a>
+  <ul class="collapse">
+  <li><a href="#overlapping-conditions-within-case_when" id="toc-overlapping-conditions-within-case_when" class="nav-link" data-scroll-target="#overlapping-conditions-within-case_when"><span class="header-section-number">12.12.1</span> Overlapping conditions within <code>case_when()</code></a></li>
+  </ul></li>
+  <li><a href="#binary-conditions-dplyrif_else" id="toc-binary-conditions-dplyrif_else" class="nav-link" data-scroll-target="#binary-conditions-dplyrif_else"><span class="header-section-number">12.13</span> Binary conditions: <code>dplyr::if_else()</code></a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">12.14</span> Wrap up</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions"><span class="header-section-number">12.15</span> Solutions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">12.1</span> Introduction</h2>
+<p>In the last lesson, you learned the basics of data transformation using the {dplyr} function <code>mutate()</code>.</p>
+<p>In that lesson, we mostly looked at <em>global</em> transformations; that is, transformations that did the same thing to an entire variable. In this lesson, we will look at how to <em>conditionally</em> manipulate certain rows based on whether or not they meet defined criteria.</p>
+<p>For this, we will mostly use the <code>case_when()</code> function, which you will likely come to see as one of the most important functions in {dplyr} for data wrangling tasks.</p>
+<p>Let’s get started.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/custom_dplyr_case_when.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Fig: the case_when() conditions.</figcaption>
+</figure>
+</div>
+</section>
+<section id="learning-objectives" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">12.2</span> Learning objectives</h2>
+<ol type="1">
+<li><p>You can transform or create new variables based on conditions using <code>dplyr::case_when()</code></p></li>
+<li><p>You know how to use the <code>TRUE</code> condition in <code>case_when()</code> to match unmatched cases.</p></li>
+<li><p>You can handle <code>NA</code> values in <code>case_when()</code> transformations.</p></li>
+<li><p>You understand how to keep the default values of a variable in a <code>case_when()</code> formula</p></li>
+<li><p>You can write <code>case_when()</code> conditions involving multiple comparators and multiple variables.</p></li>
+<li><p>You understand <code>case_when()</code> conditions priority order.</p></li>
+<li><p>You can use <code>dplyr::if_else()</code> for binary conditional assignment.</p></li>
+</ol>
+</section>
+<section id="packages" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="packages"><span class="header-section-number">12.3</span> Packages</h2>
+<p>This lesson will require the tidyverse suite of packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="datasets" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="datasets"><span class="header-section-number">12.4</span> Datasets</h2>
+<p>In this lesson, we will again use data from the COVID-19 serological survey conducted in Yaounde, Cameroon.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import and view the dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>yaounde <span class="ot">&lt;-</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'data/yaounde_data.csv'</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="do">## make every 5th age missing</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">case_when</span>(<span class="fu">row_number</span>() <span class="sc">%in%</span> <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">900</span>, <span class="at">by =</span> <span class="dv">5</span>) <span class="sc">~</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                         <span class="cn">TRUE</span> <span class="sc">~</span> age)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="do">## rename the age variable </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">age_years =</span> age) <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># drop the age category column</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>age_category)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>yaounde</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 52
+   id             date_surveyed age_years age_category_3 sex   highest_education
+   &lt;chr&gt;          &lt;date&gt;            &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;            
+ 1 BRIQUETERIE_0… 2020-10-22           45 Adult          Fema… Secondary        
+ 2 BRIQUETERIE_0… 2020-10-24           55 Adult          Male  University       
+ 3 BRIQUETERIE_0… 2020-10-24           23 Adult          Male  University       
+ 4 BRIQUETERIE_0… 2020-10-22           20 Adult          Fema… Secondary        
+ 5 BRIQUETERIE_0… 2020-10-22           NA Adult          Fema… Primary          
+ 6 BRIQUETERIE_0… 2020-10-25           17 Child          Fema… Secondary        
+ 7 BRIQUETERIE_0… 2020-10-25           13 Child          Fema… Secondary        
+ 8 BRIQUETERIE_0… 2020-10-24           28 Adult          Male  Doctorate        
+ 9 BRIQUETERIE_0… 2020-10-24           30 Adult          Male  Secondary        
+10 BRIQUETERIE_0… 2020-10-24           NA Child          Fema… Secondary        
+# ℹ 46 more variables: occupation &lt;chr&gt;, weight_kg &lt;dbl&gt;, height_cm &lt;dbl&gt;,
+#   is_smoker &lt;chr&gt;, is_pregnant &lt;chr&gt;, is_medicated &lt;chr&gt;, neighborhood &lt;chr&gt;,
+#   household_with_children &lt;chr&gt;, breadwinner &lt;chr&gt;, source_of_revenue &lt;chr&gt;,
+#   has_contact_covid &lt;chr&gt;, igg_result &lt;chr&gt;, igm_result &lt;chr&gt;,
+#   symptoms &lt;chr&gt;, symp_fever &lt;chr&gt;, symp_headache &lt;chr&gt;, symp_cough &lt;chr&gt;,
+#   symp_rhinitis &lt;chr&gt;, symp_sneezing &lt;chr&gt;, symp_fatigue &lt;chr&gt;,
+#   symp_muscle_pain &lt;chr&gt;, symp_nausea_or_vomiting &lt;chr&gt;, …</code></pre>
+</div>
+</div>
+<p>Note that in the code chunk above, we slightly modified the age column, artificially introducing some missing values, and we also dropped the <code>age_category</code> column. This is to help illustrate some key points in the tutorial.</p>
+<hr>
+<p>For practice questions, we will also use an outbreak linelist of 136 cases of influenza A H7N9 from a <a href="https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9#Reported_cases_in_2013">2013 outbreak</a> in China. This is a modified version of a dataset compiled by Kucharski et al.&nbsp;(2014).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import and view the dataset</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>flu_linelist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'data/flu_h7n9_china_2013.csv'</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flu_linelist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 8
+   case_id date_of_onset date_of_hospitalisation date_of_outcome outcome gender
+     &lt;dbl&gt; &lt;date&gt;        &lt;date&gt;                  &lt;date&gt;          &lt;chr&gt;   &lt;chr&gt; 
+ 1       1 2013-02-19    NA                      2013-03-04      Death   m     
+ 2       2 2013-02-27    2013-03-03              2013-03-10      Death   m     
+ 3       3 2013-03-09    2013-03-19              2013-04-09      Death   f     
+ 4       4 2013-03-19    2013-03-27              NA              &lt;NA&gt;    f     
+ 5       5 2013-03-19    2013-03-30              2013-05-15      Recover f     
+ 6       6 2013-03-21    2013-03-28              2013-04-26      Death   f     
+ 7       7 2013-03-20    2013-03-29              2013-04-09      Death   m     
+ 8       8 2013-03-07    2013-03-18              2013-03-27      Death   m     
+ 9       9 2013-03-25    2013-03-25              NA              &lt;NA&gt;    m     
+10      10 2013-03-28    2013-04-01              2013-04-03      Death   m     
+# ℹ 2 more variables: age &lt;dbl&gt;, province &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="reminder-relational-operators-comparators-in-r" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="reminder-relational-operators-comparators-in-r"><span class="header-section-number">12.5</span> Reminder: relational operators (comparators) in R</h2>
+<p>Throughout this lesson, you will use a lot of relational operators in R. Recall that relational operators, sometimes called “comparators”, test the relation between two values, and return <code>TRUE</code>, <code>FALSE</code> or <code>NA</code>.</p>
+<p>A list of the most common operators is given below:</p>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Operator</strong></td>
+<td style="text-align: left;"><strong>is TRUE if</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A &lt; B</td>
+<td style="text-align: left;">A is <strong>less than</strong> B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A &lt;= B</td>
+<td style="text-align: left;">A is <strong>less than or equal</strong> to B</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A &gt; B</td>
+<td style="text-align: left;">A is <strong>greater than</strong> B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A &gt;= B</td>
+<td style="text-align: left;">A is <strong>greater than or equal to</strong> B</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A == B</td>
+<td style="text-align: left;">A is <strong>equal</strong> to B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A != B</td>
+<td style="text-align: left;">A is <strong>not equal</strong> to B</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A %in% B</td>
+<td style="text-align: left;">A <strong>is an element of</strong> B</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="introduction-to-case_when" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="introduction-to-case_when"><span class="header-section-number">12.6</span> Introduction to <code>case_when()</code></h2>
+<p>To get familiar with <code>case_when(),</code> let’s begin with a simple conditional transformation on the <code>age_years</code> column of the <code>yaounde</code> dataset. First we subset the data frame to just the <code>age_years</code> column for easy illustration:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="ot">&lt;-</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  yaounde <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age_years)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>yaounde_age</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+   age_years
+       &lt;dbl&gt;
+ 1        45
+ 2        55
+ 3        23
+ 4        20
+ 5        NA
+ 6        17
+ 7        13
+ 8        28
+ 9        30
+10        NA</code></pre>
+</div>
+</div>
+<p>Now, using <code>case_when()</code>, we can make a new column, called “age_group”, that has the value “Child” if the person is below 18, and “Adult” if the person is 18 and up:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span>  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Adult"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group
+       &lt;dbl&gt; &lt;chr&gt;    
+ 1        45 Adult    
+ 2        55 Adult    
+ 3        23 Adult    
+ 4        20 Adult    
+ 5        NA &lt;NA&gt;     
+ 6        17 Child    
+ 7        13 Child    
+ 8        28 Adult    
+ 9        30 Adult    
+10        NA &lt;NA&gt;     </code></pre>
+</div>
+</div>
+<p>The <code>case_when()</code> syntax may seem a bit foreign, but it is quite simple: on the left-hand side (LHS) of the <code>~</code> sign (called a “tilde”), you provide the condition(s) you want to evaluate, and on the right-hand side (RHS), you provide a value to put in if the condition is true.</p>
+<p>So the statement <code>case_when(age_years &lt; 18 ~ "Child", age_years &gt;= 18 ~ "Adult")</code> can be read as: “if <code>age_years</code> is below 18, input ‘Child’, else if <code>age_years</code> is greater than or equal to 18, input ‘Adult’”.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Vocab">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vocab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Formulas, LHS and RHS</strong></p>
+<p>Each line of a <code>case_when()</code> call is termed a “formula” or, sometimes, a “two-sided formula”. And each formula has a left-hand side (abbreviated LHS) and right-hand side (abbreviated RHS).</p>
+<p>For example, the code <code>age_years &lt; 18 ~ "Child"</code> is a “formula”, its LHS is <code>age_years &lt; 18</code> while its RHS is <code>"Child"</code>.</p>
+<p>You are likely to come across these terms when reading the documentation for the <code>case_when()</code> function, and we will also refer to them in this lesson.</p>
+</div>
+</div>
+<hr>
+<p>After creating a new variable with <code>case_when()</code>, it is a good idea to inspect it thoroughly to make sure it worked as intended.</p>
+<p>To inspect the variable, you can pipe your data frame into the <code>View()</code> function to view it in spreadsheet form:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span>  </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Adult"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">View</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This would open up a new tab in RStudio where you should manually scan through the new column, <code>age_group</code> and the referenced column <code>age_years</code> to make sure your <code>case_when()</code> statement did what you wanted it to do.</p>
+<p>You could also pass the new column into the <code>tabyl()</code> function to ensure that the proportions “make sense”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span>  </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Adult"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(age_group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> age_group   n   percent valid_percent
+     Adult 558 0.5746653     0.7054362
+     Child 233 0.2399588     0.2945638
+      &lt;NA&gt; 180 0.1853759            NA</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With the <code>flu_linelist</code> data, make a new column, called <code>age_group</code>, that has the value “Below 50” for people under 50 and “50 and above” for people aged 50 and up. Use the <code>case_when()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Q_age_group <span class="ot">&lt;-</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> ______________________________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Out of the entire sample of individuals in the <code>flu_linelist</code> dataset, what percentage are confirmed to be below 60? (Repeat the above procedure but with the <code>60</code> cutoff, then call <code>tabyl()</code> on the age group variable. Use the <code>percent</code> column, not the <code>valid_percent</code> column.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Enter your answer as a WHOLE number without quotes:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Q_age_group_percentage <span class="ot">&lt;-</span> YOUR_ANSWER_HERE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-true-default-argument" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="the-true-default-argument"><span class="header-section-number">12.7</span> The <code>TRUE</code> default argument</h2>
+<p>In a <code>case_when()</code> statement, you can use a literal <code>TRUE</code> condition to match any rows not yet matched with provided conditions.</p>
+<p>For example, if we only keep only the first condition from the previous example, <code>age_years &lt; 18</code>, and define the default value to be <code>TRUE ~ "Not child"</code> then all adults and <code>NA</code> values in the data set will be labeled <code>"Not child"</code> by default.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Not child"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group
+       &lt;dbl&gt; &lt;chr&gt;    
+ 1        45 Not child
+ 2        55 Not child
+ 3        23 Not child
+ 4        20 Not child
+ 5        NA Not child
+ 6        17 Child    
+ 7        13 Child    
+ 8        28 Not child
+ 9        30 Not child
+10        NA Not child</code></pre>
+</div>
+</div>
+<p>This <code>TRUE</code> condition can be read as “for everything else…”.</p>
+<p>So the full <code>case_when()</code> statement used above, <code>age_years &lt; 18 ~ "Child", TRUE ~ "Not child"</code>, would then be read as: “if age is below 18, input ‘Child’ and <em>for everyone else not yet matched</em>, input ‘Not child’”.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Watch Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Watch Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is important to use <code>TRUE</code> as the <em>final</em> condition in <code>case_when()</code>. If you use it as the first condition, it will take precedence over all others, as seen here:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(<span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Not child"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group
+       &lt;dbl&gt; &lt;chr&gt;    
+ 1        45 Not child
+ 2        55 Not child
+ 3        23 Not child
+ 4        20 Not child
+ 5        NA Not child
+ 6        17 Not child
+ 7        13 Not child
+ 8        28 Not child
+ 9        30 Not child
+10        NA Not child</code></pre>
+</div>
+</div>
+<p>As you can observe, all individuals are now coded with “Not child”, because the <code>TRUE</code> condition was placed first, and therefore took precedence. We will explore the issue of precedence further below.</p>
+</div>
+</div>
+</section>
+<section id="matching-nas-with-is.na" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="matching-nas-with-is.na"><span class="header-section-number">12.8</span> Matching NA’s with <code>is.na()</code></h2>
+<p>We can match missing values manually with <code>is.na()</code>. Below we match <code>NA</code> ages with <code>is.na()</code> and set their age group to “Missing age”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span>  </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Adult"</span>, </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">is.na</span>(age_years) <span class="sc">~</span> <span class="st">"Missing age"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group  
+       &lt;dbl&gt; &lt;chr&gt;      
+ 1        45 Adult      
+ 2        55 Adult      
+ 3        23 Adult      
+ 4        20 Adult      
+ 5        NA Missing age
+ 6        17 Child      
+ 7        13 Child      
+ 8        28 Adult      
+ 9        30 Adult      
+10        NA Missing age</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As before, using the <code>flu_linelist</code> data, make a new column, called <code>age_group</code>, that has the value “Below 60” for people under 60 and “60 and above” for people aged 60 and up. But this time, also set those with missing ages to “Missing age”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>Q_age_group_nas <span class="ot">&lt;-</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>gender</code> column of the <code>flu_linelist</code> dataset contains the values “f”, “m” and <code>NA</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>flu_linelist <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> gender  n    percent valid_percent
+      f 39 0.28676471     0.2910448
+      m 95 0.69852941     0.7089552
+   &lt;NA&gt;  2 0.01470588            NA</code></pre>
+</div>
+</div>
+<p>Recode “f”, “m” and <code>NA</code> to “Female”, “Male” and “Missing gender” respectively. You should modify the existing <code>gender</code> column, not create a new column.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>Q_gender_recode <span class="ot">&lt;-</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="keeping-default-values-of-a-variable" class="level2" data-number="12.9">
+<h2 data-number="12.9" class="anchored" data-anchor-id="keeping-default-values-of-a-variable"><span class="header-section-number">12.9</span> Keeping default values of a variable</h2>
+<p>The right-hand side (RHS) of a <code>case_when()</code> formula can also take in a variable from your data frame. This is often useful when you want to change just a few values in a column.</p>
+<p>Let’s see an example with the <code>highest_education</code> column, which contains the highest education level attained by a respondent:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>yaounde_educ <span class="ot">&lt;-</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  yaounde <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(highest_education)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>yaounde_educ</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+   highest_education
+   &lt;chr&gt;            
+ 1 Secondary        
+ 2 University       
+ 3 University       
+ 4 Secondary        
+ 5 Primary          
+ 6 Secondary        
+ 7 Secondary        
+ 8 Doctorate        
+ 9 Secondary        
+10 Secondary        </code></pre>
+</div>
+</div>
+<p>Below, we create a new column, <code>highest_educ_recode</code>, where we recode both “University” and “Doctorate” to the value “Post-secondary”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>yaounde_educ <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">highest_educ_recode =</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">case_when</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        highest_education <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"University"</span>, <span class="st">"Doctorate"</span>) <span class="sc">~</span> <span class="st">"Post-secondary"</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   highest_education highest_educ_recode
+   &lt;chr&gt;             &lt;chr&gt;              
+ 1 Secondary         &lt;NA&gt;               
+ 2 University        Post-secondary     
+ 3 University        Post-secondary     
+ 4 Secondary         &lt;NA&gt;               
+ 5 Primary           &lt;NA&gt;               
+ 6 Secondary         &lt;NA&gt;               
+ 7 Secondary         &lt;NA&gt;               
+ 8 Doctorate         Post-secondary     
+ 9 Secondary         &lt;NA&gt;               
+10 Secondary         &lt;NA&gt;               </code></pre>
+</div>
+</div>
+<p>It worked, but now we have <code>NA</code>s for all other rows. To keep these other rows at their default values, we can add the line <code>TRUE ~ highest_education</code> (with a variable, <code>highest_education</code>, on the right-hand side of a formula):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>yaounde_educ <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">highest_educ_recode =</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">case_when</span>(</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        highest_education <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"University"</span>, <span class="st">"Doctorate"</span>) <span class="sc">~</span> <span class="st">"Post-secondary"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> highest_education</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   highest_education highest_educ_recode
+   &lt;chr&gt;             &lt;chr&gt;              
+ 1 Secondary         Secondary          
+ 2 University        Post-secondary     
+ 3 University        Post-secondary     
+ 4 Secondary         Secondary          
+ 5 Primary           Primary            
+ 6 Secondary         Secondary          
+ 7 Secondary         Secondary          
+ 8 Doctorate         Post-secondary     
+ 9 Secondary         Secondary          
+10 Secondary         Secondary          </code></pre>
+</div>
+</div>
+<p>Now the <code>case_when()</code> statement reads: ‘If highest education is “University” or “Doctorate”, input “Post-secondary”. For everyone else, input the value from <code>highest_education</code>’.</p>
+<hr>
+<p>Above we have been putting the recoded values in a separate column, <code>highest_educ_recode</code>, but for this kind of replacement, it is more common to simply overwrite the existing column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>yaounde_educ <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">highest_education =</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">case_when</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        highest_education <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"University"</span>, <span class="st">"Doctorate"</span>) <span class="sc">~</span> <span class="st">"Post-secondary"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> highest_education</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+   highest_education
+   &lt;chr&gt;            
+ 1 Secondary        
+ 2 Post-secondary   
+ 3 Post-secondary   
+ 4 Secondary        
+ 5 Primary          
+ 6 Secondary        
+ 7 Secondary        
+ 8 Post-secondary   
+ 9 Secondary        
+10 Secondary        </code></pre>
+</div>
+</div>
+<p>We can read this last <code>case_when()</code> statement as: ‘If highest education is “University” or “Doctorate”, <em>change the value to</em> “Post-secondary”. For everyone else, <em>leave in</em> the value from <code>highest_education</code>’.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the <code>flu_linelist</code> data, modify the existing column <code>outcome</code> by replacing the value “Recover” with “Recovery”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>Q_recode_recovery <span class="ot">&lt;-</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(We know it’s a lot of code for such a simple change. Later you will see easier ways to do this.)</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Pro Tip">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pro Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Avoiding long code lines</strong> As you start to write increasingly complex <code>case_when()</code> statements, it will become helpful to use line breaks to avoid long lines of code.</p>
+<p>To assist with creating line breaks, you can use the {styler} package. Install it with <code>pacman::p_load(styler)</code>. Then to reformat any piece of code, highlight the code, click the “Addins” button in RStudio, then click on “Style selection”:</p>
+<p><img src="images/styler_style_selection.png" class="img-fluid" width="317"></p>
+<p>Alternatively, you could highlight the code and use the shortcut <code>Shift</code> + <code>Command/Control</code> + <code>A</code> to use RStudio’s built-in code reformatter.</p>
+<p>Sometimes {styler} does a better job at reformatting. Sometimes the built-in reformatter does a better job.</p>
+</div>
+</div>
+</section>
+<section id="multiple-conditions-on-a-single-variable" class="level2" data-number="12.10">
+<h2 data-number="12.10" class="anchored" data-anchor-id="multiple-conditions-on-a-single-variable"><span class="header-section-number">12.10</span> Multiple conditions on a single variable</h2>
+<p>LHS conditions in <code>case_when()</code> formulas can have multiple parts. Let’s see an example of this.</p>
+<p>But first, we will inspire ourselves from what we learnt in the <code>mutate()</code> lesson and recreate the BMI variable. This involves first converting the <code>height_cm</code> variable to meters, then calculating BMI.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>yaounde_BMI <span class="ot">&lt;-</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  yaounde <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height_m =</span> height_cm<span class="sc">/</span><span class="dv">100</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">BMI =</span> (weight_kg <span class="sc">/</span> (height_m)<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(BMI)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>yaounde_BMI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+     BMI
+   &lt;dbl&gt;
+ 1  33.3
+ 2  28.0
+ 3  22.8
+ 4  26.0
+ 5  31.0
+ 6  24.8
+ 7  28.9
+ 8  20.7
+ 9  25.3
+10  23.9</code></pre>
+</div>
+</div>
+<p>Recall the following BMI categories:</p>
+<ul>
+<li><p>If the BMI is inferior to 18.5, the person is considered underweight.</p></li>
+<li><p>A normal BMI is greater than or equal to 18.5 and less than 25.</p></li>
+<li><p>An overweight BMI is greater than or equal to 25 and less than 30.</p></li>
+<li><p>An obese BMI is BMI is greater than or equal to 30.</p></li>
+</ul>
+<p>The condition <code>BMI &gt;= 18.5 &amp; BMI &lt; 25</code> to define <code>Normal weight</code> is a compound condition because it has <em>two</em> comparators: <code>&gt;=</code> and <code>&lt;</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>yaounde_BMI <span class="ot">&lt;-</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  yaounde_BMI <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BMI_classification =</span> <span class="fu">case_when</span>(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    BMI <span class="sc">&lt;</span> <span class="fl">18.5</span> <span class="sc">~</span><span class="st">'Underweight'</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    BMI <span class="sc">&gt;=</span> <span class="fl">18.5</span> <span class="sc">&amp;</span> BMI <span class="sc">&lt;</span> <span class="dv">25</span> <span class="sc">~</span> <span class="st">'Normal weight'</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    BMI <span class="sc">&gt;=</span> <span class="dv">25</span> <span class="sc">&amp;</span> BMI <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">'Overweight'</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    BMI <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">'Obese'</span>))</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>yaounde_BMI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+     BMI BMI_classification
+   &lt;dbl&gt; &lt;chr&gt;             
+ 1  33.3 Obese             
+ 2  28.0 Overweight        
+ 3  22.8 Normal weight     
+ 4  26.0 Overweight        
+ 5  31.0 Obese             
+ 6  24.8 Normal weight     
+ 7  28.9 Overweight        
+ 8  20.7 Normal weight     
+ 9  25.3 Overweight        
+10  23.9 Normal weight     </code></pre>
+</div>
+</div>
+<p>Let’s use <code>tabyl()</code> to have a look at our data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>yaounde_BMI <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(BMI_classification)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But you can see that the levels of BMI are defined in alphabetical order from Normal weight to Underweight, instead of from lightest (Underweight) to heaviest (Obese). Remember that if you want to have a certain order you can make <code>BMI_classification</code> a factor using <code>mutate()</code> and define its levels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>yaounde_BMI <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BMI_classification =</span> <span class="fu">factor</span>(</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    BMI_classification,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Obese"</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Overweight"</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Normal weight"</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Underweight"</span>)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(BMI_classification)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled" title="Watch Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Watch Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With compound conditions, you should remember to input the variable name <em>everytime</em> there is a comparator. R learners often forget this and will try to run code that looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>yaounde_BMI <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BMI_classification =</span> <span class="fu">case_when</span>(BMI <span class="sc">&lt;</span> <span class="fl">18.5</span> <span class="sc">~</span><span class="st">'Underweight'</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                                        BMI <span class="sc">&gt;=</span> <span class="fl">18.5</span> <span class="sc">&amp;</span> <span class="er">&lt;</span> <span class="dv">25</span> <span class="sc">~</span> <span class="st">'Normal weight'</span>,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                                        BMI <span class="sc">&gt;=</span> <span class="dv">25</span> <span class="sc">&amp;</span> <span class="er">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">'Overweight'</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                                        BMI <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">'Obese'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The definitions for the “Normal weight” and “Overweight” categories are mistaken. Do you see the problem? Try to run the code to spot the error.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With the <code>flu_linelist</code> data, make a new column, called <code>adolescent</code>, that has the value “Yes” for people in the 10-19 (at least 10 and less than 20) age group, and “No” for everyone else.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>Q_adolescent_grouping <span class="ot">&lt;-</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="multiple-conditions-on-multiple-variables" class="level2" data-number="12.11">
+<h2 data-number="12.11" class="anchored" data-anchor-id="multiple-conditions-on-multiple-variables"><span class="header-section-number">12.11</span> Multiple conditions on multiple variables</h2>
+<p>In all examples seen so far, you have only used conditions involving a single variable at a time. But LHS conditions often refer to multiple variables at once.</p>
+<p>Let’s see a simple example with age and sex in the <code>yaounde</code> data frame. First, we select just these two variables for easy illustration:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>yaounde_age_sex <span class="ot">&lt;-</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  yaounde <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age_years, sex)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>yaounde_age_sex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years sex   
+       &lt;dbl&gt; &lt;chr&gt; 
+ 1        45 Female
+ 2        55 Male  
+ 3        23 Male  
+ 4        20 Female
+ 5        NA Female
+ 6        17 Female
+ 7        13 Female
+ 8        28 Male  
+ 9        30 Male  
+10        NA Female</code></pre>
+</div>
+</div>
+<p>Now, imagine we want to recruit women and men in the 20-29 age group into two studies. For this we’d like to create a column, called <code>recruit</code>, with the following schema:</p>
+<ul>
+<li>Women aged 20-29 should have the value “Recruit to female study”</li>
+<li>Men aged 20-29 should have the value “Recruit to male study”</li>
+<li>Everyone else should have the value “Do not recruit”</li>
+</ul>
+<p>To do this, we run the following case_when statement:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>yaounde_age_sex <span class="sc">%&gt;%</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">recruit =</span> <span class="fu">case_when</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    sex <span class="sc">==</span> <span class="st">"Female"</span> <span class="sc">&amp;</span> age_years <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"Recruit to female study"</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    sex <span class="sc">==</span> <span class="st">"Male"</span> <span class="sc">&amp;</span> age_years <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"Recruit to male study"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Do not recruit"</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   age_years sex    recruit                
+       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;                  
+ 1        45 Female Do not recruit         
+ 2        55 Male   Do not recruit         
+ 3        23 Male   Recruit to male study  
+ 4        20 Female Recruit to female study
+ 5        NA Female Do not recruit         
+ 6        17 Female Do not recruit         
+ 7        13 Female Do not recruit         
+ 8        28 Male   Recruit to male study  
+ 9        30 Male   Do not recruit         
+10        NA Female Do not recruit         </code></pre>
+</div>
+</div>
+<p>You could also add extra pairs of parentheses around the age criteria within each condition:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>yaounde_age_sex <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">recruit =</span> <span class="fu">case_when</span>(</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    sex <span class="sc">==</span> <span class="st">"Female"</span> <span class="sc">&amp;</span> (age_years <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;=</span> <span class="dv">29</span>) <span class="sc">~</span> <span class="st">"Recruit to female study"</span>,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    sex <span class="sc">==</span> <span class="st">"Male"</span> <span class="sc">&amp;</span> (age_years <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;=</span> <span class="dv">29</span>) <span class="sc">~</span> <span class="st">"Recruit to male study"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Do not recruit"</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This extra pair of parentheses does not change the code output, but it improves coherence because the reader can visually see that your condition is made of two parts, one for gender, <code>sex == "Female"</code>, and another for age, <code>(age_years &gt;= 20 &amp; age_years &lt;= 29)</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With the <code>flu_linelist</code> data, make a new column, called <code>recruit</code> with the following schema:</p>
+<ul>
+<li>Individuals aged 30-59 (at least 30, younger than 60) from the Jiangsu province should have the value “Recruit to Jiangsu study”</li>
+<li>Individuals aged 30-59 from the Zhejiang province should have the value “Recruit to Zhejiang study”</li>
+<li>Everyone else should have the value “Do not recruit”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>Q_age_province_grouping <span class="ot">&lt;-</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">recruit =</span> ______________________________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="order-of-priority-of-conditions-in-case_when" class="level2" data-number="12.12">
+<h2 data-number="12.12" class="anchored" data-anchor-id="order-of-priority-of-conditions-in-case_when"><span class="header-section-number">12.12</span> Order of priority of conditions in <code>case_when()</code></h2>
+<p>Note that the order of conditions is important, because conditions listed at the top of your <code>case_when()</code> statement take priority over others.</p>
+<p>To understand this, run the example below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>yaounde_age_sex <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>, </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Young adult"</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&lt;</span> <span class="dv">120</span> <span class="sc">~</span> <span class="st">"Older adult"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   age_years sex    age_group  
+       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      
+ 1        45 Female Older adult
+ 2        55 Male   Older adult
+ 3        23 Male   Young adult
+ 4        20 Female Young adult
+ 5        NA Female &lt;NA&gt;       
+ 6        17 Female Child      
+ 7        13 Female Child      
+ 8        28 Male   Young adult
+ 9        30 Male   Older adult
+10        NA Female &lt;NA&gt;       </code></pre>
+</div>
+</div>
+<p>This initially looks like a faulty <code>case_when()</code> statement because the age conditions overlap. For example, the statement <code>age_years &lt; 120 ~ "Older adult"</code> (which reads “if age is below 120, input ‘Older adult’”) suggests that <em>anyone</em> between ages 0 and 120 (even a 1-year old baby!, would be coded as “Older adult”.</p>
+<p>But as you saw, the code actually works fine! People under 18 are still coded as “Child”.</p>
+<p>What’s going on? Essentially, the <code>case_when()</code> statement is interpreted as a series of branching logical steps, starting with the first condition. So this particular statement can be read as: “If age is below 18, input ‘Child’, <em>and otherwise</em>, if age is below 30, input ‘Young adult’, <em>and otherwise</em>, if age is below 120, input”Older adult”.</p>
+<p>This is illustrated in the schematic below:</p>
+<p><img src="images/case_when_eval_order_4.png" class="img-fluid" width="530"></p>
+<p>This means that if you swap the order of the conditions, you will end up with a faulty <code>case_when()</code> statement:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(age_years <span class="sc">&lt;</span> <span class="dv">120</span> <span class="sc">~</span> <span class="st">"Older adult"</span>, </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Young adult"</span>, </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                               age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group  
+       &lt;dbl&gt; &lt;chr&gt;      
+ 1        45 Older adult
+ 2        55 Older adult
+ 3        23 Older adult
+ 4        20 Older adult
+ 5        NA &lt;NA&gt;       
+ 6        17 Older adult
+ 7        13 Older adult
+ 8        28 Older adult
+ 9        30 Older adult
+10        NA &lt;NA&gt;       </code></pre>
+</div>
+</div>
+<p>As you can see, everyone is coded as “Older adult”. This happens because the first condition matches everyone, so there is no one left to match with the subsequent conditions. The statement can be read “If age is below 120, input ‘Older adult’, <em>and otherwise</em> if age is below 30….” But there is no “otherwise” because everyone has already been matched!</p>
+<p>This is illustrated in the diagram below:</p>
+<p><img src="images/case_when_faulty_order.png" class="img-fluid" width="532"></p>
+<p>Although we have spent much time explaining the importance of the order of conditions, in this specific example, there would be a much clearer way to write this code that would not depend on the order of conditions. Rather than leave the age groups open-ended like this:</p>
+<blockquote class="blockquote">
+<p><code>age_years &lt; 120 ~ "Older adult"</code></p>
+</blockquote>
+<p>you should actually use <em>closed</em> age bounds like this:</p>
+<blockquote class="blockquote">
+<p><code>age_years &gt;= 30 &amp; age_years &lt; 120 ~ "Older adult"</code></p>
+</blockquote>
+<p>which is read: “if age is greater than or equal to 30 and less than 120, input ‘Older adult’”.</p>
+<p>With such closed conditions, the order of conditions no longer matters. You get the same result no matter how you arrange the conditions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="do">## start with "Older adult" condition</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    age_years <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;</span> <span class="dv">120</span> <span class="sc">~</span> <span class="st">"Older adult"</span>,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    age_years <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Young adult"</span>,</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    age_years <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group  
+       &lt;dbl&gt; &lt;chr&gt;      
+ 1        45 Older adult
+ 2        55 Older adult
+ 3        23 Young adult
+ 4        20 Young adult
+ 5        NA &lt;NA&gt;       
+ 6        17 Child      
+ 7        13 Child      
+ 8        28 Young adult
+ 9        30 Older adult
+10        NA &lt;NA&gt;       </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="do">## start with "Child" condition</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>yaounde_age <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    age_years <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Child"</span>,</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    age_years <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Young adult"</span>,</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>    age_years <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> age_years <span class="sc">&lt;</span> <span class="dv">120</span> <span class="sc">~</span> <span class="st">"Older adult"</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   age_years age_group  
+       &lt;dbl&gt; &lt;chr&gt;      
+ 1        45 Older adult
+ 2        55 Older adult
+ 3        23 Young adult
+ 4        20 Young adult
+ 5        NA &lt;NA&gt;       
+ 6        17 Child      
+ 7        13 Child      
+ 8        28 Young adult
+ 9        30 Older adult
+10        NA &lt;NA&gt;       </code></pre>
+</div>
+</div>
+<p>Nice and clean!</p>
+<p>So why did we spend so much time explaining the importance of condition order if you can simply avoid open-ended categories and not have to worry about condition order?</p>
+<p>One reason is that understanding condition order should now help you see why it is important to put the <code>TRUE</code> condition as the final line in your <code>case_when()</code> statement. The <code>TRUE</code> condition matches <em>every row that has not yet been matched</em>, so if you use it first in the <code>case_when()</code> , it will match <em>everyone</em>!</p>
+<p>The other reason is that there are certain cases where you <em>may</em> want to use open-ended overlapping conditions, and so you will have to pay attention to the order of conditions. Let’s see one such example now: identifying COVID-like symptoms. Note that this is somewhat advanced material, likely a bit above your current needs. We are introducing it now so you are aware and can stay vigilant with <code>case_when()</code> in the future.</p>
+<section id="overlapping-conditions-within-case_when" class="level3" data-number="12.12.1">
+<h3 data-number="12.12.1" class="anchored" data-anchor-id="overlapping-conditions-within-case_when"><span class="header-section-number">12.12.1</span> Overlapping conditions within <code>case_when()</code></h3>
+<p>We want to identify COVID-like symptoms in our data. Consider the symptoms columns in the <code>yaounde</code> data frame, which indicates which symptoms were experienced by respondents over a 6-month period:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>yaounde <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"symp_"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 13
+   symp_fever symp_headache symp_cough symp_rhinitis symp_sneezing symp_fatigue
+   &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;       
+ 1 No         No            No         No            No            No          
+ 2 No         No            No         No            No            No          
+ 3 No         No            No         No            No            No          
+ 4 No         No            No         Yes           Yes           No          
+ 5 No         No            No         No            No            No          
+ 6 Yes        No            Yes        Yes           No            No          
+ 7 No         No            No         No            Yes           No          
+ 8 No         Yes           No         No            No            No          
+ 9 Yes        No            No         Yes           No            No          
+10 No         No            No         No            No            No          
+# ℹ 7 more variables: symp_muscle_pain &lt;chr&gt;, symp_nausea_or_vomiting &lt;chr&gt;,
+#   symp_diarrhoea &lt;chr&gt;, symp_short_breath &lt;chr&gt;, symp_sore_throat &lt;chr&gt;,
+#   symp_anosmia_or_ageusia &lt;chr&gt;, symp_stomach_ache &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>We would like to use this to assess whether a person may have had COVID, partly following guidelines recommended by the <a href="https://apps.who.int/iris/handle/10665/333752">WHO</a>.</p>
+<ul>
+<li>Individuals with cough are to be classed as “possible COVID cases”</li>
+<li>Individuals with anosmia/ageusia (loss of smell or loss of taste) are to be classed as “probable COVID cases”.</li>
+</ul>
+<p>Now, keeping these criteria in mind, consider an individual, let’s call her Osma, who has cough AND anosmia/ageusia? How should we classify Osma?</p>
+<p>She meets the criteria for “possible COVID” (because she has cough), but she <em>also</em> meets the criteria for “probable COVID” (because she has anosmia/ageusia). So which group should she be classed as, “possible COVID” or “probable COVID”? Think about it for a minute.</p>
+<p>Hopefully you guessed that she should be classed as a “probable COVID case”. “Probable” is more likely than “Possible”; and the anosmia/ageusia symptom is more <em>significant</em> than the cough symptom. One might say that the criterion for “probable COVID” has a higher specificity or a higher <em>precedence</em> than the criterion for “possible COVID”.</p>
+<p>Therefore, when constructing a <code>case_when()</code> statement, the “probable COVID” condition should also take higher precedence—it should come <em>first</em> in the conditions provided to <code>case_when()</code>. Let’s see this now.</p>
+<p>First we select the relevant variables, for easy illustration. We also identify and <code>slice()</code> specific rows that are useful for the demonstration:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>yaounde_symptoms_slice <span class="ot">&lt;-</span> </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  yaounde <span class="sc">%&gt;%</span> </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(symp_cough, symp_anosmia_or_ageusia) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># slice of specific rows useful for demo </span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Once you find the right code, you would remove this slice</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">32</span>, <span class="dv">711</span>, <span class="dv">625</span>, <span class="dv">651</span> )</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>yaounde_symptoms_slice</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  symp_cough symp_anosmia_or_ageusia
+  &lt;chr&gt;      &lt;chr&gt;                  
+1 No         No                     
+2 Yes        No                     
+3 No         Yes                    
+4 Yes        Yes                    </code></pre>
+</div>
+</div>
+<p>Now, the correct <code>case_when()</code> statement, which has the “Probable COVID” condition first:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>yaounde_symptoms_slice <span class="sc">%&gt;%</span> </span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covid_status =</span> <span class="fu">case_when</span>(</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    symp_anosmia_or_ageusia <span class="sc">==</span> <span class="st">"Yes"</span> <span class="sc">~</span> <span class="st">"Probable COVID"</span>, </span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>    symp_cough <span class="sc">==</span> <span class="st">"Yes"</span>  <span class="sc">~</span> <span class="st">"Possible COVID"</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>    ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  symp_cough symp_anosmia_or_ageusia covid_status  
+  &lt;chr&gt;      &lt;chr&gt;                   &lt;chr&gt;         
+1 No         No                      &lt;NA&gt;          
+2 Yes        No                      Possible COVID
+3 No         Yes                     Probable COVID
+4 Yes        Yes                     Probable COVID</code></pre>
+</div>
+</div>
+<p>This <code>case_when()</code> statement can be read in simple terms as ‘If the person has anosmia/ageusia, input “Probable COVID”, and otherwise, if the person has cough, input “Possible COVID”’.</p>
+<p>Now, spend some time looking through the output data frame, especially the last three individuals. The individual in row 2 meets the criterion for “Possible COVID” because they have cough (<code>symp_cough</code> == “Yes”), and the individual in row 3 meets the criterion for “Probable COVID” because they have anosmia/ageusia (<code>symp_anosmia_or_ageusia == "Yes"</code>).</p>
+<p>The individual in row 4 is Osma, who both meets the criteria for “possible COVID” <em>and</em> for “probable COVID”. And because we arranged our <code>case_when()</code> conditions in the right order, she is coded correctly as “probable COVID”. Great!</p>
+<p>But notice what happens if we swap the order of the conditions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>yaounde_symptoms_slice <span class="sc">%&gt;%</span> </span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covid_status =</span> <span class="fu">case_when</span>(</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    symp_cough <span class="sc">==</span> <span class="st">"Yes"</span>  <span class="sc">~</span> <span class="st">"Possible COVID"</span>,</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>    symp_anosmia_or_ageusia <span class="sc">==</span> <span class="st">"Yes"</span> <span class="sc">~</span> <span class="st">"Probable COVID"</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>    ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  symp_cough symp_anosmia_or_ageusia covid_status  
+  &lt;chr&gt;      &lt;chr&gt;                   &lt;chr&gt;         
+1 No         No                      &lt;NA&gt;          
+2 Yes        No                      Possible COVID
+3 No         Yes                     Probable COVID
+4 Yes        Yes                     Possible COVID</code></pre>
+</div>
+</div>
+<p>Oh no! Osma in row 4 is now misclassed as “Possible COVID” even though she has the more significant anosmia/ageusia symptom. This is because the first condition <code>symp_cough == "Yes"</code> matched her first, and so the second condition was not able to match her!</p>
+<p>So now you see why you sometimes need to think deeply about the order of your <code>case_when()</code> conditions. It is a minor point, but it can bite you at unexpected times. Even experienced analysts tend to make mistakes that can be traced to improper arrangement of <code>case_when()</code> statements.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Challenge">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In reality, there <em>is</em> still another solution to avoid misclassifying the person with cough and anosmia/ageusia. That is to add <code>symp_anosmia_or_ageusia != "Yes"</code> (not equal to “Yes”) to the conditions for “Possible COVID”. Can you think of why this works?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>yaounde_symptoms_slice <span class="sc">%&gt;%</span> </span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covid_status =</span> <span class="fu">case_when</span>(</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>    symp_cough <span class="sc">==</span> <span class="st">"Yes"</span> <span class="sc">&amp;</span> symp_anosmia_or_ageusia <span class="sc">!=</span> <span class="st">"Yes"</span> <span class="sc">~</span> <span class="st">"Possible COVID"</span>,</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>    symp_anosmia_or_ageusia <span class="sc">==</span> <span class="st">"Yes"</span> <span class="sc">~</span> <span class="st">"Probable COVID"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  symp_cough symp_anosmia_or_ageusia covid_status  
+  &lt;chr&gt;      &lt;chr&gt;                   &lt;chr&gt;         
+1 No         No                      &lt;NA&gt;          
+2 Yes        No                      Possible COVID
+3 No         Yes                     Probable COVID
+4 Yes        Yes                     Probable COVID</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With the <code>flu_linelist</code> dataset, create a new column called <code>follow_up_priority</code> that implements the following schema:</p>
+<ul>
+<li>Women should be considered “High priority”</li>
+<li>All children (under 18 years) of any gender should be considered “Highest priority”.</li>
+<li>Everyone else should have the value “No priority”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>Q_priority_groups <span class="ot">&lt;-</span> </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">follow_up_priority =</span> ________________</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="binary-conditions-dplyrif_else" class="level2" data-number="12.13">
+<h2 data-number="12.13" class="anchored" data-anchor-id="binary-conditions-dplyrif_else"><span class="header-section-number">12.13</span> Binary conditions: <code>dplyr::if_else()</code></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/custom_dplyr_if_else.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Fig: the if_else() conditions.</figcaption>
+</figure>
+</div>
+<p>There is another {dplyr} verb similar to <code>case_when()</code> for when we want to apply a binary condition to a variable: <code>if_else()</code>. A binary condition is either <code>TRUE</code> or <code>FALSE</code>.</p>
+<p><code>if_else()</code> has a similar application as <code>case_when()</code> : if the condition is true, then one operation is applied, if the condition is false, the alternative is applied. The syntax is: <code>if_else(CONDITION, IF_TRUE, IF_FALSE)</code>. As you can see, this only allows for a binary condition (not multiple cases, such as handled by <code>case_when()</code>).</p>
+<p>If we take one of the first examples about recoding the <code>highest_education</code> variable, we can write it either with <code>case_when()</code> or with <code>if_else()</code>.</p>
+<p>Here is the version we already explored:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>yaounde_educ <span class="sc">%&gt;%</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">highest_education =</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">case_when</span>(</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>        highest_education <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"University"</span>, <span class="st">"Doctorate"</span>) <span class="sc">~</span> <span class="st">"Post-secondary"</span>,</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> highest_education</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+   highest_education
+   &lt;chr&gt;            
+ 1 Secondary        
+ 2 Post-secondary   
+ 3 Post-secondary   
+ 4 Secondary        
+ 5 Primary          
+ 6 Secondary        
+ 7 Secondary        
+ 8 Post-secondary   
+ 9 Secondary        
+10 Secondary        </code></pre>
+</div>
+</div>
+<p>And this is how we would write it using <code>if_else()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>yaounde_educ <span class="sc">%&gt;%</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">highest_education =</span> </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>             highest_education <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"University"</span>, <span class="st">"Doctorate"</span>),</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>             <span class="co"># if TRUE then we recode</span></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Post-secondary"</span>,</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>             <span class="co"># if FALSE then we keep default value</span></span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>             highest_education</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>             ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+   highest_education
+   &lt;chr&gt;            
+ 1 Secondary        
+ 2 Post-secondary   
+ 3 Post-secondary   
+ 4 Secondary        
+ 5 Primary          
+ 6 Secondary        
+ 7 Secondary        
+ 8 Post-secondary   
+ 9 Secondary        
+10 Secondary        </code></pre>
+</div>
+</div>
+<p>As you can see, we get the same output, whether we use <code>if_else()</code> or <code>case_when()</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With the <code>flu_linelist</code> data, make a new column, called <code>age_group</code>, that has the value “Below 50” for people under 50 and “50 and above” for people aged 50 and up. Use the <code>if_else()</code> function.</p>
+<p>This is exactly the same question as your first practice question, but this time you need to use <code>if_else()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>Q_age_group_if_else <span class="ot">&lt;-</span> </span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  flu_linelist <span class="sc">%&gt;%</span> </span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">if_else</span>(______________________________))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="wrap-up" class="level2" data-number="12.14">
+<h2 data-number="12.14" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">12.14</span> Wrap up</h2>
+<p>Changing or constructing your variables based on conditions on other variables is one of the most repeated data wrangling tasks. To the point it deserved its very own lesson !</p>
+<p>I hope now that you will feel comfortable using <code>case_when()</code> and <code>if_else()</code> within <code>mutate()</code> and that you are excited to learn more complex {dplyr} operations such as grouping variables and summarizing them.</p>
+<p>See you next time!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/custom_dplyr_conditional.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Fig: the if_else() and the `case_when()` conditions.</figcaption>
+</figure>
+</div>
+<p></p><div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/lolovanco.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/lolovanco" target="_blank">LAURE VANCAUWENBERGHE </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>A firm believer in science for good, striving to ally programming, health and education</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/kendavidn.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/kendavidn/" target="_blank">KENE DAVID NWOSU </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>Passionate about world improvement</p></li></ul></div><p></p>
+</section>
+<section id="references" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="references">References</h2>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li><p>Horst, A. (2022). <em>Dplyr-learnr</em>. <a href="https://github.com/allisonhorst/dplyr-learnr" class="uri">https://github.com/allisonhorst/dplyr-learnr</a> (Original work published 2020)</p></li>
+<li><p><em>Create, modify, and delete columns — Mutate</em>. (n.d.). Retrieved 21 February 2022, from <a href="https://dplyr.tidyverse.org/reference/mutate.html" class="uri">https://dplyr.tidyverse.org/reference/mutate.html</a></p></li>
+</ul>
+<p>Artwork was adapted from:</p>
+<ul>
+<li>Horst, A. (2022). <em>R &amp; stats illustrations by Allison Horst</em>. <a href="https://github.com/allisonhorst/stats-illustrations" class="uri">https://github.com/allisonhorst/stats-illustrations</a> (Original work published 2018)</li>
+</ul>
+</section>
+<section id="solutions" class="level2" data-number="12.15">
+<h2 data-number="12.15" class="anchored" data-anchor-id="solutions"><span class="header-section-number">12.15</span> Solutions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_age_group</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_age_group &lt;- 
+  flu_linelist %&gt;% 
+  mutate(age_group = case_when(age &lt; 50 ~ "Below 50", 
+                                   age &gt;= 50 ~ "50 and above"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_age_group_percentage</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Here is one way (not the only way) to get it:
+  
+Q_age_group_percentage &lt;- 
+  flu_linelist %&gt;% 
+      mutate(age_group_percentage = case_when(age &lt; 60 ~ "Below 60", 
+                                              age &gt;= 60 ~ "60 and above")) %&gt;% 
+      tabyl(age_group_percentage) %&gt;% 
+      filter(age_group_percentage == "Below 60") %&gt;% 
+      pull(percent) * 100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_age_group_nas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_age_group_nas &lt;- 
+  flu_linelist %&gt;% 
+  mutate(age_group = case_when(age &lt; 60 ~ "Below 60", 
+                               age &gt;= 60 ~ "60 and above", 
+                               is.na(age) ~ "Missing age"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_gender_recode</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_gender_recode &lt;- 
+  flu_linelist %&gt;%  
+      mutate(gender = case_when(gender == "f" ~ "Female",
+                                gender == "m" ~ "Male",
+                                is.na(gender) ~ "Missing gender"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_recode_recovery</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_recode_recovery &lt;- 
+  flu_linelist %&gt;% 
+  mutate(outcome = case_when(outcome == "Recover" ~ "Recovery", 
+                                 TRUE ~ outcome))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_adolescent_grouping</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_adolescent_grouping &lt;- 
+  flu_linelist %&gt;% 
+      mutate(adolescent = case_when(
+        age &gt;= 10 &amp; age &lt; 20 ~ "Yes",
+        TRUE ~ "No"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_age_province_grouping</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_age_province_grouping &lt;- 
+  flu_linelist %&gt;% 
+      mutate(recruit = case_when(
+        province == "Jiangsu" &amp; (age &gt;= 30 &amp; age &lt; 60) ~ "Recruit to Jiangsu study",
+        province == "Zhejiang" &amp; (age &gt;= 30 &amp; age &lt; 60) ~ "Recruit to Zhejiang study",
+        TRUE ~ "Do not recruit"
+      ))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_priority_groups</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_priority_groups &lt;- 
+  flu_linelist %&gt;% 
+      mutate(follow_up_priority = case_when(
+        age &lt; 18 ~ "Highest priority", 
+        gender == "f" ~ "High priority", 
+        TRUE ~ "No priority"
+      ))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_age_group_if_else</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_age_group_if_else &lt;- 
+  flu_linelist %&gt;% 
+  mutate(age_group = if_else(age &lt; 50, "Below 50", "50 and above"))</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./untangled_ls03_mutate.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./untangled_ls05_groupby_summarize.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

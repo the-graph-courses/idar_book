@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 16&nbsp; Advanced pivoting</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./data_on_display_ls01_gg_intro.html" rel="next">
+<link href="./untangled_ls07_pivoting.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./untangled_ls01_select_rename.html">Data Manipulation</a></li><li class="breadcrumb-item"><a href="./untangled_ls08_advanced_pivoting.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">16.1</span> Intro</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">16.2</span> Learning Objectives</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">16.3</span> Packages</a></li>
+  <li><a href="#datasets" id="toc-datasets" class="nav-link" data-scroll-target="#datasets"><span class="header-section-number">16.4</span> Datasets</a></li>
+  <li><a href="#wide-to-long" id="toc-wide-to-long" class="nav-link" data-scroll-target="#wide-to-long"><span class="header-section-number">16.5</span> Wide to long</a>
+  <ul class="collapse">
+  <li><a href="#understanding-names_sep-and-.value" id="toc-understanding-names_sep-and-.value" class="nav-link" data-scroll-target="#understanding-names_sep-and-.value"><span class="header-section-number">16.5.1</span> Understanding <code>names_sep</code> and “.value”</a></li>
+  <li><a href="#value-type-before-the-separator" id="toc-value-type-before-the-separator" class="nav-link" data-scroll-target="#value-type-before-the-separator"><span class="header-section-number">16.5.2</span> Value type <em>before</em> the separator</a></li>
+  <li><a href="#a-non-time-series-example" id="toc-a-non-time-series-example" class="nav-link" data-scroll-target="#a-non-time-series-example"><span class="header-section-number">16.5.3</span> A non-time-series example</a></li>
+  <li><a href="#escaping-the-dot-separator" id="toc-escaping-the-dot-separator" class="nav-link" data-scroll-target="#escaping-the-dot-separator"><span class="header-section-number">16.5.4</span> Escaping the dot separator</a></li>
+  <li><a href="#what-to-do-when-you-dont-have-a-neat-separator" id="toc-what-to-do-when-you-dont-have-a-neat-separator" class="nav-link" data-scroll-target="#what-to-do-when-you-dont-have-a-neat-separator"><span class="header-section-number">16.5.5</span> What to do when you don’t have a neat separator ?</a></li>
+  </ul></li>
+  <li><a href="#long-to-wide" id="toc-long-to-wide" class="nav-link" data-scroll-target="#long-to-wide"><span class="header-section-number">16.6</span> Long to wide</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">16.7</span> Wrap up</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions"><span class="header-section-number">16.8</span> Solutions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="intro" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="intro"><span class="header-section-number">16.1</span> Intro</h2>
+<p>You know basic pivoting operations from long format datasets to wide format datasets and vice versa. However, as is often the case, basic manipulations are sometimes not enough for the wrangling you need to do. Let’s now see the next level. Let’s go !</p>
+</section>
+<section id="learning-objectives" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">16.2</span> Learning Objectives</h2>
+<ol type="1">
+<li><p>Master complex pivoting from wide to long and long to wide</p></li>
+<li><p>Know how to use separators as a pivoting tool</p></li>
+</ol>
+</section>
+<section id="packages" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="packages"><span class="header-section-number">16.3</span> Packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, outbreaks, janitor, rio, here, knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="datasets" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="datasets"><span class="header-section-number">16.4</span> Datasets</h2>
+<p>We will introduce these datasets as we go along but here is an overview:</p>
+<ul>
+<li><p>Survey data from India on how much money patients spent on tuberculosis treatment</p></li>
+<li><p>Biomarker data from an enteropathogen study in Zambia</p></li>
+<li><p>A diet survey from Vietnam</p></li>
+</ul>
+</section>
+<section id="wide-to-long" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="wide-to-long"><span class="header-section-number">16.5</span> Wide to long</h2>
+<p>Sometimes you have multiple kinds of wide data in the same table. Consider this artificial example of heights and weights for children over two years:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>child_stats <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>child, <span class="sc">~</span>year1_height, <span class="sc">~</span>year2_height, <span class="sc">~</span>year1_weight, <span class="sc">~</span>year2_weight,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"A"</span>,        <span class="st">"80cm"</span>,        <span class="st">"85cm"</span>,         <span class="st">"5kg"</span>,        <span class="st">"10kg"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"B"</span>,        <span class="st">"85cm"</span>,        <span class="st">"90cm"</span>,         <span class="st">"7kg"</span>,        <span class="st">"12kg"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"C"</span>,        <span class="st">"90cm"</span>,       <span class="st">"100cm"</span>,         <span class="st">"6kg"</span>,        <span class="st">"14kg"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>child_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  child year1_height year2_height year1_weight year2_weight
+  &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;       
+1 A     80cm         85cm         5kg          10kg        
+2 B     85cm         90cm         7kg          12kg        
+3 C     90cm         100cm        6kg          14kg        </code></pre>
+</div>
+</div>
+<p>If you pivot all the measurement columns, you’ll get overly long data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>child_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  child name         value
+  &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;
+1 A     year1_height 80cm 
+2 A     year2_height 85cm 
+3 A     year1_weight 5kg  
+4 A     year2_weight 10kg 
+5 B     year1_height 85cm </code></pre>
+</div>
+</div>
+<p>This is not what you (usually) want, because now you have two different kinds of data in the same column—weight and height.</p>
+<p>To get the right shape, you’ll need to use the <code>names_sep</code> argument and the “.value” identifier:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>child_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"period"</span>, <span class="st">".value"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period height weight
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+1 A     year1  80cm   5kg   
+2 A     year2  85cm   10kg  
+3 B     year1  85cm   7kg   
+4 B     year2  90cm   12kg  
+5 C     year1  90cm   6kg   </code></pre>
+</div>
+</div>
+<p>Now we have one row for each child-period, an appropriately long format!</p>
+<p>What the code above is doing may not be clear, but you should already be able to answer the practice question below by pattern matching with our example. After the practice question, we will explain the <code>names_sep</code> argument and the “.value” identifier in more depth.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider this other artificial data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>adult_stats <span class="ot">&lt;-</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>adult,  <span class="sc">~</span>year1_BMI,  <span class="sc">~</span>year2_BMI,  <span class="sc">~</span>year1_HIV,  <span class="sc">~</span>year2_HIV,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"A"</span>,          <span class="dv">25</span>,          <span class="dv">30</span>,  <span class="st">"Positive"</span>,  <span class="st">"Positive"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"B"</span>,          <span class="dv">34</span>,          <span class="dv">28</span>,  <span class="st">"Negative"</span>,  <span class="st">"Positive"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"C"</span>,          <span class="dv">19</span>,          <span class="dv">17</span>,  <span class="st">"Negative"</span>,  <span class="st">"Negative"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>adult_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  adult year1_BMI year2_BMI year1_HIV year2_HIV
+  &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
+1 A            25        30 Positive  Positive 
+2 B            34        28 Negative  Positive 
+3 C            19        17 Negative  Negative </code></pre>
+</div>
+</div>
+<p>Pivot the data into a long format to get the following structure:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>adult</th>
+<th>year</th>
+<th>BMI</th>
+<th>HIV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Q_adult_long <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  adult_stats <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(_________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>child_stats</code> example above has numbers stored as characters […]</p>
+<p>As you saw in the previous lesson, you can easily extract the numbers from the output long data frame in our example using the <code>parse_number()</code> function from readr:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>child_stats_long <span class="ot">&lt;-</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  child_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"period"</span>, <span class="st">".value"</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>child_stats_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period height weight
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+1 A     year1  80cm   5kg   
+2 A     year2  85cm   10kg  
+3 B     year1  85cm   7kg   
+4 B     year2  90cm   12kg  
+5 C     year1  90cm   6kg   </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>child_stats_long <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">parse_number</span>(height), </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">weight =</span> <span class="fu">parse_number</span>(weight))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period height weight
+  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 A     year1      80      5
+2 A     year2      85     10
+3 B     year1      85      7
+4 B     year2      90     12
+5 C     year1      90      6</code></pre>
+</div>
+</div>
+</div>
+</div>
+<section id="understanding-names_sep-and-.value" class="level3" data-number="16.5.1">
+<h3 data-number="16.5.1" class="anchored" data-anchor-id="understanding-names_sep-and-.value"><span class="header-section-number">16.5.1</span> Understanding <code>names_sep</code> and “.value”</h3>
+<p>Now let’s break down the <code>pivot_longer()</code> call we saw above a bit more:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>child_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  child year1_height year2_height year1_weight year2_weight
+  &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;       
+1 A     80cm         85cm         5kg          10kg        
+2 B     85cm         90cm         7kg          12kg        
+3 C     90cm         100cm        6kg          14kg        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>child_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"period"</span>, <span class="st">".value"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period height weight
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+1 A     year1  80cm   5kg   
+2 A     year2  85cm   10kg  
+3 B     year1  85cm   7kg   
+4 B     year2  90cm   12kg  
+5 C     year1  90cm   6kg   </code></pre>
+</div>
+</div>
+<p>Notice that the column names in the original <code>child_stats</code> data frame (<code>year1_height</code>, <code>year2_height</code> and so on) are made of three parts:</p>
+<ul>
+<li><p>the period being referenced: e.g.&nbsp;“year1”</p></li>
+<li><p>an underscore separator, “_”;</p></li>
+<li><p>and the type of value recorded “height” or “weight”</p></li>
+</ul>
+<p>We can make a table with these parts:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>column_name</th>
+<th>period</th>
+<th>separator</th>
+<th>“.value”</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>year1_height</code></td>
+<td>year1</td>
+<td>_</td>
+<td>height</td>
+</tr>
+<tr class="even">
+<td><code>year2_height</code></td>
+<td>year2</td>
+<td>_</td>
+<td>height</td>
+</tr>
+<tr class="odd">
+<td><code>year1_weight</code></td>
+<td>year1</td>
+<td>_</td>
+<td>weight</td>
+</tr>
+<tr class="even">
+<td><code>year2_weight</code></td>
+<td>year2</td>
+<td>_</td>
+<td>weight</td>
+</tr>
+</tbody>
+</table>
+<p>Based on that table, it should now be easier to understand the <code>names_sep</code> and <code>names_to</code> arguments that we supplied to <code>pivot_longer()</code>:</p>
+<section id="names_sep-_" class="level4" data-number="16.5.1.1">
+<h4 data-number="16.5.1.1" class="anchored" data-anchor-id="names_sep-_"><span class="header-section-number">16.5.1.1</span> <code>names_sep = "_"</code>:</h4>
+<p>This is the separator between the period indicator (year) and the values (year and weight) recorded.</p>
+<p>If we have a different separator, this argument would change. For example, if the separator were an empty space, ” “, you would have <code>names_sep = " "</code>, as seen in the example below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>child_stats_space_sep <span class="ot">&lt;-</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>child, <span class="sc">~</span><span class="st">`</span><span class="at">yr1 height</span><span class="st">`</span>, <span class="sc">~</span><span class="st">`</span><span class="at">yr2 height</span><span class="st">`</span>, <span class="sc">~</span><span class="st">`</span><span class="at">yr1 weight</span><span class="st">`</span>, <span class="sc">~</span><span class="st">`</span><span class="at">yr2 weight</span><span class="st">`</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"A"</span>,        <span class="st">"80cm"</span>,        <span class="st">"85cm"</span>,         <span class="st">"5kg"</span>,        <span class="st">"10kg"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"B"</span>,        <span class="st">"85cm"</span>,        <span class="st">"90cm"</span>,         <span class="st">"7kg"</span>,        <span class="st">"12kg"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"C"</span>,        <span class="st">"90cm"</span>,       <span class="st">"100cm"</span>,         <span class="st">"6kg"</span>,        <span class="st">"14kg"</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>child_stats_space_sep <span class="sc">%&gt;%</span> </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">" "</span>, </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"period"</span>, <span class="st">".value"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period height weight
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+1 A     yr1    80cm   5kg   
+2 A     yr2    85cm   10kg  
+3 B     yr1    85cm   7kg   
+4 B     yr2    90cm   12kg  
+5 C     yr1    90cm   6kg   </code></pre>
+</div>
+</div>
+</section>
+<section id="names_to-cperiod-.value" class="level4" data-number="16.5.1.2">
+<h4 data-number="16.5.1.2" class="anchored" data-anchor-id="names_to-cperiod-.value"><span class="header-section-number">16.5.1.2</span> <code>names_to = c("period", ".value")</code></h4>
+<p>Next, the names_to argument indicates how the data should be reshaped. We passed a vector of two character strings , “period” and the “.value” to this argument. Let’s consider each in turn:</p>
+<p><strong>The “period” string</strong> indicated that we want to move the data from each year (or period) into a separate row Note that there is nothing special about the word “period” used here; we could change this to any other string. So instead of “period”, you could have written “time” or “year_of_measurement” or anything else:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>child_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"year_of_measurement"</span>, <span class="st">".value"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child year_of_measurement height weight
+  &lt;chr&gt; &lt;chr&gt;               &lt;chr&gt;  &lt;chr&gt; 
+1 A     year1               80cm   5kg   
+2 A     year2               85cm   10kg  
+3 B     year1               85cm   7kg   
+4 B     year2               90cm   12kg  
+5 C     year1               90cm   6kg   </code></pre>
+</div>
+</div>
+<p>Now, <strong>the “.value” placeholder</strong> is a special indicator, that tells <code>pivot_longer()</code> to make a separate column for every distinct value that appears after the separator. In our example, these distinct values are “height” and “weight”.</p>
+<p>The “.value” string cannot be arbitrarily replaced. For example, this won’t work:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>child_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"period"</span>, <span class="st">"values"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period values value
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;
+1 A     year1  height 80cm 
+2 A     year2  height 85cm 
+3 A     year1  weight 5kg  
+4 A     year2  weight 10kg 
+5 B     year1  height 85cm </code></pre>
+</div>
+</div>
+<hr>
+<p>To restate the point, the “.value” placeholder is tells <code>pivot_longer()</code> that we want to separate out the “height” and “weight” values into separate columns, because there are the two value types that occur after the “_” separator in the column names.</p>
+<p>This means that if you had a wide dataset with three types of values, you would get separated-out columns, one for each value type. For example, consider the mock dataset below which shows children’s records, at two time points, for the following variables:</p>
+<ul>
+<li>age in months,</li>
+<li>body fat %</li>
+<li>bmi</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>child_stats_three_values <span class="ot">&lt;-</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>child,  <span class="sc">~</span>t1_age,  <span class="sc">~</span>t2_age, <span class="sc">~</span>t1_fat, <span class="sc">~</span>t2_fat, <span class="sc">~</span>t1_bmi, <span class="sc">~</span>t2_bmi,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>     <span class="st">"a"</span>,  <span class="st">"5mths"</span>,  <span class="st">"8mths"</span>,   <span class="st">"13%"</span>,   <span class="st">"15%"</span>,      <span class="dv">14</span>,      <span class="dv">15</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>     <span class="st">"b"</span>,  <span class="st">"7mths"</span>,  <span class="st">"9mths"</span>,   <span class="st">"15%"</span>,   <span class="st">"17%"</span>,      <span class="dv">16</span>,      <span class="dv">18</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>child_stats_three_values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  child t1_age t2_age t1_fat t2_fat t1_bmi t2_bmi
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 a     5mths  8mths  13%    15%        14     15
+2 b     7mths  9mths  15%    17%        16     18</code></pre>
+</div>
+</div>
+<p>Here, in the column names there are three value types occurring after the “_” separator: <code>age</code>, <code>fat</code> and <code>bmi</code>; the “.value” string tells <code>pivot_longer()</code> to make a new column for each value type:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>child_stats_three_values <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>, </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">".value"</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  child time  age   fat     bmi
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+1 a     t1    5mths 13%      14
+2 a     t2    8mths 15%      15
+3 b     t1    7mths 15%      16
+4 b     t2    9mths 17%      18</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A pediatrician records the following information for a set of children over two years:</p>
+<ul>
+<li>head circumference;</li>
+<li>neck circumference; and</li>
+<li>hip circumference</li>
+</ul>
+<p>all in centimeters.</p>
+<p>The output table resembles the below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>growth_stats <span class="ot">&lt;-</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>child,<span class="sc">~</span>yr1_head,<span class="sc">~</span>yr2_head,<span class="sc">~</span>yr1_neck,<span class="sc">~</span>yr2_neck,<span class="sc">~</span>yr1_hip,<span class="sc">~</span>yr2_hip,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"a"</span>,       <span class="dv">45</span>,       <span class="dv">48</span>,       <span class="dv">23</span>,       <span class="dv">24</span>,      <span class="dv">51</span>,      <span class="dv">52</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"b"</span>,       <span class="dv">48</span>,       <span class="dv">50</span>,       <span class="dv">24</span>,       <span class="dv">26</span>,      <span class="dv">52</span>,      <span class="dv">52</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"c"</span>,       <span class="dv">50</span>,       <span class="dv">52</span>,       <span class="dv">24</span>,       <span class="dv">27</span>,      <span class="dv">53</span>,      <span class="dv">54</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>growth_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  child yr1_head yr2_head yr1_neck yr2_neck yr1_hip yr2_hip
+  &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1 a           45       48       23       24      51      52
+2 b           48       50       24       26      52      52
+3 c           50       52       24       27      53      54</code></pre>
+</div>
+</div>
+<p>Pivot the data into a long format to get the following structure:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>child</th>
+<th>year</th>
+<th>head</th>
+<th>neck</th>
+<th>hip</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>Q_growth_stats_long <span class="ot">&lt;-</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  growth_stats <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(_________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="value-type-before-the-separator" class="level3" data-number="16.5.2">
+<h3 data-number="16.5.2" class="anchored" data-anchor-id="value-type-before-the-separator"><span class="header-section-number">16.5.2</span> Value type <em>before</em> the separator</h3>
+<p>In all the example we have used so far, the column names were constructed such that value type came after the separator (Recall our table:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>column_name</th>
+<th>period</th>
+<th>separator</th>
+<th>“.value”</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>year1_height</code></td>
+<td>year1</td>
+<td>_</td>
+<td>height</td>
+</tr>
+<tr class="even">
+<td><code>year2_height</code></td>
+<td>year2</td>
+<td>_</td>
+<td>height</td>
+</tr>
+<tr class="odd">
+<td><code>year1_weight</code></td>
+<td>year1</td>
+<td>_</td>
+<td>weight</td>
+</tr>
+<tr class="even">
+<td><code>year2_weight</code></td>
+<td>year2</td>
+<td>_</td>
+<td>weight</td>
+</tr>
+</tbody>
+</table>
+<p>)</p>
+<p>But of course, the column names could be constructed differently, with the value types coming before the separator, as in this example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>child_stats2 <span class="ot">&lt;-</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>child, <span class="sc">~</span>height_year1, <span class="sc">~</span>height_year2, <span class="sc">~</span>weight_year1, <span class="sc">~</span>weight_year2,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"A"</span>,        <span class="st">"80cm"</span>,        <span class="st">"85cm"</span>,         <span class="st">"5kg"</span>,        <span class="st">"10kg"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"B"</span>,        <span class="st">"85cm"</span>,        <span class="st">"90cm"</span>,         <span class="st">"7kg"</span>,        <span class="st">"12kg"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"C"</span>,        <span class="st">"90cm"</span>,       <span class="st">"100cm"</span>,         <span class="st">"6kg"</span>,        <span class="st">"14kg"</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>child_stats2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  child height_year1 height_year2 weight_year1 weight_year2
+  &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;       
+1 A     80cm         85cm         5kg          10kg        
+2 B     85cm         90cm         7kg          12kg        
+3 C     90cm         100cm        6kg          14kg        </code></pre>
+</div>
+</div>
+<p>Here, the value types (height and weight) come before the “_” separator.</p>
+<p>How can our <code>pivot_longer()</code> command accommodate this? Simple! Just swap the order of the vector given to the <code>names_to</code> argument:</p>
+<p>So instead of <code>names_to = c("time", ".value")</code>, you would have <code>names_to = c(".value", "time")</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>child_stats2 <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"time"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child time  height weight
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; 
+1 A     year1 80cm   5kg   
+2 A     year2 85cm   10kg  
+3 B     year1 85cm   7kg   
+4 B     year2 90cm   12kg  
+5 C     year1 90cm   6kg   </code></pre>
+</div>
+</div>
+<p>And that’s it!</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the following <a href="https://zenodo.org/record/4571669">data set from Zambia</a> about enteropathogens and their biomarkers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_wide<span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/enteropathogens_zambia_wide.csv"</span>))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+     ID LPS_1 LPS_2  LBP_1 LBP_2 IFABP_1 IFABP_2
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1  1002  222.  390. 38414. 6840.  1294.     610.
+2  1003  181.   NA  26888.   NA     22.5     NA 
+3  1004  257.  221. 49183. 5426.     0        0 
+4  1005   NA   369.    NA  1938.     0     1010.
+5  1006  275.   NA  61758.   NA      0       NA </code></pre>
+</div>
+</div>
+<p>This data frame has the following columns:</p>
+<ul>
+<li><p>LPS_1 and LPS_2: lipopolysaccharide levels, measured by Pyrochrome LAL, in EU/mL</p></li>
+<li><p>LBP_1 and LBP_2: LPS binding protein levels, in pg/mL</p></li>
+<li><p>IFABP_1 and IFAPB_2: intestinal-type fatty acid binding protein levels, in pg/mL</p></li>
+</ul>
+<p>Pivot the dataset so that it resembles the following structure</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>sample_count</th>
+<th>LPS</th>
+<th>LBP</th>
+<th>IFABP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_wide <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">pivot_longer</span>(____________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-non-time-series-example" class="level3" data-number="16.5.3">
+<h3 data-number="16.5.3" class="anchored" data-anchor-id="a-non-time-series-example"><span class="header-section-number">16.5.3</span> A non-time-series example</h3>
+<p>So far we have been using person-period (time series) datasets to illustrate the idea of complex pivots with multiple value types.</p>
+<p>But as we have mentioned, not all reshape-requiring datasets are time series data. Let’s see a quick non-time-series example […]</p>
+<p>You might measure the height (cm) and weight (kg) of a series of parental couples in a table like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>family_stats <span class="ot">&lt;-</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>couple, <span class="sc">~</span>father_height, <span class="sc">~</span>father_weight, <span class="sc">~</span>mother_height, <span class="sc">~</span>mother_weight,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">"a"</span>,            <span class="dv">180</span>,            <span class="dv">80</span>,            <span class="dv">160</span>,             <span class="dv">70</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"b"</span>,            <span class="dv">185</span>,            <span class="dv">90</span>,            <span class="dv">150</span>,             <span class="dv">76</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"c"</span>,            <span class="dv">182</span>,            <span class="dv">93</span>,            <span class="dv">143</span>,             <span class="dv">78</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>family_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  couple father_height father_weight mother_height mother_weight
+  &lt;chr&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+1 a                180            80           160            70
+2 b                185            90           150            76
+3 c                182            93           143            78</code></pre>
+</div>
+</div>
+<p>Here we have two different types of values (weight and height) for each person in the couple.</p>
+<p>To pivot this to one-row per person, we’ll again need the <code>names_sep</code> and <code>names_to</code> arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>family_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep  =</span> <span class="st">"_"</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"person"</span>, <span class="st">".value"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  couple person height weight
+  &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 a      father    180     80
+2 a      mother    160     70
+3 b      father    185     90
+4 b      mother    150     76
+5 c      father    182     93</code></pre>
+</div>
+</div>
+<p>The separator is an underscore, “_”, so we used <code>names_sep  = "_"</code> and because the value types come after the separator, the “.value” identifier was placed second in the <code>names_to</code> argument.</p>
+</section>
+<section id="escaping-the-dot-separator" class="level3" data-number="16.5.4">
+<h3 data-number="16.5.4" class="anchored" data-anchor-id="escaping-the-dot-separator"><span class="header-section-number">16.5.4</span> Escaping the dot separator</h3>
+<p>A special example may crop up when you try to pivot a dataset where the separator is a period.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>child_stats_dot_sep <span class="ot">&lt;-</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>child, <span class="sc">~</span>year1.height, <span class="sc">~</span>year2.height, <span class="sc">~</span>year1.weight, <span class="sc">~</span>year2.weight,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"A"</span>,        <span class="st">"80cm"</span>,        <span class="st">"85cm"</span>,         <span class="st">"5kg"</span>,        <span class="st">"10kg"</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"B"</span>,        <span class="st">"85cm"</span>,        <span class="st">"90cm"</span>,         <span class="st">"7kg"</span>,        <span class="st">"12kg"</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"C"</span>,        <span class="st">"90cm"</span>,       <span class="st">"100cm"</span>,         <span class="st">"6kg"</span>,        <span class="st">"14kg"</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>child_stats_dot_sep <span class="sc">%&gt;%</span> </span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"period"</span>, <span class="st">".value"</span>),</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  child period height weight
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+1 A     year1  80cm   5kg   
+2 A     year2  85cm   10kg  
+3 B     year1  85cm   7kg   
+4 B     year2  90cm   12kg  
+5 C     year1  90cm   6kg   </code></pre>
+</div>
+</div>
+<p>There we used the string “\.” to indicate a dot “.” because the “.” is a special character in R, and sometimes needs to be <a href="https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html#escaping" target="_blank">escaped</a></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider again the adult_stats data you saw above. Now the column names have been changed slightly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>adult_stats_dot_sep <span class="ot">&lt;-</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>adult,  <span class="sc">~</span><span class="st">`</span><span class="at">BMI.year1</span><span class="st">`</span>,  <span class="sc">~</span><span class="st">`</span><span class="at">BMI.year2</span><span class="st">`</span>,  <span class="sc">~</span><span class="st">`</span><span class="at">HIV.year1</span><span class="st">`</span>,  <span class="sc">~</span><span class="st">`</span><span class="at">HIV.year2</span><span class="st">`</span>,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">"A"</span>,            <span class="dv">25</span>,            <span class="dv">30</span>,    <span class="st">"Positive"</span>,   <span class="st">"Positive"</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">"B"</span>,            <span class="dv">34</span>,            <span class="dv">28</span>,    <span class="st">"Negative"</span>,   <span class="st">"Positive"</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">"C"</span>,            <span class="dv">19</span>,            <span class="dv">17</span>,    <span class="st">"Negative"</span>,   <span class="st">"Negative"</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>adult_stats_dot_sep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  adult BMI.year1 BMI.year2 HIV.year1 HIV.year2
+  &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    
+1 A            25        30 Positive  Positive 
+2 B            34        28 Negative  Positive 
+3 C            19        17 Negative  Negative </code></pre>
+</div>
+</div>
+<p>Again, pivot the data into a long format to get the following structure:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>adult</th>
+<th>year</th>
+<th>BMI</th>
+<th>HIV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Q_adult2_long <span class="ot">&lt;-</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  adult_stats_dot_sep <span class="sc">%&gt;%</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(_________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-to-do-when-you-dont-have-a-neat-separator" class="level3" data-number="16.5.5">
+<h3 data-number="16.5.5" class="anchored" data-anchor-id="what-to-do-when-you-dont-have-a-neat-separator"><span class="header-section-number">16.5.5</span> What to do when you don’t have a neat separator ?</h3>
+<p>Sometimes you do not have a neat separator.</p>
+<p>Consider this <a href="https://zenodo.org/record/5014153">survey data from India</a> that looked at how much money patients spent on tuberculosis treatment:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>tb_visits <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/india_tb_pathways_and_costs_data.csv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, first_visit_location, first_visit_cost, second_visit_location, second_visit_cost, third_visit_location, third_visit_cost)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>tb_visits</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+      id first_visit_location first_visit_cost second_visit_location
+   &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt; &lt;chr&gt;                
+1 100202 GH                                  0 &lt;NA&gt;                 
+2 100396 Pvt. docto                       1500 Pvt. clini           
+3 100590 Pvt. docto                       2000 Pvt. docto           
+4 100687 Pvt. hospi                      20000 Pvt. hospi           
+5 100784 Pvt. docto                       1000 GH                   
+# ℹ 3 more variables: second_visit_cost &lt;dbl&gt;, third_visit_location &lt;chr&gt;,
+#   third_visit_cost &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>It does not have a neat separator between the time indicators (first, second, third) and the value type (cost, location). That is, rather than something like “firstvisit_location”, we have instead “first_visit_location”, so the underscore is used for two purposes. For this reason, if you try our usual pivot strategy, you will get an error:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>tb_visits <span class="sc">%&gt;%</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>, </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"visit_count"</span>, <span class="st">".value"</span>), </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Error in `pivot_longer_spec()`:
+! Can't combine `first_visit_location` &lt;character&gt; and `first_visit_cost` &lt;double&gt;.
+Run `rlang::last_error()` to see where the error occurred.</code></pre>
+<p>The most direct way to reshape this dataset successfully would be to use special “regex” (string manipulation), but you likely have not learned this yet!</p>
+<p>So for now, the solution we recommend is to manually rename your columns to insert a clear separator, “__”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>tb_visits_renamed <span class="ot">&lt;-</span> </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  tb_visits <span class="sc">%&gt;%</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">first__visit_location =</span> first_visit_location, </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">first__visit_cost =</span> first_visit_cost, </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">second__visit_location =</span> second_visit_location, </span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">second__visit_cost=</span> second_visit_cost, </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">third__visit_location =</span> third_visit_location, </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">third__visit_cost =</span> third_visit_cost)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>tb_visits_renamed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+      id first__visit_location first__visit_cost second__visit_location
+   &lt;dbl&gt; &lt;chr&gt;                             &lt;dbl&gt; &lt;chr&gt;                 
+1 100202 GH                                    0 &lt;NA&gt;                  
+2 100396 Pvt. docto                         1500 Pvt. clini            
+3 100590 Pvt. docto                         2000 Pvt. docto            
+4 100687 Pvt. hospi                        20000 Pvt. hospi            
+5 100784 Pvt. docto                         1000 GH                    
+# ℹ 3 more variables: second__visit_cost &lt;dbl&gt;, third__visit_location &lt;chr&gt;,
+#   third__visit_cost &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now we can try the pivot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>tb_visits_long <span class="ot">&lt;-</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  tb_visits_renamed <span class="sc">%&gt;%</span> </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>, </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"visit_count"</span>, <span class="st">".value"</span>), </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"__"</span>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>tb_visits_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+      id visit_count visit_location visit_cost
+   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;               &lt;dbl&gt;
+1 100202 first       GH                      0
+2 100202 second      &lt;NA&gt;                    0
+3 100202 third       &lt;NA&gt;                    0
+4 100396 first       Pvt. docto           1500
+5 100396 second      Pvt. clini           1000</code></pre>
+</div>
+</div>
+<p>Now let’s polish the data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>tb_visits_long <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove nonexistent entries</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>visit_location <span class="sc">==</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># give significant naming to the visit_count values</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">visit_count =</span> <span class="fu">case_when</span>(visit_count <span class="sc">==</span> <span class="st">"first"</span> <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>                                 visit_count <span class="sc">==</span> <span class="st">"second"</span> <span class="sc">~</span> <span class="dv">2</span>, </span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>                                 visit_count <span class="sc">==</span> <span class="st">"third"</span> <span class="sc">~</span> <span class="dv">3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ensure visit_cost is numerical</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">visit_cost =</span> <span class="fu">as.numeric</span>(visit_cost))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+      id visit_count visit_location visit_cost
+   &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;
+1 100202           1 GH                      0
+2 100396           1 Pvt. docto           1500
+3 100396           2 Pvt. clini           1000
+4 100396           3 Pvt. hospi           2500
+5 100590           1 Pvt. docto           2000</code></pre>
+</div>
+</div>
+<p>Above, we first remove the entries where we do not have the visit location information (i.e.&nbsp;we filter out the rows where the visit location variable is set to <code>""</code> ). We then convert to numeric values the visit count variable, where the strings <code>"first"</code> to <code>"third"</code> are converted to numerical entries <code>1</code> to <code>3</code>. Finally, we ensure the variable of visit cost is numeric using <code>mutate()</code> and the helper function <code>as.numeric()</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We will use <a href="https://www.wur.nl/en/project/Retail-Diversity-for-Dietary-Diversity-RD4DD.htm">a survey data about diet from Vietnam</a>. Women in Hanoi were interviewed about their food shopping, and this was used to create nutrition profiles for each women. Here we will use a subset of this data for 61 households who came for 2 visits, recording:</p>
+<ul>
+<li><p><code>enerc_kcal_w_1</code>: the consumed energy from ingredient/food (Kcal) during the first visit (with <code>_2</code> for the second visit)</p></li>
+<li><p><code>dry_w_1</code>: the consumed dry from ingredient/food (g) during the first visit (with <code>_2</code> for the second visit)</p></li>
+<li><p><code>water_w_1</code>: the consumed water from ingredient/food (g) during the first visit (with <code>_2</code> for the second visit)</p></li>
+<li><p><code>fat_w_1</code>: the consumed Lipid from ingredient/food (g) during the first visit (with <code>_2</code> for the second visit)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_wide <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/diet_diversity_vietnam_wide.csv"</span>))</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 9
+  household_id enerc_kcal_w_1 enerc_kcal_w_2 dry_w_1 dry_w_2 water_w_1 water_w_2
+         &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1          348          2268.          1386.    548.    281.     4219.     1997.
+2          354          2775.          1240.    600.    284.     2376.     3145.
+3           53          3104.          2075.    646.    451.     2808.     2305.
+4           18          2802.          2146.    620.    807.     3457.     1903.
+5          211          1298.          1191.    269.    288.     2584.     2269.
+# ℹ 2 more variables: fat_w_1 &lt;dbl&gt;, fat_w_2 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>You should first distinguish if we have a neat operator or not. Based on this, rename your columns if necessary. Then bring the different visit records (1 and 2) into a sole column for energy, fat weight, water weight and dry weight. In other words, pivot the dataset into long format of this form:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>household_id</th>
+<th>visit</th>
+<th>enerc_kcal_w</th>
+<th>dry_w</th>
+<th>water_w</th>
+<th>fat_w</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>Q_diet_diversity_vietnam_long <span class="ot">&lt;-</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  diet_diversity_vietnam_wide <span class="sc">%&gt;%</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(_________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="long-to-wide" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="long-to-wide"><span class="header-section-number">16.6</span> Long to wide</h2>
+<p>We just saw how to do some complex operations wide to long, which we saw in the previous lesson is essential for plotting and wrangling. Let’s see the opposite transformation.</p>
+<p>It could be useful to put long to wide to do different transformations, filters, and processing NAs. In this format, your measurements / collected data become the columns of the data set.</p>
+<p>Let’s take the Zambia enteropathogen data, and this time, let’s take the original ! Indeed, what you were handling before was a dataset <strong>prepared for you</strong>, in a wide format. <strong>The original dataset is long</strong> and we will now see the data preparation I did beforehand, behind the scenes. You’re almost becoming the teacher of this lesson ;)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_long <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/enteropathogens_zambia_long.csv"</span>))</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+     ID group   LPS    LBP  IFABP
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1  1002     1  222. 38414. 1294. 
+2  1002     2  390.  6840.  610. 
+3  1003     1  181. 26888.   22.5
+4  1004     2  221.  5426.    0  
+5  1004     1  257. 49183.    0  </code></pre>
+</div>
+</div>
+<p>This is how we convert it from long to wide:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_wide <span class="ot">&lt;-</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  enteropathogens_zambia_long <span class="sc">%&gt;%</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> group,</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(LPS, LBP, IFABP)</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>enteropathogens_zambia_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+     ID LPS_1 LPS_2  LBP_1 LBP_2 IFABP_1 IFABP_2
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1  1002  222.  390. 38414. 6840.  1294.     610.
+2  1003  181.   NA  26888.   NA     22.5     NA 
+3  1004  257.  221. 49183. 5426.     0        0 
+4  1005   NA   369.    NA  1938.     0     1010.
+5  1006  275.   NA  61758.   NA      0       NA </code></pre>
+</div>
+</div>
+<p>You can see that the values of the variable <code>group</code> (1 or 2) are added to the values’ names (LPS, LBP, IFABP) to create the new columns representing different group data: for example, <code>LPS_1</code> and <code>LPS_2</code>.</p>
+<p>We are considering this “advanced” pivoting because we are pivoting wider several variables at the same time, but as you can see, the syntax is quite simple—the same arguments are used as we did with the simpler pivots in the previous lesson—<code>names_from</code> and <code>values_from</code>.</p>
+<hr>
+<p>Let’s see another example, using the diet survey data from Vietnam that you manipulated previously:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_long <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/diet_diversity_vietnam_long.csv"</span>))</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 6
+  visit_number household_id enerc_kcal_w dry_w water_w fat_w
+         &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1            1          348        2268.  548.   4219.  78.4
+2            1          354        2775.  600.   2376. 115. 
+3            1           53        3104.  646.   2808. 127. 
+4            1           18        2802.  620.   3457.  87.4
+5            1          211        1298.  269.   2584.  47.8</code></pre>
+</div>
+</div>
+<p>Here we will use the <code>visit_number</code> variable to create new variable for energy, water, fat and dry content of foods recorded at different visits:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_wide <span class="ot">&lt;-</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  diet_diversity_vietnam_long <span class="sc">%&gt;%</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> visit_number, </span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(enerc_kcal_w, dry_w, water_w, fat_w)</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 9
+  household_id enerc_kcal_w_1 enerc_kcal_w_2 dry_w_1 dry_w_2 water_w_1 water_w_2
+         &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1          348          2268.          1386.    548.    281.     4219.     1997.
+2          354          2775.          1240.    600.    284.     2376.     3145.
+3           53          3104.          2075.    646.    451.     2808.     2305.
+4           18          2802.          2146.    620.    807.     3457.     1903.
+5          211          1298.          1191.    269.    288.     2584.     2269.
+# ℹ 2 more variables: fat_w_1 &lt;dbl&gt;, fat_w_2 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>You can see that the values of the variable <code>visit_number</code> (1 or 2) are added to the values’ names (<code>energy_kcal_w</code>, <code>dry_w</code>, <code>fat_w</code>, <code>water_w</code>) to create the new columns representing different group data: for example, <code>water_w_1</code> and <code>water_w_2</code>. We have pivoted to wide format all of these variables at the same time. Now each weight measure per visit is represented as a single variable (i.e.&nbsp;column) in the dataset.</p>
+<p>With this format, it is easy to sum together the energy intake per household for example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_wide <span class="sc">%&gt;%</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(household_id, enerc_kcal_w_1, enerc_kcal_w_2) <span class="sc">%&gt;%</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_energy_kcal =</span> enerc_kcal_w_1 <span class="sc">+</span> enerc_kcal_w_2) <span class="sc">%&gt;%</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(household_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  household_id enerc_kcal_w_1 enerc_kcal_w_2 total_energy_kcal
+         &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;             &lt;dbl&gt;
+1           14          1040.          1663.             2704.
+2           17          2100.          1286.             3386.
+3           18          2802.          2146.             4948.
+4           22          3187.          1582.             4769.
+5           24          2359.          2026.             4385.</code></pre>
+</div>
+</div>
+<p>However, you could get something similar in the long format:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>diet_diversity_vietnam_long <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(household_id) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_energy =</span> <span class="fu">sum</span>(enerc_kcal_w)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  household_id total_energy
+         &lt;dbl&gt;        &lt;dbl&gt;
+1           14        2704.
+2           17        3386.
+3           18        4948.
+4           22        4769.
+5           24        4385.</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Take <code>tb_visits_long</code> dataset that we manipulated above and pivot it back to a wide format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>Q_tb_visit_wide <span class="ot">&lt;-</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  tb_visits_long <span class="sc">%&gt;%</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(_________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="wrap-up" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">16.7</span> Wrap up</h2>
+<p>You data wrangling skills have just been enhanced with advanced pivoting. This skill will often prove essential when handling real world data. I have no doubt you will soon put it into practice. It is also essential, as we have seen, for plotting. So I hope pivoting will be of use not only for your wrangling, but also for your plotting tasks.</p>
+<p></p><div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/kendavidn.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/kendavidn/" target="_blank">KENE DAVID NWOSU </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>Passionate about world improvement</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/lolovanco.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/lolovanco" target="_blank">LAURE VANCAUWENBERGHE </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>A firm believer in science for good, striving to ally programming, health and education</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/camille.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/camille/" target="_blank">CAMILLE BEATRICE VALERA </a> </name> <br> <label>Project Manager and Scientific Collaborator, The GRAPH Network</label> <p></p></li></ul></div><p></p>
+</section>
+<section id="solutions" class="level2" data-number="16.8">
+<h2 data-number="16.8" class="anchored" data-anchor-id="solutions"><span class="header-section-number">16.8</span> Solutions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_adult_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  adult_stats %&gt;%
+      pivot_longer(cols = 2:5,
+                   names_sep = "_",
+                   names_to = c("year", ".value"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_growth_stats_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  growth_stats %&gt;%
+     pivot_longer(cols = 2:7,
+                   names_to = c("year", ".value"),
+                   names_sep = "_")</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_adult2_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  adult_stats_dot_sep %&gt;%
+      pivot_longer(cols = 2:5,
+                   names_sep = "\.",
+                   names_to = c(".value", "year"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_diet_diversity_vietnam_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  diet_diversity_vietnam_wide%&gt;%
+      rename(
+        enerc_kcal_w__1 = enerc_kcal_w_1,
+        enerc_kcal_w__2 = enerc_kcal_w_2,
+        dry_w__1 = dry_w_1,
+        dry_w__2 = dry_w_2,
+        water_w__1 = water_w_1,
+        water_w__2 = water_w_2,
+        fat_w__1 = fat_w_1,
+        fat_w__2 = fat_w_2
+      ) %&gt;%  
+      pivot_longer(2:9, names_sep = "__", names_to = c(".value", "visit"))
+  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_tb_visit_wide</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  tb_visits_long %&gt;%
+      pivot_wider(names_from = visit_count,
+                  values_from = c(visit_location, visit_cost))
+      )</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_adult_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  adult_stats %&gt;%
+      pivot_longer(cols = 2:5,
+                   names_sep = "_",
+                   names_to = c("year", ".value"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_growth_stats_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  growth_stats %&gt;%
+     pivot_longer(cols = 2:7,
+                   names_to = c("year", ".value"),
+                   names_sep = "_")</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_adult2_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  adult_stats_dot_sep %&gt;%
+      pivot_longer(cols = 2:5,
+                   names_sep = "\.",
+                   names_to = c(".value", "year"))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_diet_diversity_vietnam_long</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  diet_diversity_vietnam_wide%&gt;%
+      rename(
+        enerc_kcal_w__1 = enerc_kcal_w_1,
+        enerc_kcal_w__2 = enerc_kcal_w_2,
+        dry_w__1 = dry_w_1,
+        dry_w__2 = dry_w_2,
+        water_w__1 = water_w_1,
+        water_w__2 = water_w_2,
+        fat_w__1 = fat_w_1,
+        fat_w__2 = fat_w_2
+      ) %&gt;%  
+      pivot_longer(2:9, names_sep = "__", names_to = c(".value", "visit"))
+  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_tb_visit_wide</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+  
+  tb_visits_long %&gt;%
+      pivot_wider(names_from = visit_count,
+                  values_from = c(visit_location, visit_cost))
+      )</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./untangled_ls07_pivoting.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./data_on_display_ls01_gg_intro.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 14&nbsp; Grouped filter, mutate and arrange</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./untangled_ls07_pivoting.html" rel="next">
+<link href="./untangled_ls05_groupby_summarize.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./untangled_ls01_select_rename.html">Data Manipulation</a></li><li class="breadcrumb-item"><a href="./untangled_ls06_group_by_other_verbs.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">14.1</span> Introduction</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">14.2</span> Learning objectives</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">14.3</span> Packages</a></li>
+  <li><a href="#datasets" id="toc-datasets" class="nav-link" data-scroll-target="#datasets"><span class="header-section-number">14.4</span> Datasets</a></li>
+  <li><a href="#arranging-by-group" id="toc-arranging-by-group" class="nav-link" data-scroll-target="#arranging-by-group"><span class="header-section-number">14.5</span> Arranging by group</a>
+  <ul class="collapse">
+  <li><a href="#arrange-can-group-automatically" id="toc-arrange-can-group-automatically" class="nav-link" data-scroll-target="#arrange-can-group-automatically"><code>arrange()</code> can group automatically</a></li>
+  </ul></li>
+  <li><a href="#filtering-by-group" id="toc-filtering-by-group" class="nav-link" data-scroll-target="#filtering-by-group"><span class="header-section-number">14.6</span> Filtering by group</a>
+  <ul class="collapse">
+  <li><a href="#filtering-with-nested-groupings" id="toc-filtering-with-nested-groupings" class="nav-link" data-scroll-target="#filtering-with-nested-groupings">Filtering with nested groupings</a></li>
+  </ul></li>
+  <li><a href="#mutating-by-group" id="toc-mutating-by-group" class="nav-link" data-scroll-target="#mutating-by-group"><span class="header-section-number">14.7</span> Mutating by group</a>
+  <ul class="collapse">
+  <li><a href="#mutating-with-nested-groupings" id="toc-mutating-with-nested-groupings" class="nav-link" data-scroll-target="#mutating-with-nested-groupings">Mutating with nested groupings</a></li>
+  </ul></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">14.8</span> Wrap up</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions"><span class="header-section-number">14.9</span> Solutions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">14.1</span> Introduction</h2>
+<p>Data wrangling often involves applying the same operations separately to different groups within the data. This pattern, sometimes called “split-apply-combine”, is easily accomplished in {dplyr} by chaining the <code>group_by()</code> verb with other wrangling verbs like <code>filter()</code>, <code>mutate()</code>, and <code>arrange()</code> (all of which you have seen before!).</p>
+<p>In this lesson, you’ll become confident with these kinds of grouped manipulations.</p>
+<p>Let’s get started.</p>
+</section>
+<section id="learning-objectives" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">14.2</span> Learning objectives</h2>
+<ol type="1">
+<li>You can use <code>group_by()</code> with <code>arrange()</code>, <code>filter()</code>, and <code>mutate()</code> to conduct grouped operations on a data frame.</li>
+</ol>
+</section>
+<section id="packages" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="packages"><span class="header-section-number">14.3</span> Packages</h2>
+<p>This lesson will require the {tidyverse} suite of packages and the {here} package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="datasets" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="datasets"><span class="header-section-number">14.4</span> Datasets</h2>
+<p>In this lesson, we will again use data from the COVID-19 serological survey conducted in Yaounde, Cameroon. Below, we import the data, create a small data frame subset, <code>yao</code> and an even smaller subset, <code>yao_sex_weight</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>yao <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'data/yaounde_data.csv'</span>))  <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sex, age, age_category, weight_kg, occupation, igg_result, igm_result)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>yao</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  sex      age age_category weight_kg occupation      igg_result igm_result
+  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;     
+1 Female    45 45 - 64             95 Informal worker Negative   Negative  
+2 Male      55 45 - 64             96 Salaried worker Positive   Negative  
+3 Male      23 15 - 29             74 Student         Negative   Negative  
+4 Female    20 15 - 29             70 Student         Positive   Negative  
+5 Female    55 45 - 64             67 Trader--Farmer  Positive   Negative  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="ot">&lt;-</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  yao <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sex, weight_kg)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>yao_sex_weight</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        95
+2 Male          96
+3 Male          74
+4 Female        70
+5 Female        67</code></pre>
+</div>
+</div>
+<hr>
+<p>For practice questions, we will also use the sarcopenia data set that you have seen previously:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sarcopenia <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'data/sarcopenia_elderly.csv'</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sarcopenia</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 9
+  number   age age_group sex_male_1_female_0 marital_status height_meters
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;
+1      7  60.8 Sixties                     0 married                 1.57
+2      8  72.3 Seventies                   1 married                 1.65
+3      9  62.6 Sixties                     0 married                 1.59
+4     12  72   Seventies                   0 widow                   1.47
+5     13  60.1 Sixties                     0 married                 1.55
+# ℹ 3 more variables: weight_kg &lt;dbl&gt;, grip_strength_kg &lt;dbl&gt;,
+#   skeletal_muscle_index &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="arranging-by-group" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="arranging-by-group"><span class="header-section-number">14.5</span> Arranging by group</h2>
+<p>The <code>arrange()</code> function orders the rows of a data frame by the values of selected columns. This function is only sensitive to groupings when we set its argument <code>.by_group</code> to <code>TRUE</code>. To illustrate this, consider the <code>yao_sex_weight</code> data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        95
+2 Male          96
+3 Male          74
+4 Female        70
+5 Female        67</code></pre>
+</div>
+</div>
+<p>We can arrange this data frame by weight like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(weight_kg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        14
+2 Male          15
+3 Male          15
+4 Male          15
+5 Female        15</code></pre>
+</div>
+</div>
+<p>As expected, lower weights have been brought to the top of the data frame.</p>
+<p>If we first group the data, we might expect a different output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(weight_kg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+# Groups:   sex [2]
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        14
+2 Male          15
+3 Male          15
+4 Male          15
+5 Female        15</code></pre>
+</div>
+</div>
+<p>But as you see, the arrangement is still the same.</p>
+<p>Only when we set the <code>.by_group</code> argument to <code>TRUE</code> do we get something different:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(weight_kg, <span class="at">.by_group =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+# Groups:   sex [1]
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        14
+2 Female        15
+3 Female        16
+4 Female        16
+5 Female        18</code></pre>
+</div>
+</div>
+<p>Now, the data is <em>first</em> sorted by sex (all women first), and then by weight.</p>
+<section id="arrange-can-group-automatically" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="arrange-can-group-automatically"><code>arrange()</code> can group automatically</h3>
+<p>In reality we do not need <code>group_by()</code> to arrange by group; we can simply put multiple variables in the <code>arrange()</code> function for the same effect.</p>
+<p>So this simple <code>arrange()</code> statement:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sex, weight_kg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        14
+2 Female        15
+3 Female        16
+4 Female        16
+5 Female        18</code></pre>
+</div>
+</div>
+<p>is equivalent to the more complex <code>group_by()</code>, <code>arrange()</code> statement used before:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(weight_kg, <span class="at">.by_group =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code <code>arrange(sex, weight_kg)</code> tells R to arrange the rows <em>first</em> by sex, and then by weight.</p>
+<p>Obviously, this syntax, with just <code>arrange()</code>, and no <code>group_by()</code> is simpler, so you can stick to it.</p>
+<div class="Reminder">
+<p><code>desc()</code> <strong>for descending order</strong></p>
+<p>Recall that to arrange <em>in descending order</em>, we can wrap the target variable in <code>desc()</code>. So, for example, to sort by sex and weight, but with the heaviest people on top, we can run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sex, <span class="fu">desc</span>(weight_kg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female       162
+2 Female       161
+3 Female       158
+4 Female       135
+5 Female       129</code></pre>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With an <code>arrange()</code> call, sort the <code>sarcopenia</code> data first by sex and then by grip strength. (If done correctly, the first row should be of a woman with a grip strength of 1.3 kg). To make the arrangement clear, you should first <code>select()</code> the sex and grip strength variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>Q_grip_strength_arranged <span class="ot">&lt;-</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  sarcopenia <span class="sc">%&gt;%</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(______________________________) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(______________________________)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>sarcopenia</code> dataset contains a column, <code>age_group</code>, which stores age groups as a string (the age groups are “Sixties”, “Seventies” and “Eighties”). Convert this variable to a factor with the levels in the right order (first “Sixties” then “Seventies” and so on). (Hint: Look back on the <code>case_when()</code> lesson if you do not see how to relevel a factor.)</p>
+<p>Then, with a nested <code>arrange()</code> call, arrange the data first by the newly-created <code>age_group</code> factor variable (younger individuals first) and then by <code>height_meters</code>, with shorter individuals first.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Q_age_group_height <span class="ot">&lt;-</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  sarcopenia </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="filtering-by-group" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="filtering-by-group"><span class="header-section-number">14.6</span> Filtering by group</h2>
+<p>The <code>filter()</code> function keeps or drops rows based on a condition. If <code>filter()</code> is applied to grouped data, the filtering operation is carried out separately for each group.</p>
+<p>To illustrate this, consider again the <code>yao_sex_weight</code> data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female        95
+2 Male          96
+3 Male          74
+4 Female        70
+5 Female        67</code></pre>
+</div>
+</div>
+<p>If we want to filter the data for the heaviest person, we could run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(weight_kg <span class="sc">==</span> <span class="fu">max</span>(weight_kg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Female       162</code></pre>
+</div>
+</div>
+<p>But if we want to get heaviest person per sex group (the heaviest man <em>and</em> the heaviest woman), we can use <code>group_by(sex)</code> then <code>filter()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(weight_kg <span class="sc">==</span> <span class="fu">max</span>(weight_kg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+# Groups:   sex [2]
+  sex    weight_kg
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Male         128
+2 Female       162</code></pre>
+</div>
+</div>
+<p>Great! The code above can be translated as “For each sex group, keep the row with the maximum <code>weight_kg</code> value”.</p>
+<section id="filtering-with-nested-groupings" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="filtering-with-nested-groupings">Filtering with nested groupings</h3>
+<p><code>filter()</code> will work fine with any number of nested groupings.</p>
+<p>For example, if we want to see the heaviest man and heaviest woman <em>per age group</em> we could run the following on the <code>yao</code> data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>yao <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(weight_kg <span class="sc">==</span> <span class="fu">max</span>(weight_kg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+# Groups:   sex, age_category [10]
+   sex      age age_category weight_kg occupation      igg_result igm_result
+   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;     
+ 1 Male      69 65 +               108 Retired         Positive   Negative  
+ 2 Male      37 30 - 44            128 Informal worker Negative   Negative  
+ 3 Male      26 15 - 29             91 Trader          Positive   Negative  
+ 4 Female    19 15 - 29            109 Student         Negative   Negative  
+ 5 Female    64 45 - 64            158 Retired         Negative   Negative  
+ 6 Female    32 30 - 44            162 Informal worker Positive   Negative  
+ 7 Male      46 45 - 64            122 Informal worker Negative   Negative  
+ 8 Female     8 5 - 14             161 Student         Negative   Positive  
+ 9 Female    68 65 +               109 Retired         Negative   Negative  
+10 Male       6 5 - 14              99 No response     Negative   Negative  </code></pre>
+</div>
+</div>
+<p>This code groups by sex <em>and</em> age category, and then finds the heaviest person in each sub-category.</p>
+<p>(Why do we have 10 rows in the output? Well, 2 sex groups x 5 groups age groups = 10 unique groupings.)</p>
+<p>The output is a bit scattered though, so we can chain this with the <code>arrange()</code> function, to arrange by sex and age group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>yao <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(weight_kg <span class="sc">==</span> <span class="fu">max</span>(weight_kg)) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sex, age_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+# Groups:   sex, age_category [10]
+   sex      age age_category weight_kg occupation      igg_result igm_result
+   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;     
+ 1 Female    19 15 - 29            109 Student         Negative   Negative  
+ 2 Female    32 30 - 44            162 Informal worker Positive   Negative  
+ 3 Female    64 45 - 64            158 Retired         Negative   Negative  
+ 4 Female     8 5 - 14             161 Student         Negative   Positive  
+ 5 Female    68 65 +               109 Retired         Negative   Negative  
+ 6 Male      26 15 - 29             91 Trader          Positive   Negative  
+ 7 Male      37 30 - 44            128 Informal worker Negative   Negative  
+ 8 Male      46 45 - 64            122 Informal worker Negative   Negative  
+ 9 Male       6 5 - 14              99 No response     Negative   Negative  
+10 Male      69 65 +               108 Retired         Positive   Negative  </code></pre>
+</div>
+</div>
+<p>Now the data is easier to read. All women come first, then men. But we see notice a weird arrangement of the age groups! Those aged 5 to 14 should come <em>first</em> in the arrangement. Of course, we’ve learned how to fix this—the <code>factor()</code> function, and its <code>levels</code> argument:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>yao <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_category =</span> <span class="fu">factor</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    age_category,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"5 - 14"</span>, <span class="st">"15 - 29"</span>, <span class="st">"30 - 44"</span>, <span class="st">"45 - 64"</span>, <span class="st">"65 +"</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(weight_kg <span class="sc">==</span> <span class="fu">max</span>(weight_kg)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sex, age_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+# Groups:   sex, age_category [10]
+   sex      age age_category weight_kg occupation      igg_result igm_result
+   &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;     
+ 1 Female     8 5 - 14             161 Student         Negative   Positive  
+ 2 Female    19 15 - 29            109 Student         Negative   Negative  
+ 3 Female    32 30 - 44            162 Informal worker Positive   Negative  
+ 4 Female    64 45 - 64            158 Retired         Negative   Negative  
+ 5 Female    68 65 +               109 Retired         Negative   Negative  
+ 6 Male       6 5 - 14              99 No response     Negative   Negative  
+ 7 Male      26 15 - 29             91 Trader          Positive   Negative  
+ 8 Male      37 30 - 44            128 Informal worker Negative   Negative  
+ 9 Male      46 45 - 64            122 Informal worker Negative   Negative  
+10 Male      69 65 +               108 Retired         Positive   Negative  </code></pre>
+</div>
+</div>
+<p>Now we have a nice and well-arranged output!</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Group the <code>sarcopenia</code> data frame by age group and sex, then filter for the highest skeletal muscle index in each (nested) group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>Q_max_skeletal_muscle_index <span class="ot">&lt;-</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  sarcopenia </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="mutating-by-group" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="mutating-by-group"><span class="header-section-number">14.7</span> Mutating by group</h2>
+<p><code>mutate()</code> is used to modify columns or to create new ones. With grouped data, <code>mutate()</code> operates over each group independently.</p>
+<p>Let’s first consider a regular <code>mutate()</code> call, not a grouped one. Imagine that you wanted to add a column that ranks respondents by weight. This can be done with the <code>rank()</code> function inside a <code>mutate()</code> call:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(weight_kg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  sex    weight_kg weight_rank
+  &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1 Female        95        901 
+2 Male          96        908 
+3 Male          74        640.
+4 Female        70        564.
+5 Female        67        502.</code></pre>
+</div>
+</div>
+<p>The output shows that the first row is the 901st lightest individual. But it would be more intuitive to rank in descending order with the heaviest person first. We can do this with the <code>desc()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  sex    weight_kg weight_rank
+  &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1 Female        95         71 
+2 Male          96         64 
+3 Male          74        332.
+4 Female        70        408.
+5 Female        67        470.</code></pre>
+</div>
+</div>
+<p>The output shows that the person in the first row is the 71st heaviest individual.</p>
+<hr>
+<p>Now, let’s try to write a grouped <code>mutate()</code> call. Imagine we want to add this weight rank column <em>per sex group</em> in the data frame. That is, we want to know each person’s weight rank in their sex category. In this case, we can chain <code>group_by(sex)</code> with <code>mutate()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   sex [2]
+  sex    weight_kg weight_rank
+  &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1 Female        95        53.5
+2 Male          96        13.5
+3 Male          74       148  
+4 Female        70       220. 
+5 Female        67       250. </code></pre>
+</div>
+</div>
+<p>Now we see that the person in the first row is the 53rd heaviest <em>woman</em>. (The .5 indicates that this rank is a tie with someone else in the data.)</p>
+<p>We could also arrange the data to make things clearer:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>yao_sex_weight <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg))) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(sex, weight_rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   sex [1]
+  sex    weight_kg weight_rank
+  &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1 Female       162           1
+2 Female       161           2
+3 Female       158           3
+4 Female       135           4
+5 Female       129           5</code></pre>
+</div>
+</div>
+<section id="mutating-with-nested-groupings" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="mutating-with-nested-groupings">Mutating with nested groupings</h3>
+<p>Of course, as with the other verbs we have seen, <code>mutate()</code> also works with nested groups.</p>
+<p>For example, below we create the nested grouping of age <em>and</em> sex with the <code>yao</code> data frame, then add a rank column with <code>mutate()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>yao <span class="sc">%&gt;%</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+# Groups:   sex, age_category [4]
+  sex      age age_category weight_kg occupation      igg_result igm_result
+  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;     
+1 Female    45 45 - 64             95 Informal worker Negative   Negative  
+2 Male      55 45 - 64             96 Salaried worker Positive   Negative  
+3 Male      23 15 - 29             74 Student         Negative   Negative  
+4 Female    20 15 - 29             70 Student         Positive   Negative  
+5 Female    55 45 - 64             67 Trader--Farmer  Positive   Negative  
+# ℹ 1 more variable: weight_rank &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>The output shows that the person in the first row is 20th heaviest <em>woman in the 45 to 64 age group</em>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With the <code>sarcopenia</code> data, group by <code>age_group</code>, then in a new variable called <code>grip_strength_rank</code>, compute the per-age-group rank of each individual’s grip strength. (To compute the rank, use <code>mutate()</code> and the <code>rank()</code> function with its default ties method.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Complete the code with your answer:</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>Q_rank_grip_strength <span class="ot">&lt;-</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  sarcopenia</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled" title="Watch Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Watch Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Remember to ungroup data before further analysis</strong></p>
+<p>As has been mentioned before, it is important ungroup your data before doing further analysis.</p>
+<p>Consider this last example, where we computed the weight rank of individuals per age and sex group:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>yao <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+# Groups:   sex, age_category [4]
+  sex      age age_category weight_kg occupation      igg_result igm_result
+  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;     
+1 Female    45 45 - 64             95 Informal worker Negative   Negative  
+2 Male      55 45 - 64             96 Salaried worker Positive   Negative  
+3 Male      23 15 - 29             74 Student         Negative   Negative  
+4 Female    20 15 - 29             70 Student         Positive   Negative  
+5 Female    55 45 - 64             67 Trader--Farmer  Positive   Negative  
+# ℹ 1 more variable: weight_rank &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>If, in the process of analysis, you stored this output as a new data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>yao_modified <span class="ot">&lt;-</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  yao <span class="sc">%&gt;%</span> </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And then, later on, you picked up the data frame and tried some other analysis, for example, filtering to get the oldest person in the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>yao_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(age <span class="sc">==</span> <span class="fu">max</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+# Groups:   sex, age_category [5]
+  sex      age age_category weight_kg occupation           igg_result igm_result
+  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;      &lt;chr&gt;     
+1 Male      65 45 - 64             93 Retired              Negative   Negative  
+2 Male      78 65 +                95 Retired--Informal w… Positive   Negative  
+3 Male      14 5 - 14              44 Student              Negative   Negative  
+4 Female    44 30 - 44             67 Home-maker           Positive   Negative  
+5 Female    79 65 +                40 Retired              Negative   Negative  
+# ℹ 1 more variable: weight_rank &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>You might be confused by the output! Why are there 55 rows of “oldest people”?</p>
+<p>This would be because you forgot to ungroup the data before storing it for further analysis. Let’s do this properly now</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>yao_modified <span class="ot">&lt;-</span> </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  yao <span class="sc">%&gt;%</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, age_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(weight_kg))) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can correctly obtain the oldest person/people in the data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>yao_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(age <span class="sc">==</span> <span class="fu">max</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 8
+  sex      age age_category weight_kg occupation igg_result igm_result
+  &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+1 Female    79 65 +                40 Retired    Negative   Negative  
+2 Female    79 65 +                81 Home-maker Negative   Negative  
+# ℹ 1 more variable: weight_rank &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wrap-up" class="level2" data-number="14.8">
+<h2 data-number="14.8" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">14.8</span> Wrap up</h2>
+<p><code>group_by()</code> is a marvelous tool for arranging, mutating, filtering based on the groups within a single or multiple variables.</p>
+<p><img src="images/custom_dplyr_groupby_arrange.png" class="img-fluid" alt="Fig: arrange() and its use combined with group_by()." width="400"> <img src="images/custom_dplyr_groupby_mutate.png" class="img-fluid" alt="Fig: mutate() and its use combined with group_by()." width="400"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/custom_dplyr_groupby_filter.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Fig: filter() and its use combined with group_by().</figcaption>
+</figure>
+</div>
+<p>There are numerous ways of combining these verbs to manipulate your data. We invite you to take some time and to try these verbs out in different combinations!</p>
+<p>See you next time!</p>
+<p></p><div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/lolovanco.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/lolovanco" target="_blank">LAURE VANCAUWENBERGHE </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>A firm believer in science for good, striving to ally programming, health and education</p></li></ul></div> <div class="user-profile-details"><ul><li><img src="./Users/kendavidn/Dropbox/tgc_github_projects/data_dive/global/contributors/kendavidn.jpg" width="50px" height="50px"> <name><a href="https://thegraphcourses.org/members/kendavidn/" target="_blank">KENE DAVID NWOSU </a> </name> <br> <label>Data analyst, the GRAPH Network</label> <p>Passionate about world improvement</p></li></ul></div><p></p>
+</section>
+<section id="references" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="references">References</h2>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li><p>Horst, A. (2022). <em>Dplyr-learnr</em>. <a href="https://github.com/allisonhorst/dplyr-learnr" class="uri">https://github.com/allisonhorst/dplyr-learnr</a> (Original work published 2020)</p></li>
+<li><p><em>Group by one or more variables</em>. (n.d.). Retrieved 21 February 2022, from <a href="https://dplyr.tidyverse.org/reference/group_by.html" class="uri">https://dplyr.tidyverse.org/reference/group_by.html</a></p></li>
+<li><p><em>Create, modify, and delete columns — Mutate</em>. (n.d.). Retrieved 21 February 2022, from <a href="https://dplyr.tidyverse.org/reference/mutate.html" class="uri">https://dplyr.tidyverse.org/reference/mutate.html</a></p></li>
+<li><p><em>Subset rows using column values — Filter</em>. (n.d.). Retrieved 21 February 2022, from <a href="https://dplyr.tidyverse.org/reference/filter.html" class="uri">https://dplyr.tidyverse.org/reference/filter.html</a></p></li>
+<li><p><em>Arrange rows by column values — Arrange</em>. (n.d.). Retrieved 21 February 2022, from <a href="https://dplyr.tidyverse.org/reference/arrange.html" class="uri">https://dplyr.tidyverse.org/reference/arrange.html</a></p></li>
+</ul>
+<p>Artwork was adapted from:</p>
+<ul>
+<li>Horst, A. (2022). <em>R &amp; stats illustrations by Allison Horst</em>. <a href="https://github.com/allisonhorst/stats-illustrations" class="uri">https://github.com/allisonhorst/stats-illustrations</a> (Original work published 2018)</li>
+</ul>
+</section>
+<section id="solutions" class="level2" data-number="14.9">
+<h2 data-number="14.9" class="anchored" data-anchor-id="solutions"><span class="header-section-number">14.9</span> Solutions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_grip_strength_arranged</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_grip_strength_arranged &lt;- 
+  sarcopenia %&gt;%
+  select(sex_male_1_female_0, grip_strength_kg) %&gt;%
+  arrange(sex_male_1_female_0, grip_strength_kg)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_age_group_height</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_age_group_height &lt;- 
+  sarcopenia %&gt;%
+  mutate(age_group = factor(age_group, levels = c("Sixties",
+                                                  "Seventies",
+                                                  "Eighties"))) %&gt;%
+  arrange(age_group, height_meters)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_max_skeletal_muscle_index</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_max_skeletal_muscle_index &lt;- 
+  sarcopenia %&gt;%
+  group_by(age_group,sex_male_1_female_0) %&gt;%
+  filter(skeletal_muscle_index == max(skeletal_muscle_index))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_Q_rank_grip_strength</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Q_rank_grip_strength &lt;- 
+  sarcopenia %&gt;%
+  group_by(age_group) %&gt;%
+  mutate(grip_strength_rank = rank(grip_strength_kg))</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./untangled_ls05_groupby_summarize.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./untangled_ls07_pivoting.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

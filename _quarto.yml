@@ -1,0 +1,49 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Introduction to Data Analysis with R (IDAR)"
+  subtitle: "With Examples from Public Health and Epidemiology"
+  author: "The GRAPH Courses"
+  cover-image: cover.jpg
+  chapters:
+    - index.qmd
+    - part: "Foundations"
+      chapters:
+        - foundations_ls01_setting_up.qmd
+        - foundations_ls02_using_rstudio.qmd
+        - foundations_ls03_coding_basics.qmd
+        - foundations_ls04_data_dive_ebola_sierra_leone.qmd
+        - foundations_ls05_projects.qmd
+        - foundations_ls06_rmarkdown.qmd
+        - foundations_ls07_data_structures.qmd
+        - foundations_ls08_01_using_chatgpt.qmd
+    - part: "Data Manipulation"
+      chapters:
+        - untangled_ls01_select_rename.qmd
+        - untangled_ls02_filter.qmd
+        - untangled_ls03_mutate.qmd
+        - untangled_ls04_conditional_mutate.qmd
+        - untangled_ls05_groupby_summarize.qmd
+        - untangled_ls06_group_by_other_verbs.qmd
+        - untangled_ls07_pivoting.qmd
+        - untangled_ls08_advanced_pivoting.qmd
+    - part: "Data Visualization"
+      chapters:
+        - data_on_display_ls01_gg_intro.qmd
+        - data_on_display_ls02_scatter.qmd
+        - data_on_display_ls03_line_graphs.qmd
+        - data_on_display_ls04_histograms.qmd
+        - data_on_display_ls05_boxplots.qmd
+
+format:
+  PrettyPDF-pdf:
+    keep-tex: true
+    toc: true
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: source

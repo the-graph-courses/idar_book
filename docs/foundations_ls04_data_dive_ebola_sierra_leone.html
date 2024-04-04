@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 4&nbsp; Data dive: Ebola in Sierra Leone</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundations_ls05_projects.html" rel="next">
+<link href="./foundations_ls03_coding_basics.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundations_ls01_setting_up.html">Foundations</a></li><li class="breadcrumb-item"><a href="./foundations_ls04_data_dive_ebola_sierra_leone.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">4.1</span> Introduction</a></li>
+  <li><a href="#script-setup" id="toc-script-setup" class="nav-link" data-scroll-target="#script-setup"><span class="header-section-number">4.2</span> Script setup</a>
+  <ul class="collapse">
+  <li><a href="#header" id="toc-header" class="nav-link" data-scroll-target="#header"><span class="header-section-number">4.2.1</span> Header</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">4.2.2</span> Packages</a></li>
+  </ul></li>
+  <li><a href="#importing-data-into-r" id="toc-importing-data-into-r" class="nav-link" data-scroll-target="#importing-data-into-r"><span class="header-section-number">4.3</span> Importing data into R</a></li>
+  <li><a href="#intro-to-reproducibility" id="toc-intro-to-reproducibility" class="nav-link" data-scroll-target="#intro-to-reproducibility"><span class="header-section-number">4.4</span> Intro to reproducibility</a></li>
+  <li><a href="#quick-data-exploration" id="toc-quick-data-exploration" class="nav-link" data-scroll-target="#quick-data-exploration"><span class="header-section-number">4.5</span> Quick data exploration</a>
+  <ul class="collapse">
+  <li><a href="#vis_dat" id="toc-vis_dat" class="nav-link" data-scroll-target="#vis_dat"><span class="header-section-number">4.5.1</span> <code>vis_dat()</code></a></li>
+  <li><a href="#inspect_cat-and-inspect_num" id="toc-inspect_cat-and-inspect_num" class="nav-link" data-scroll-target="#inspect_cat-and-inspect_num"><span class="header-section-number">4.5.2</span> <code>inspect_cat()</code> and <code>inspect_num()</code></a></li>
+  </ul></li>
+  <li><a href="#analyzing-a-single-numeric-variable" id="toc-analyzing-a-single-numeric-variable" class="nav-link" data-scroll-target="#analyzing-a-single-numeric-variable"><span class="header-section-number">4.6</span> Analyzing a single numeric variable</a>
+  <ul class="collapse">
+  <li><a href="#extract-a-column-vector-with" id="toc-extract-a-column-vector-with" class="nav-link" data-scroll-target="#extract-a-column-vector-with"><span class="header-section-number">4.6.1</span> Extract a column vector with <code>$</code></a></li>
+  <li><a href="#basic-operations-on-a-numeric-variable" id="toc-basic-operations-on-a-numeric-variable" class="nav-link" data-scroll-target="#basic-operations-on-a-numeric-variable"><span class="header-section-number">4.6.2</span> Basic operations on a numeric variable</a></li>
+  <li><a href="#visualizing-a-numeric-variable" id="toc-visualizing-a-numeric-variable" class="nav-link" data-scroll-target="#visualizing-a-numeric-variable"><span class="header-section-number">4.6.3</span> Visualizing a numeric variable</a></li>
+  </ul></li>
+  <li><a href="#analyzing-a-single-categorical-variable" id="toc-analyzing-a-single-categorical-variable" class="nav-link" data-scroll-target="#analyzing-a-single-categorical-variable"><span class="header-section-number">4.7</span> Analyzing a single categorical variable</a>
+  <ul class="collapse">
+  <li><a href="#frequency-tables" id="toc-frequency-tables" class="nav-link" data-scroll-target="#frequency-tables"><span class="header-section-number">4.7.1</span> Frequency tables</a></li>
+  <li><a href="#visualizing-a-categorical-variable" id="toc-visualizing-a-categorical-variable" class="nav-link" data-scroll-target="#visualizing-a-categorical-variable"><span class="header-section-number">4.7.2</span> Visualizing a categorical variable</a></li>
+  </ul></li>
+  <li><a href="#answering-questions-about-the-outbreak" id="toc-answering-questions-about-the-outbreak" class="nav-link" data-scroll-target="#answering-questions-about-the-outbreak"><span class="header-section-number">4.8</span> Answering questions about the outbreak</a></li>
+  <li><a href="#havent-had-enough" id="toc-havent-had-enough" class="nav-link" data-scroll-target="#havent-had-enough"><span class="header-section-number">4.9</span> Haven’t had enough?</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up"><span class="header-section-number">4.10</span> Wrapping up</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<section id="learning-objectives" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<ol type="1">
+<li><p>You can use RStudio’s graphic user interface to import CSV data into R.</p></li>
+<li><p>You can explain the concept of reproducibility.</p></li>
+<li><p>You can use the <code>nrow()</code>, <code>ncol()</code> and <code>dim()</code> functions to get the dimensions of a dataset, and the <code>summary()</code> function to get a summary of the dataset’s variables.</p></li>
+<li><p>You can use <code>vis_dat()</code>, <code>inspect_num()</code> and <code>inspect_cat()</code> to obtain visual summaries of a dataset.</p></li>
+<li><p>You can inspect a numeric variable:</p>
+<ul>
+<li><p>with the summary functions <code>mean()</code> , <code>median()</code>, <code>max()</code>, <code>min()</code>, <code>length()</code> and <code>sum()</code>;</p></li>
+<li><p>with esquisse-generated ggplot2 code.</p></li>
+</ul></li>
+<li><p>You can inspect a categorical variable:</p>
+<ul>
+<li><p>with the summary functions <code>table()</code> and <code>janitor::tabyl()</code>;</p></li>
+<li><p>with the graphical functions <code>barplot()</code> and <code>pie()</code>.</p></li>
+</ul></li>
+</ol>
+</section>
+<section id="introduction" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
+<p>With your newly-acquired knowledge of functions and objects, you now have the basic building blocks required to do simple data analysis in R. So let’s get started. The goal is to start working with data as quickly as possible, even before you feel ready.</p>
+<p>Here you will analyze a dataset of confirmed and suspected cases of Ebola hemorrhagic fever in Sierra Leone in May and June of 2014 (Fang et al., 2016). The data is shown below:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+      id   age sex   status    date_of_onset date_of_sample district
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;date&gt;        &lt;date&gt;         &lt;chr&gt;   
+ 1    92     6 M     confirmed 2014-06-10    2014-06-15     Kailahun
+ 2    51    46 F     confirmed 2014-05-30    2014-06-04     Kailahun
+ 3   230    NA M     confirmed 2014-06-26    2014-06-30     Kenema  
+ 4   139    25 F     confirmed 2014-06-13    2014-06-18     Kailahun
+ 5     8     8 F     confirmed 2014-05-22    2014-05-27     Kailahun
+ 6   215    49 M     confirmed 2014-06-24    2014-06-29     Kailahun
+ 7   189    13 F     confirmed 2014-06-19    2014-06-24     Kailahun
+ 8   115    50 M     confirmed 2014-06-10    2014-06-25     Kailahun
+ 9   218    35 F     confirmed 2014-06-25    2014-06-28     Kenema  
+10   159    38 F     confirmed 2014-06-14    2014-06-22     Kailahun</code></pre>
+</div>
+</div>
+<p>You will import and explore this dataset, then use R to answer the following questions about the outbreak:</p>
+<ul>
+<li><strong>When was the first case reported?</strong></li>
+<li><strong>What was the median age of those affected?</strong></li>
+<li><strong>Had there been more cases in men or women?</strong></li>
+<li><strong>What district had had the most reported cases?</strong></li>
+<li><strong>By the end of June 2014, was the outbreak growing or receding?</strong></li>
+</ul>
+</section>
+<section id="script-setup" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="script-setup"><span class="header-section-number">4.2</span> Script setup</h2>
+<p>First, open a new script in RStudio with <code>File &gt; New File &gt; R Script</code>. (If you are on RStudio, you can open up any of your previously-created projects.)</p>
+<p><img src="images/new_r_script.jpg" class="img-fluid" width="481"></p>
+<p>Next, save the script with <code>File &gt; Save As</code> or press <code>Command</code>/<code>Control</code> + <code>S</code> to bring up the Save File dialog box. Save the file with the name “ebola_analysis” or something similar</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Empty your environment at the start of the analysis</strong></p>
+<p>When you start a new analysis, your R environment should usually be empty. Verify this by opening the <em>Environment</em> tab; it should say “Environment is empty”. If instead, it shows some previously-loaded objects, it is recommended to restart R by going to the menu option <code>Session &gt; Restart R</code></p>
+</div>
+</div>
+<section id="header" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="header"><span class="header-section-number">4.2.1</span> Header</h3>
+<p>Add a title, name and date to the start of the script, as code comments. This is generally good practice for writing R scripts, as it helps give you and your collaborators context about your script. Your header may look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ebola Sierra Leone analysis</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="do">## John Sample-Name Doe</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 2024-01-01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="packages" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="packages"><span class="header-section-number">4.2.2</span> Packages</h3>
+<p>Next, use the <code>p_load()</code> function from {pacman} to load the packages you will be using. Put this under a section header called “Load packages”, with four hyphens, as shown below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages ----</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  tidyverse, <span class="co"># meta-package</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  inspectdf,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  plotly,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  janitor,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  visdat,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  esquisse</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember that the <em>full signifier</em> of a function includes both the package name and the function name, <code>package::function()</code>. This full signifier is handy if you want to use a function before you have loaded its source package. This is the case in the code chunk above: we want use <code>p_load()</code> from {pacman} without formally loading the {pacman} package, so we type <code>pacman::p_load()</code></p>
+<p>We could also first load {pacman} before using the p_load function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman) <span class="co"># first load {pacman}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(tidyverse) <span class="co"># use `p_load` from {pacman} to load other packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(Also recall that the benefit of <code>p_load()</code> is that it automatically installs a package if it is not yet installed. Without <code>p_load()</code>, you have to first install the package with <code>install.packages()</code> before you can load it with <code>library()</code>.)</p>
+</div>
+</div>
+</section>
+</section>
+<section id="importing-data-into-r" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="importing-data-into-r"><span class="header-section-number">4.3</span> Importing data into R</h2>
+<p>Now that the needed packages are loaded, you should import the dataset.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>About the Ebola dataset</strong></p>
+<p>The data you will be working on contains a sample of patient information from the 2014-2016 Ebola outbreak in Sierra Leone. It comes from a research paper which analyzed the transmission dynamics of that outbreak. Key variables include the <code>status</code> of a case, whether the case was “confirmed” or “suspected”; the <code>date_of_onset</code>, when Ebola-like symptoms arose in a patient; and the <code>date_of_sample</code>, when the test sample was taken. To learn more about these data, visit the source publication here: <a href="https://bit.ly/ebola-data-source" target="_blank">bit.ly/ebola-data-source</a>. Or search the following DOI on DOI.org: 10.1073/pnas.1518587113.</p>
+</div>
+</div>
+<p>Go to <a href="https://bit.ly/view-ebola-data" target="_blank">bit.ly/view-ebola-data</a> to view the dataset you will be working on. Then click the download icon at the top to download it to your computer.</p>
+<p><img src="images/download_data_ebola.png" class="img-fluid" width="674"></p>
+<p>You can leave the dataset in your downloads folder, or move it to somewhere more respectable; the upcoming steps will work independent of where the data is stored. In the next lesson, you will learn how to organize your data analysis projects properly, and we will think about the ideal folder setup for storing data.</p>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled" title="RStudio Cloud">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+RStudio Cloud
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>NOTE: If you are using RStudio Cloud, you need to upload your dataset to the cloud. Do this in the “Files” tab by clicking on the “Upload” button.</p>
+<p><img src="images/rstudio_cloud_upload_button.png" class="img-fluid" width="500"></p>
+</div>
+</div>
+<hr>
+<p>Next, on the RStudio menu, go to <code>File &gt; Import Dataset &gt; From Text (readr)</code>. <img src="images/import_data.jpg" class="img-fluid" width="421"></p>
+<p>Browse through the computer’s files and navigate to the downloaded dataset. Click to open it. You should see an import dialog box like this:</p>
+<p><img src="images/ebola_dat_import_dialog.jpg" class="img-fluid"></p>
+<p>Leave all the import settings at the default values; simply click on “Import” at the bottom; this should load the dataset into R. You can tell this by looking at your environment pane, which should now feature an object called “ebola_sierra_leone” or something similar:</p>
+<p><img src="images/environment_with_ebola_data.png" class="img-fluid" width="507"></p>
+<p>RStudio should also have called the <code>View()</code> function on your dataset, so you should see a familiar spreadsheet view of this data:</p>
+<p><img src="images/view_ebola_data.png" class="img-fluid" width="576"></p>
+<p>Now take a look at your console. Do you observe that your actions in the graphical user interface actually triggered some R code to be run? Copy the line of code that includes the <code>read_csv()</code> function, leaving out the <code>&gt;</code> symbol.</p>
+<p><img src="images/copy_import_code.jpg" class="img-fluid" width="613"></p>
+<p>Paste the copied code into your R script, and label this section “Load data”. This may look something like the below (the file path inside quotes will differ from computer to computer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load data ----</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"~/Downloads/ebola_sierra_leone.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Recap">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Recap
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nice work so far!</p>
+<p>Your R script should look similar to this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ebola Sierra Leone analysis</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## John Sample-Name Doe</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 2024-01-01</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages ----</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  tidyverse,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  inspectdf,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  plotly,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  janitor,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  visdat</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Load data ----</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"~/Downloads/ebola_sierra_leone.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="intro-to-reproducibility" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="intro-to-reproducibility"><span class="header-section-number">4.4</span> Intro to reproducibility</h2>
+<p>Now that the code for importing data is in your R script, you can easily rerun this script anytime to reimport the dataset; there will be no need to redo the manual point-and-click procedure for data import.</p>
+<p>Try restarting R and rerunning the script now. Save your script with <code>Control/Command</code> + <code>s</code> , then <em>restart</em> R with the RStudio Menu, at <code>Session &gt; Restart R</code>. On RStudio Cloud, the menu option looks like this:</p>
+<p><img src="images/restart_r_session.png" class="img-fluid" width="204"></p>
+<p>If restarting is successful, your console should print this message:</p>
+<p><img src="images/restarting_r_session.png" class="img-fluid" width="485"></p>
+<p>You should also see the phrase “Environment is empty” in the Environment tab, indicating that the dataset you imported is no longer stored by R—you are starting with a fresh workspace.</p>
+<p><img src="images/environment_is_empty.png" class="img-fluid" width="481"></p>
+<p>To re-run your script, use <code>Command/Control</code> + <code>a</code> to highlight all the code, then <code>Command/Control</code> + <code>Enter</code> to run it.</p>
+<p>If this worked, congratulations; you have the beginnings of your first “reproducible” analysis script!</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Vocab">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vocab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>What does “reproducible” mean?</strong></p>
+<p>When you do things with code rather than by pointing and clicking, it is easy for anyone to re-run, or <em>reproduce</em> these steps, by simply re-running your script.</p>
+<p>While you can use RStudio’s graphical user interface to point-and-click your way through the data import process, you should always copy the relevant code to your script so that your script remains a reproducible record of all your analysis steps.</p>
+<p>Of course, your script so far is not yet <em>entirely</em> reproducible, because the file path for the dataset (the one that looks like this: “…intro-to-data-analysis-with-r/ch01_getting_started/data…”) is specific to just your computer. Later on we will see how to use relative file paths, so that the code for importing data can work on anyone’s computer.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled" title="Watch Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Watch Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If your environment was not empty after restarting R, it means you skipped a step in a previous lesson. Do this now:</p>
+<ul>
+<li><p>In the RStudio Menu, go to <code>Tools &gt; Global Options</code> to bring up RStudio’s options dialog box.</p></li>
+<li><p>Then go to <code>General &gt; Basic</code>, and <strong>uncheck</strong> the box that says “Restore .RData into workspace at startup”.</p></li>
+<li><p>For the option, “save your workspace to .RData on exit”, set this to “Never”.</p>
+<p><img src="images/dont_restore_rdata.png" class="img-fluid" width="542"></p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="quick-data-exploration" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="quick-data-exploration"><span class="header-section-number">4.5</span> Quick data exploration</h2>
+<p>Now let’s walk through some basic steps of data exploration—taking a broad, bird’s eye look at the dataset. You should put this section under a heading like “Explore data” in your script.</p>
+<p>To view the top and bottom 6 rows of the dataset, you can use the <code>head()</code> and <code>tail()</code> functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Explore data ----</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+     id   age sex   status    date_of_onset date_of_sample district
+  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;date&gt;        &lt;date&gt;         &lt;chr&gt;   
+1    92     6 M     confirmed 2014-06-10    2014-06-15     Kailahun
+2    51    46 F     confirmed 2014-05-30    2014-06-04     Kailahun
+3   230    NA M     confirmed 2014-06-26    2014-06-30     Kenema  
+4   139    25 F     confirmed 2014-06-13    2014-06-18     Kailahun
+5     8     8 F     confirmed 2014-05-22    2014-05-27     Kailahun
+6   215    49 M     confirmed 2014-06-24    2014-06-29     Kailahun</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+     id   age sex   status    date_of_onset date_of_sample district
+  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;date&gt;        &lt;date&gt;         &lt;chr&gt;   
+1   214     6 F     confirmed 2014-06-24    2014-06-30     Kenema  
+2    28    45 F     confirmed 2014-05-27    2014-06-01     Kailahun
+3    12    27 F     confirmed 2014-05-22    2014-05-27     Kailahun
+4   110     6 M     confirmed 2014-06-10    2014-06-15     Kailahun
+5   209    40 F     confirmed 2014-06-24    2014-06-27     Kailahun
+6    35    29 M     suspected 2014-05-28    2014-06-01     Kenema  </code></pre>
+</div>
+</div>
+<p>To view the whole dataset, use the <code>View()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will again open a familiar spreadsheet view of the data:</p>
+<p><img src="images/view_ebola_data.png" class="img-fluid" width="504"></p>
+<p>You can close this tab and return to your script.</p>
+<hr>
+<p>The functions <code>nrow()</code>, <code>ncol()</code> and <code>dim()</code> give you the dimensions of your dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(ebola_sierra_leone) <span class="co"># number of rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(ebola_sierra_leone) <span class="co"># number of columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ebola_sierra_leone) <span class="co"># number of rows and columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200   7</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’re not sure what a function does, remember that you can get function help with the question mark symbol. For example, to get help on the <code>ncol()</code> function, run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>?ncol</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<hr>
+<p>Another often-helpful function is <code>summary()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id              age            sex               status         
+ Min.   :  1.00   Min.   : 1.80   Length:200         Length:200        
+ 1st Qu.: 62.75   1st Qu.:20.00   Class :character   Class :character  
+ Median :131.50   Median :35.00   Mode  :character   Mode  :character  
+ Mean   :136.72   Mean   :33.85                                        
+ 3rd Qu.:208.25   3rd Qu.:45.00                                        
+ Max.   :285.00   Max.   :80.00                                        
+                  NA's   :4                                            
+ date_of_onset        date_of_sample         district        
+ Min.   :2014-05-18   Min.   :2014-05-23   Length:200        
+ 1st Qu.:2014-06-01   1st Qu.:2014-06-07   Class :character  
+ Median :2014-06-13   Median :2014-06-18   Mode  :character  
+ Mean   :2014-06-12   Mean   :2014-06-17                     
+ 3rd Qu.:2014-06-23   3rd Qu.:2014-06-29                     
+ Max.   :2014-06-29   Max.   :2014-07-17                     
+                                                             </code></pre>
+</div>
+</div>
+<p>As you can see, for numeric columns in your dataset, <code>summary()</code> gives you the minimum value, the maximum value, the mean, median and the 1st and 3rd <a href="https://www.mathsisfun.com/data/quartiles.html">quartiles</a>.</p>
+<p>For character columns it gives you just the length of the column (the number of rows), the “class” and the “mode”. We will discuss what “class” and “mode” mean later.</p>
+<section id="vis_dat" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="vis_dat"><span class="header-section-number">4.5.1</span> <code>vis_dat()</code></h3>
+<p>The <code>vis_dat()</code> function from the {visdat} package is a wonderful way to quickly visualize the data types and the missing values in a dataset. Try this now:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_dat</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="2450"></p>
+</div>
+</div>
+<p>From this figure, you can quickly see the character, date and numeric data types, and you can note that age is missing for some cases.</p>
+</section>
+<section id="inspect_cat-and-inspect_num" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="inspect_cat-and-inspect_num"><span class="header-section-number">4.5.2</span> <code>inspect_cat()</code> and <code>inspect_num()</code></h3>
+<p>Next, <code>inspect_cat()</code> and <code>inspect_num()</code> from the {inspectdf} package give you visual summaries of the distribution of variables in the dataset.</p>
+<p>If you run <code>inspect_cat()</code> on the data object, you get a tabular summary of the <a href="https://psyteachr.github.io/glossary/c.html?q=categor#categorical">categorical</a> variables in the dataset, with some information hidden in the <code>levels</code> column (later you will learn how to extract this information).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect_cat</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  col_name         cnt common     common_pcnt levels           
+  &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;named list&gt;     
+1 date_of_onset     39 2014-06-10        10   &lt;tibble [39 × 3]&gt;
+2 date_of_sample    45 2014-06-15         9.5 &lt;tibble [45 × 3]&gt;
+3 district           7 Kailahun          77.5 &lt;tibble [7 × 3]&gt; 
+4 sex                2 F                 57   &lt;tibble [2 × 3]&gt; 
+5 status             2 confirmed         91   &lt;tibble [2 × 3]&gt; </code></pre>
+</div>
+</div>
+<p>But the magic happens when you run <code>show_plot()</code> on the result from <code>inspect_cat()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## store the output of `inspect_cat()` in `cat_summary`</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>cat_summary <span class="ot">&lt;-</span> <span class="fu">inspect_cat</span>(ebola_sierra_leone)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="do">## call the `show_plot()` function on that summmary.</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">show_plot</span>(cat_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You get a wonderful figure showing the distribution of all categorical and date variables!</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You could also run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_plot</span>(<span class="fu">inspect_cat</span>(ebola_sierra_leone))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+<p>From this plot, you can quickly tell that most cases are in Kailahun, and that there are more cases in women than in men (“F” stands for “female”).</p>
+<p>One problem is that in this plot, the smaller categories are not labelled. So, for example, we are not sure what value is represented by the white section for “status” at the bottom right. To see labels on these smaller categories, you can turn this into an interactive plot with the <code>ggplotly()</code> function from the {plotly} package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cat_summary_plot <span class="ot">&lt;-</span> <span class="fu">show_plot</span>(cat_summary)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(cat_summary_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wonderful! Now you can hover over each of the bars to see the proportion of each bar section. For example you can now tell that 9% (0.090) of the cases have a suspected status:</p>
+<p><img src="images/plotly_inspect_cat.png" class="img-fluid" width="656"></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The assignment arrow, <code>&lt;-</code>, can be written with the RStudio shortcut <strong><code>alt</code></strong> + <strong><code>-</code></strong> (<strong>alt</strong> AND <strong>minus</strong>) on Windows or <strong><code>option</code></strong> + <strong><code>-</code></strong> (<strong>option</strong> AND <strong>minus</strong>) on macOS.</p>
+</div>
+</div>
+<hr>
+<p>You can obtain a similar plot for the numerical (continuous) variables in the dataset with <code>inspect_num()</code>. Here, we show all three steps in one go.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>num_summary <span class="ot">&lt;-</span> <span class="fu">inspect_num</span>(ebola_sierra_leone)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>num_summary_plot <span class="ot">&lt;-</span> <span class="fu">show_plot</span>(num_summary)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(num_summary_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This gives you an overview of the numerical columns, <code>age</code> and <code>id</code>. (Of course, the distribution of the <code>id</code> variable is not meaningful.)</p>
+<p>You can tell that individuals aged 35 to 40 (mid-point 37.5) are the largest age group, making up 13.8% (0.1377…) of the cases in the dataset.</p>
+</section>
+</section>
+<section id="analyzing-a-single-numeric-variable" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="analyzing-a-single-numeric-variable"><span class="header-section-number">4.6</span> Analyzing a single numeric variable</h2>
+<p>Now that you have a sense of what the entire dataset looks like, you can isolate and analyze single variables at a time—this is called <em>univariate analysis</em>.</p>
+<p>Go ahead and create a new section in your script for this univariate analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Univariate analysis, numeric variables ----</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s start by analyzing the numeric <code>age</code> variable.</p>
+<section id="extract-a-column-vector-with" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="extract-a-column-vector-with"><span class="header-section-number">4.6.1</span> Extract a column vector with <code>$</code></h3>
+<p>To extract a single variable/column from a dataset, use the dollar sign, <code>$</code> operator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone<span class="sc">$</span>age <span class="co"># extract the age column in the dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  6.0 46.0   NA 25.0  8.0 49.0 13.0 50.0 35.0 38.0 60.0 18.0 10.0 14.0 50.0
+ [16] 35.0 43.0 17.0  3.0 60.0 38.0 41.0 49.0 12.0 74.0 21.0 27.0 41.0 42.0 60.0
+ [31] 30.0 50.0 50.0 22.0 40.0 35.0 19.0  3.0 34.0 21.0 73.0 65.0 30.0 70.0 12.0
+ [46] 15.0 42.0 60.0 14.0 40.0 33.0 43.0 45.0 14.0 14.0 40.0 35.0 30.0 17.0 39.0
+ [61] 20.0  8.0 40.0 42.0 53.0 18.0 40.0 20.0 45.0 40.0 60.0 44.0 33.0 23.0 45.0
+ [76]  7.0   NA 35.0 36.0 42.0 35.0 25.0 30.0 30.0 28.0 14.0 20.0 60.0 67.0 35.0
+ [91] 50.0  4.0 28.0 38.0 30.0 26.0 37.0 30.0  3.0 56.0 32.0 35.0 54.0 42.0 48.0
+[106] 11.0  1.8 63.0 55.0 20.0 62.0 62.0 42.0 65.0 29.0 20.0 33.0 30.0 35.0   NA
+[121] 50.0 16.0  3.0 22.0  7.0 50.0 17.0 40.0 21.0  9.0 27.0 52.0 50.0 25.0 10.0
+[136] 30.0 32.0 38.0 30.0 50.0 26.0 35.0  3.0 50.0 60.0 40.0 34.0  4.0 42.0   NA
+[151] 54.0 18.0 45.0 30.0 35.0 35.0 16.0 26.0 23.0 45.0 45.0 45.0 38.0 45.0 35.0
+[166] 30.0 60.0  5.0 18.0  2.0 70.0 35.0  3.0 30.0 80.0 62.0 20.0 45.0 18.0 28.0
+[181] 48.0 38.0 39.0 26.0 60.0 35.0 20.0 50.0 11.0 36.0 29.0 57.0 35.0 26.0  6.0
+[196] 45.0 27.0  6.0 40.0 29.0</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Vocab">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vocab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This list of values is called a <em>vector</em> in R. A vector is a kind of data structure that has elements of one <em>type</em>. In this case, the type is “numeric”. We will formally introduce you to vectors and other data structures in a future chapter. In this lesson, you can take “vector” and “variable” to be synonyms.</p>
+</div>
+</div>
+</section>
+<section id="basic-operations-on-a-numeric-variable" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="basic-operations-on-a-numeric-variable"><span class="header-section-number">4.6.2</span> Basic operations on a numeric variable</h3>
+<p>To get the mean of these ages, you could run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ebola_sierra_leone<span class="sc">$</span>age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>But it seems we have a problem. R says the mean is <code>NA</code>, which means “not applicable” or “not available”. This is because there are some missing values in the vector of ages. (Did you notice this when you printed the vector?) By default, R cannot find the mean if there are missing values. To ignore these values, use the argument <code>na.rm</code> (which stands for “NA remove”) setting it to <code>T</code>, or <code>TRUE</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ebola_sierra_leone<span class="sc">$</span>age, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33.84592</code></pre>
+</div>
+</div>
+<p>Great! This need to remove the <code>NA</code>s before computing a statistic applies to many functions. The <code>median()</code> function for example, will also return <code>NA</code> by default if it is called on a vector with any <code>NA</code>s:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ebola_sierra_leone<span class="sc">$</span>age) <span class="co"># does not work</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ebola_sierra_leone<span class="sc">$</span>age, <span class="at">na.rm =</span> T) <span class="co"># works</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35</code></pre>
+</div>
+</div>
+<hr>
+<p><code>mean</code> and <code>median</code> are just two of many R functions that can be used to inspect a numerical variable. Let’s look at some others.</p>
+<p>But first, we can assign the age vector to a new object, so you don’t have to keep typing <code>ebola_sierra_leone$age</code> each time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>age_vec <span class="ot">&lt;-</span> ebola_sierra_leone<span class="sc">$</span>age <span class="co"># assign the vector to the object "age_vec"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now run these functions on <code>age_vec</code> and observe their outputs:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(age_vec, <span class="at">na.rm =</span> T) <span class="co"># standard deviation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17.26864</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(age_vec, <span class="at">na.rm =</span> T) <span class="co"># maximum age</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 80</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(age_vec, <span class="at">na.rm =</span> T) <span class="co"># minimum age</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(age_vec) <span class="co"># min, max, mean, quartiles and NAs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   1.80   20.00   35.00   33.85   45.00   80.00       4 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(age_vec) <span class="co"># number of elements in the vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(age_vec, <span class="at">na.rm =</span> T) <span class="co"># sum of all elements in the vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6633.8</code></pre>
+</div>
+</div>
+<p>Do not feel intimidated by the long list of functions! You should not have to memorize them; rather you should feel free to Google the function for whatever operation you want to carry out. You might search something like “what is the function for standard deviation in R”. One of the first results should lead you to what you need.</p>
+</section>
+<section id="visualizing-a-numeric-variable" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="visualizing-a-numeric-variable"><span class="header-section-number">4.6.3</span> Visualizing a numeric variable</h3>
+<p>Now let’s create a graph to visualize the age variable. The two most common graphics for inspecting the distribution of numerical variables are <a href="https://www.mathsisfun.com/data/histograms.html">histograms</a> (like the output of the <code>inspect_num()</code> function you saw earlier) and <a href="https://www.mathsisfun.com/data/quartiles.html">boxplots</a>.</p>
+<p>R has built-in functions for these:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(age_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" style="width:70.0%"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(age_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" style="width:70.0%"></p>
+</div>
+</div>
+<p>Nice and easy!</p>
+<p>Graphical functions like boxplot() and hist() are part of R’s base graphics package. These functions are quick and easy to use, but they do not offer a lot of flexibility, and it is difficult to make beautiful plots with them. So most people in the R community use an extension package, {ggplot2}, for their data visualization.</p>
+<p>In this course, we’ll use ggplot indirectly; by using the {esquisse} package, which provides a user-friendly interface for creating ggplot2 plots.</p>
+<p>The workhorse function of the {esquisse} package is <code>esquisser()</code>, and this function takes a single argument—the dataset you want to visualize. So we can run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">esquisser</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This should bring a graphic user interface that you can use to plot different variables. To visualize the age variable, simply drag <code>age</code> from the list of variables into the x axis box:</p>
+<p><img src="images/23.30.37.jpg" class="img-fluid" width="441"></p>
+<p>When <code>age</code> is in the x axis box, you should automatically get a histogram of ages:</p>
+<p><img src="images/23.32.03.jpg" class="img-fluid" width="554"></p>
+<p>You can change the plot type by clicking on the “Histogram” button and selecting one of the other valid plot types. Try out the boxplot, violin plot and density plot and observe the outputs.</p>
+<p><img src="images/23.39.38.jpg" class="img-fluid" width="215"></p>
+<p>When you are done creating a plot with {esquisse}, you should copy the code that was created by clicking on the “Code” button at the bottom right then “Copy to clipboard”:</p>
+<p><img src="images/23.48.18.jpg" class="img-fluid" width="403"></p>
+<p>Now, paste that code into your script, and make sure you can run it from there. The code should look something like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ebola_sierra_leone) <span class="sc">+</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> age) <span class="sc">+</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> 30L, <span class="at">fill =</span> <span class="st">"#112446"</span>) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>By copying the generated code into your script, you ensure that the data visualization you created is fully reproducible.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Pro Tip">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pro Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>{esquisse} can only create fairly simple graphics, so when you want to make highly customized or complex plots, you will need to learn how to write {ggplot} code manually. This will be the focus of a later course.</p>
+</div>
+</div>
+<p>You should also test out the other tabs on the bottom toolbar to see what they do: Labels &amp; Title, Plot options, Appearance and Data.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Challenge">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Easy bivariate and multivariate plots</strong></p>
+<p>In this lesson we are focusing on univariate analysis: exploring and visualizing one variable at a time. But with esquisse; it is <em>so</em> easy to make a bivariate or multivariate plot, so you can already get your feet wet with this.</p>
+<p>Try the following plots:</p>
+<ul>
+<li><p>Drag <code>age</code> to the X box and <code>sex</code> to the Y box.</p></li>
+<li><p>Drag <code>age</code> to the X box, <code>sex</code> to the Y box, and <code>sex</code> to the fill box.</p></li>
+<li><p>Drag <code>age</code> to the X box and <code>district</code> to the Y box.</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="analyzing-a-single-categorical-variable" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="analyzing-a-single-categorical-variable"><span class="header-section-number">4.7</span> Analyzing a single categorical variable</h2>
+<p>Next, let’s look at a categorical variable, the districts of reported cases:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Univariate analysis, categorical variables ----</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone<span class="sc">$</span>district</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+  [5] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+  [9] "Kenema"        "Kailahun"      "Kailahun"      "Kailahun"     
+ [13] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [17] "Kailahun"      "Kenema"        "Kono"          "Kailahun"     
+ [21] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+ [25] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [29] "Kenema"        "Kenema"        "Kenema"        "Kailahun"     
+ [33] "Kailahun"      "Bo"            "Kailahun"      "Kailahun"     
+ [37] "Kailahun"      "Kenema"        "Kenema"        "Kenema"       
+ [41] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [45] "Kailahun"      "Kailahun"      "Western Urban" "Kailahun"     
+ [49] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [53] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [57] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [61] "Kailahun"      "Kenema"        "Western Urban" "Kambia"       
+ [65] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [69] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [73] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+ [77] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+ [81] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [85] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [89] "Kailahun"      "Kenema"        "Kailahun"      "Kailahun"     
+ [93] "Kailahun"      "Kono"          "Port Loko"     "Kenema"       
+ [97] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[101] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+[105] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[109] "Kailahun"      "Kailahun"      "Kenema"        "Western Urban"
+[113] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[117] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[121] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+[125] "Kailahun"      "Kenema"        "Kailahun"      "Port Loko"    
+[129] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[133] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[137] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[141] "Kailahun"      "Kailahun"      "Kailahun"      "Kenema"       
+[145] "Kenema"        "Kailahun"      "Kenema"        "Kailahun"     
+[149] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[153] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+[157] "Kailahun"      "Kenema"        "Kailahun"      "Kailahun"     
+[161] "Kenema"        "Kailahun"      "Kailahun"      "Kailahun"     
+[165] "Kailahun"      "Bo"            "Kailahun"      "Kailahun"     
+[169] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[173] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+[177] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[181] "Kailahun"      "Kailahun"      "Kailahun"      "Western Urban"
+[185] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+[189] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[193] "Kailahun"      "Kenema"        "Kenema"        "Kailahun"     
+[197] "Kailahun"      "Kailahun"      "Kailahun"      "Kenema"       </code></pre>
+</div>
+</div>
+<p>Sorry for printing that very long vector!</p>
+<section id="frequency-tables" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="frequency-tables"><span class="header-section-number">4.7.1</span> Frequency tables</h3>
+<p>You can use the <code>table()</code> function to create a frequency table of a categorical variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ebola_sierra_leone<span class="sc">$</span>district)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+           Bo      Kailahun        Kambia        Kenema          Kono 
+            2           155             1            34             2 
+    Port Loko Western Urban 
+            2             4 </code></pre>
+</div>
+</div>
+<p>You can see that most cases are in Kailahun and Kenema.</p>
+<hr>
+<p><code>table()</code> is auseful “base” function. But there is a better function for creating frequency tables, called <code>tabyl()</code>, from the {janitor} package.</p>
+<p>To use it, you supply the name of your data frame as the first argument, then the name of variable to be tabulated:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(ebola_sierra_leone, district)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      district   n percent
+            Bo   2   0.010
+      Kailahun 155   0.775
+        Kambia   1   0.005
+        Kenema  34   0.170
+          Kono   2   0.010
+     Port Loko   2   0.010
+ Western Urban   4   0.020</code></pre>
+</div>
+</div>
+<p>As you can see, <code>tabyl()</code> gives you both the counts and the percentage proportions of each value. It also has some other attractive features you will see later.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Pro Tip">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pro Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can also easily make cross-tabulations with <code>tabyl()</code>. Simply add additional variables separated by a comma. For example, to create a cross-tabulation by district and sex, run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(ebola_sierra_leone, district, sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      district  F  M
+            Bo  0  2
+      Kailahun 91 64
+        Kambia  0  1
+        Kenema 20 14
+          Kono  0  2
+     Port Loko  1  1
+ Western Urban  2  2</code></pre>
+</div>
+</div>
+<p>The output shows us that there were 0 women in the Bo district, 2 men in the Bo district, 91 women in the Kailahun district, and so on.</p>
+</div>
+</div>
+</section>
+<section id="visualizing-a-categorical-variable" class="level3" data-number="4.7.2">
+<h3 data-number="4.7.2" class="anchored" data-anchor-id="visualizing-a-categorical-variable"><span class="header-section-number">4.7.2</span> Visualizing a categorical variable</h3>
+<p>Now, let’s try to visualize the <code>district</code> variable. As before, the best way to do this is with the <code>esquisser()</code> function from {esquisse}. Run this code again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">esquisser</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then drag the <code>district</code> variable to the X axis box:</p>
+<p><img src="images/00.33.04.jpg" class="img-fluid"></p>
+<p>You should get a bar chart showing the count of individuals across districts. Copy the generated code and paste it into your script.</p>
+</section>
+</section>
+<section id="answering-questions-about-the-outbreak" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="answering-questions-about-the-outbreak"><span class="header-section-number">4.8</span> Answering questions about the outbreak</h2>
+<p>With the functions you have just learned, you have the tools to answer the questions about the Ebola outbreak that were listed at the top. Give it a go. Attempt these questions on your own, then look at the solutions below.</p>
+<ul>
+<li><strong>When was the first case reported? (Hint: look at the date of sample)</strong></li>
+<li><strong>As at the end of June 2014, which 10-year age group had had the most cases?</strong></li>
+<li><strong>What was the median age of those affected?</strong></li>
+<li><strong>Had there been more cases in men or women?</strong></li>
+<li><strong>What district had had the most reported cases?</strong></li>
+<li><strong>By the end of June 2014, was the outbreak growing or receding?</strong></li>
+</ul>
+<hr>
+<p><strong>Solutions</strong></p>
+<ul>
+<li><strong>When was the first case reported?</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(ebola_sierra_leone<span class="sc">$</span>date_of_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2014-05-23"</code></pre>
+</div>
+</div>
+<p>We don’t have the date of report, but the first “date_of_sample” (when the Ebola test sample was taken from the patient) is May 23rd. We can use this as a proxy for the date of first report.</p>
+<ul>
+<li><strong>What was the median age of cases?</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ebola_sierra_leone<span class="sc">$</span>age, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35</code></pre>
+</div>
+</div>
+<p>The median age of cases was 35.</p>
+<ul>
+<li><strong>Are there more cases in men or women?</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(ebola_sierra_leone<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ebola_sierra_leone$sex   n percent
+                      F 114    0.57
+                      M  86    0.43</code></pre>
+</div>
+</div>
+<p>As seen in the table, there were more cases in women. Specifically, 57% of cases are of women.</p>
+<ul>
+<li><strong>What district has had the most reported cases?</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabyl</span>(ebola_sierra_leone<span class="sc">$</span>district)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ebola_sierra_leone$district   n percent
+                          Bo   2   0.010
+                    Kailahun 155   0.775
+                      Kambia   1   0.005
+                      Kenema  34   0.170
+                        Kono   2   0.010
+                   Port Loko   2   0.010
+               Western Urban   4   0.020</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="do">## We can also plot the following chart (generated with esquisse)</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ebola_sierra_leone) <span class="sc">+</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> district) <span class="sc">+</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"#112446"</span>) <span class="sc">+</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" style="width:70.0%"></p>
+</div>
+</div>
+<p>As seen, the Kailahun district had the majority of cases.</p>
+<ul>
+<li><strong>By the end of June 2014, was the outbreak growing or receding?</strong></li>
+</ul>
+<p>For this, we can use esquisse to generate a bar chart that shows a count of cases in each day. Simply drag the <code>date_of_onset</code> variable to the x axis. The output code from esquisse should resemble the below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ebola_sierra_leone) <span class="sc">+</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> date_of_onset) <span class="sc">+</span></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> 30L, <span class="at">fill =</span> <span class="st">"#112446"</span>) <span class="sc">+</span></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="foundations_ls04_data_dive_ebola_sierra_leone_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" style="width:70.0%"></p>
+</div>
+</div>
+<p>Great! But it is debatable whether the outbreak was growing or receding at the end of June 2014; a precise trend is not really clear!</p>
+</section>
+<section id="havent-had-enough" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="havent-had-enough"><span class="header-section-number">4.9</span> Haven’t had enough?</h2>
+<p>If you would like to practice some of the methods and functions you learned on a similar dataset, try downloading the data that is stored on this page: <a href="https://bit.ly/view-yaounde-covid-data" class="uri">https://bit.ly/view-yaounde-covid-data</a></p>
+<p>That dataset is in the form of an Excel spreadsheet, so when you are importing the dataset with RStudio, you should use the “From Excel” option (File &gt; Import Dataset &gt; From Excel).</p>
+<p>This dataset contains the results of a COVID-19 serological survey conducted in Yaounde, Cameroon in late 2020. The survey estimated how many people had been infected with COVID-19 in the region, by testing for IgG and IgM antibodies. The full dataset can be obtained from here: <a href="https://go.nature.com/3R866wx" target="_blank">go.nature.com/3R866wx</a></p>
+</section>
+<section id="wrapping-up" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="wrapping-up"><span class="header-section-number">4.10</span> Wrapping up</h2>
+<p>Congratulations! You have now taken your first baby steps in analyzing data with R: you imported a dataset, explored its structure, performed basic univariate analysis and visualization on its numeric and categorical variables, and you were able to answer important questions about the outbreak based on this.</p>
+<p>Of course, this was only a <em>sneak peek</em> of the data analysis process—a lot was left out. Hopefully, though, this sneak peek has gotten you a bit excited about what you can do with R. And hopefully, you can already start to apply some of these to your own datasets. The journey is only beginning! See you soon.</p>
+<!-- Only team members who contributed "substantially" to a specific lesson should be listed here -->
+<!-- See https://tinyurl.com/icjme-authorship for notes on "substantial" contribution-->
+</section>
+<section id="references" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="references">References</h2>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li><p>Barnier, Julien. “Introduction à R Et Au Tidyverse.” Partie 13 Diffuser et publier avec rmarkdown, May 24, 2022. <a href="https://juba.github.io/tidyverse/13-rmarkdown.html" class="uri">https://juba.github.io/tidyverse/13-rmarkdown.html</a>.</p></li>
+<li><p>Yihui Xie, J. J. Allaire, and Garrett Grolemund. “R Markdown: The Definitive Guide.” Home, April 11, 2022. <a href="https://bookdown.org/yihui/rmarkdown/" class="uri">https://bookdown.org/yihui/rmarkdown/</a>.</p></li>
+</ul>
+<!-- (Chicago format. You can use https://www.citationmachine.net) -->
+<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution Share Alike</a> license. <a class="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">     <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundations_ls03_coding_basics.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundations_ls05_projects.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

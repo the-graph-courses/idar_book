@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 17&nbsp; Intro to ggplot2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./data_on_display_ls02_scatter.html" rel="next">
+<link href="./untangled_ls08_advanced_pivoting.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script src="site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="site_libs/react-17.0.0/react.min.js"></script>
+<script src="site_libs/react-17.0.0/react-dom.min.js"></script>
+<script src="site_libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="site_libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<link href="site_libs/reactable-0.4.3/reactable.css" rel="stylesheet">
+<script src="site_libs/reactable-binding-0.4.3/reactable.js"></script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data_on_display_ls01_gg_intro.html">Data Visualization</a></li><li class="breadcrumb-item"><a href="./data_on_display_ls01_gg_intro.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">17.1</span> Introduction</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">17.2</span> Learning objectives</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">17.3</span> Packages</a></li>
+  <li><a href="#measles-outbreaks-in-niger" id="toc-measles-outbreaks-in-niger" class="nav-link" data-scroll-target="#measles-outbreaks-in-niger"><span class="header-section-number">17.4</span> Measles outbreaks in Niger</a>
+  <ul class="collapse">
+  <li><a href="#the-nigerm-dataset" id="toc-the-nigerm-dataset" class="nav-link" data-scroll-target="#the-nigerm-dataset"><span class="header-section-number">17.4.1</span> The <code>nigerm</code> dataset</a></li>
+  <li><a href="#the-layered-grammar-of-graphics" id="toc-the-layered-grammar-of-graphics" class="nav-link" data-scroll-target="#the-layered-grammar-of-graphics"><span class="header-section-number">17.4.2</span> The layered Grammar of Graphics</a></li>
+  </ul></li>
+  <li><a href="#working-through-the-essential-layers" id="toc-working-through-the-essential-layers" class="nav-link" data-scroll-target="#working-through-the-essential-layers"><span class="header-section-number">17.5</span> Working through the essential layers</a>
+  <ul class="collapse">
+  <li><a href="#building-a-ggplot-in-steps" id="toc-building-a-ggplot-in-steps" class="nav-link" data-scroll-target="#building-a-ggplot-in-steps"><span class="header-section-number">17.5.1</span> Building a <code>ggplot()</code> in steps</a></li>
+  </ul></li>
+  <li><a href="#modifying-the-layers" id="toc-modifying-the-layers" class="nav-link" data-scroll-target="#modifying-the-layers"><span class="header-section-number">17.6</span> Modifying the layers</a>
+  <ul class="collapse">
+  <li><a href="#changing-aesthetic-mappings" id="toc-changing-aesthetic-mappings" class="nav-link" data-scroll-target="#changing-aesthetic-mappings"><span class="header-section-number">17.6.1</span> Changing <code>aes</code>thetic mappings</a></li>
+  <li><a href="#changing-geom_-functions" id="toc-changing-geom_-functions" class="nav-link" data-scroll-target="#changing-geom_-functions"><span class="header-section-number">17.6.2</span> Changing <code>geom_*</code> functions</a></li>
+  <li><a href="#additional-aesthetic-mappings-inside-aes" id="toc-additional-aesthetic-mappings-inside-aes" class="nav-link" data-scroll-target="#additional-aesthetic-mappings-inside-aes"><span class="header-section-number">17.6.3</span> Additional aesthetic mappings inside <code>aes()</code></a></li>
+  <li><a href="#fixed-aesthetics-outside-aes" id="toc-fixed-aesthetics-outside-aes" class="nav-link" data-scroll-target="#fixed-aesthetics-outside-aes"><span class="header-section-number">17.6.4</span> Fixed aesthetics outside <code>aes()</code></a></li>
+  </ul></li>
+  <li><a href="#additional-gg-layers" id="toc-additional-gg-layers" class="nav-link" data-scroll-target="#additional-gg-layers"><span class="header-section-number">17.7</span> Additional GG layers</a></li>
+  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes"><span class="header-section-number">17.8</span> Learning outcomes</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions"><span class="header-section-number">17.9</span> Solutions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="17.1">
+<h2 data-number="17.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">17.1</span> Introduction</h2>
+<p>Welcome to The GRAPH Courses’ Data Visualization course!</p>
+<p>We will focus on learning how to use the <strong>{ggplot2} package</strong> to produce high quality visualizations in R.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ggplot2-part-of-tidyverse.png" class="img-fluid figure-img" width="192"></p>
+<figcaption class="figure-caption">{ggplot2} is one of the core packages of the {tidyverse} metapackage. It is the most popular R package for data visualization.</figcaption>
+</figure>
+</div>
+<p>Let’s dive in!</p>
+</section>
+<section id="learning-objectives" class="level2" data-number="17.2">
+<h2 data-number="17.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">17.2</span> Learning objectives</h2>
+<p>By the end of this lesson you should be able to:</p>
+<ol type="1">
+<li><p>Recall and explain how the <strong>{ggplot2}</strong> package for data visualization is based on a theoretical framework called the <strong>grammar of graphics</strong>.</p></li>
+<li><p>Name and describe the 3 essential components required for building a graph: <strong>data</strong>, <strong>aesthetics</strong>, and <strong>geometries</strong>.</p></li>
+<li><p>Write code to <strong>build a complete <code>ggplot</code></strong> <strong>graphic</strong> by correctly supplying the 3 essential layers to the <strong><code>ggplot()</code></strong> <strong>function</strong>.</p></li>
+<li><p>Create different types of plots such as <strong>scatter plots</strong>, <strong>line graphs</strong>, and <strong>bar graphs</strong>.</p></li>
+<li><p>Add or modify visual elements of a plot such as <strong>color</strong> and <strong>size</strong>.</p></li>
+<li><p>Distinguish between between <strong>aesthetic mappings</strong> and <strong>fixed aesthetics</strong>, and how to apply them.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ggplot2_masterpiece.png" class="img-fluid figure-img" width="600"></p>
+<figcaption class="figure-caption">Illustration by Allison Horst</figcaption>
+</figure>
+</div>
+</section>
+<section id="packages" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="packages"><span class="header-section-number">17.3</span> Packages</h2>
+<p>The {tidyverse} meta package includes {ggplot2}, so we don’t need to add it separately. The {here} package will help us correctly reference file paths.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="measles-outbreaks-in-niger" class="level2" data-number="17.4">
+<h2 data-number="17.4" class="anchored" data-anchor-id="measles-outbreaks-in-niger"><span class="header-section-number">17.4</span> Measles outbreaks in Niger</h2>
+<p>In this lesson, we will explore patterns of measles outbreaks in Niger.</p>
+<p>Measles is a <strong>highly infectious virus</strong> spread by airborne respiratory droplets.</p>
+<p>[Slide presentation about geography]</p>
+<p>Since it is transmitted through direct contact, <strong>population density</strong> is an important driver of measles dynamics.</p>
+<section id="the-nigerm-dataset" class="level3" data-number="17.4.1">
+<h3 data-number="17.4.1" class="anchored" data-anchor-id="the-nigerm-dataset"><span class="header-section-number">17.4.1</span> The <code>nigerm</code> dataset</h3>
+<p>We will be creating plots with a dataset of weekly reported measles cases at the region level in Niger.</p>
+<p>These data were collected by the Ministry of Health of Niger, from 1 Jan 1995 to 31 Dec 2005.</p>
+<p>To get started, let’s first load the (preprocessed) data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import data frame to RStudio Environment</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">here</span>(<span class="st">"data/clean/nigerm_cases_rgn.RData"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Take a moment to browse through the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Print Niger measles (nigerm) data frame</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>nigerm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="reactable html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-01ccb398f8040c5b62d6" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-01ccb398f8040c5b62d6">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"year":[1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1995,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1996,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1997,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1998,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,1999,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2001,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2002,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2003,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2004,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005,2005],"week":[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52],"region":["Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder"],"cases":[0,0,4,64,22,16,1,3,0,0,18,75,21,13,32,0,0,0,31,123,30,75,29,9,0,0,51,155,39,78,29,2,1,0,70,158,22,67,49,15,1,0,105,184,102,67,49,5,1,0,114,183,195,57,44,9,0,0,195,210,201,99,212,6,1,3,250,160,346,109,228,4,9,0,488,336,577,132,402,6,0,0,614,48,638,142,588,8,1,2,977,177,1634,260,718,12,28,1,769,432,1845,429,883,13,38,3,1011,383,1807,348,1188,15,59,0,760,517,1660,464,1011,13,57,6,1036,617,583,419,1303,15,55,25,931,612,1001,546,1162,19,60,13,912,623,398,490,1097,22,44,36,812,640,323,545,1003,18,43,7,733,580,321,510,1095,43,46,32,534,622,212,445,1103,47,6,18,445,607,111,552,986,40,39,71,382,718,72,481,976,85,17,41,371,530,48,571,572,57,30,20,182,492,24,305,477,29,19,32,150,353,29,308,392,20,19,34,134,241,10,231,390,18,8,41,119,195,9,174,246,16,0,19,62,69,7,169,237,3,2,21,116,133,9,108,336,8,2,19,54,80,0,103,192,7,0,17,30,59,0,74,164,3,2,5,42,68,1,94,191,4,7,4,49,23,1,83,118,1,5,13,52,37,0,59,135,1,2,12,30,22,1,33,157,0,21,4,39,21,0,52,118,0,13,11,72,27,0,50,58,0,19,4,22,9,1,81,47,0,25,14,35,11,0,49,58,4,13,26,22,7,0,58,52,5,8,15,32,50,0,31,52,3,5,17,40,27,0,53,103,5,62,14,17,50,0,58,71,3,85,5,53,9,0,87,27,5,159,6,38,80,0,54,17,4,85,27,80,5,0,59,32,7,145,16,22,73,0,41,52,6,126,8,139,97,0,77,43,19,157,14,150,66,2,116,77,39,141,18,125,88,0,67,121,13,111,40,162,95,0,99,75,19,120,75,98,123,0,113,42,25,120,96,96,128,0,102,115,66,114,46,76,139,0,144,118,83,111,54,126,151,0,108,74,115,110,70,133,256,10,164,99,146,89,44,132,327,8,282,5,294,72,175,159,349,5,473,157,496,72,204,180,371,10,436,172,446,54,225,106,402,9,590,102,714,51,250,99,411,5,629,339,632,68,277,115,726,26,636,208,929,49,242,193,686,8,716,135,1147,45,145,90,650,18,587,209,1493,24,154,126,907,0,494,269,1599,51,153,110,891,19,591,167,1462,28,105,129,936,34,692,101,1778,31,130,125,843,28,634,171,1836,17,73,134,913,26,514,245,1801,21,84,122,909,27,569,92,1742,39,69,72,1089,26,529,84,1887,8,73,85,932,17,324,113,1666,19,58,119,959,12,430,82,1512,5,24,46,777,4,354,63,1028,2,32,32,574,1,274,80,910,0,27,26,475,7,175,73,697,0,8,11,389,3,165,32,454,12,21,35,248,2,132,41,310,0,10,16,235,2,126,54,242,0,9,27,237,3,107,25,199,0,11,21,139,0,50,12,116,0,4,7,114,0,88,19,94,6,3,3,96,0,57,23,91,0,0,11,87,0,34,9,102,0,2,0,81,0,24,12,110,1,1,4,102,0,22,9,56,0,3,2,56,0,25,18,52,0,0,4,65,8,21,7,45,0,0,1,69,0,7,1,28,0,0,0,100,0,14,6,21,0,0,5,78,0,26,4,15,0,0,1,133,2,30,11,17,0,1,0,165,1,26,13,19,2,0,0,136,0,19,1,20,0,0,0,101,0,7,4,32,0,0,2,102,0,13,0,26,0,0,0,128,0,9,2,19,0,0,0,137,1,6,0,46,0,0,0,156,0,9,1,37,0,0,0,185,0,49,0,62,1,0,12,181,0,134,0,56,0,0,10,201,0,91,0,102,0,0,0,207,0,20,0,120,4,0,10,226,0,7,5,132,0,0,47,210,0,117,4,166,0,0,35,410,2,83,5,209,0,0,4,351,12,74,18,243,0,0,13,393,7,95,19,167,0,0,38,481,9,70,34,159,0,0,32,416,12,167,49,248,0,0,55,471,12,207,70,215,0,2,72,552,12,160,78,227,0,0,82,510,20,301,145,227,0,0,17,504,55,320,136,244,0,0,52,502,34,345,135,212,2,0,64,495,55,359,284,428,4,0,55,540,35,394,256,249,7,0,67,507,40,300,187,338,12,0,61,561,33,292,213,372,10,0,73,634,43,347,270,257,22,0,73,555,53,318,216,263,17,1,58,630,31,285,264,366,9,0,36,505,58,341,314,417,3,0,59,517,30,234,213,328,12,0,49,416,23,251,174,252,0,0,24,369,22,156,221,258,0,0,74,274,11,184,190,239,2,0,59,259,5,209,78,183,3,0,31,188,4,98,130,151,4,0,7,132,10,106,96,91,1,0,28,77,2,93,61,112,0,0,16,57,2,79,57,43,1,1,12,76,1,69,46,57,0,0,10,30,2,52,28,44,0,0,9,54,1,54,36,22,0,0,3,23,4,36,32,51,0,0,1,36,2,18,19,34,0,0,4,27,1,27,22,39,0,0,1,19,0,17,26,20,0,0,8,13,0,23,25,24,0,0,1,13,0,17,5,34,0,0,1,3,0,10,11,32,0,0,2,1,0,14,15,21,0,0,7,4,1,31,21,18,0,1,0,9,1,9,37,9,0,0,38,1,0,19,16,16,0,0,1,0,0,18,4,15,0,0,12,1,3,9,19,12,0,0,1,8,4,11,23,6,0,0,7,9,0,7,31,16,0,0,18,2,0,11,5,9,0,0,22,4,0,14,7,11,0,0,29,6,3,17,1,5,0,0,17,13,0,21,22,17,0,0,49,9,1,13,19,19,0,0,48,6,1,31,14,20,0,0,31,3,1,36,9,27,0,0,39,21,1,56,34,27,0,0,13,17,3,23,32,62,0,0,31,35,2,27,37,42,0,0,1,16,4,62,34,37,0,1,6,17,2,35,35,53,0,1,17,25,5,43,39,47,0,1,36,65,5,100,57,102,0,0,17,24,6,75,52,82,0,0,10,51,8,132,38,90,0,0,70,34,10,90,87,80,0,1,62,56,11,89,78,158,0,0,67,62,3,79,56,159,0,0,30,51,6,100,127,156,0,2,64,36,0,109,79,131,1,0,101,63,12,120,140,214,1,0,122,27,14,97,236,252,0,2,81,55,13,163,131,345,0,0,110,32,15,82,235,226,1,4,53,59,9,66,154,242,0,0,75,33,7,92,139,198,0,0,31,38,4,42,91,251,5,1,14,17,3,39,69,164,0,1,14,18,3,44,34,142,0,2,16,26,2,40,30,115,0,5,8,12,0,55,17,110,0,2,8,11,2,24,16,105,0,1,17,3,0,15,7,103,0,5,0,4,1,7,1,90,0,0,10,5,0,10,0,52,0,2,0,8,0,26,3,33,0,0,22,4,0,1,0,14,0,0,1,0,0,6,1,26,0,0,8,3,0,16,0,14,0,0,5,1,0,15,0,9,0,0,1,1,0,12,0,20,0,0,0,4,0,6,0,9,0,1,7,0,0,6,1,13,0,0,1,0,0,3,0,2,0,0,43,1,0,2,0,7,0,0,1,4,0,11,0,18,0,0,6,1,0,11,0,13,0,0,1,5,0,17,0,40,1,0,16,4,0,4,0,33,0,1,1,0,0,8,0,14,0,0,1,3,0,3,1,26,0,0,28,2,0,6,0,34,0,3,11,5,0,25,0,30,0,15,36,4,0,38,0,52,0,3,12,9,0,19,0,47,0,2,16,7,1,15,11,84,0,0,24,6,0,12,0,80,0,0,56,13,0,38,0,103,0,17,16,17,1,53,0,125,0,6,35,16,0,70,0,101,1,9,12,18,0,42,3,190,0,10,31,22,2,41,0,154,0,12,19,70,1,36,0,205,0,14,47,78,11,34,0,191,0,19,78,82,1,95,15,256,1,17,76,111,3,77,23,282,2,15,57,156,2,122,13,224,16,30,54,124,55,309,76,209,36,20,57,215,15,182,155,212,24,52,38,301,141,220,171,470,36,23,78,403,605,164,185,267,56,43,69,386,789,221,158,735,37,30,136,421,742,208,343,637,42,40,102,454,510,154,322,581,36,40,131,485,356,233,290,612,14,48,78,605,287,207,369,710,7,68,60,540,153,195,344,600,10,71,57,588,133,229,317,567,9,50,33,521,98,305,280,711,4,48,88,463,60,166,209,596,2,32,51,380,54,209,246,373,0,22,67,248,14,195,162,325,1,27,17,248,21,117,118,241,0,14,45,252,9,121,95,227,1,9,14,177,4,131,81,197,1,7,12,142,3,138,67,120,3,3,3,81,0,116,56,115,1,4,2,80,1,56,87,45,0,3,4,40,2,27,92,48,1,14,7,28,0,50,20,19,0,4,9,27,0,43,41,8,0,7,0,27,0,33,27,15,1,3,4,24,2,32,49,22,2,1,9,13,0,11,28,5,0,2,5,7,0,23,23,3,0,15,9,4,1,21,12,27,0,0,0,6,0,24,19,5,0,0,1,4,0,20,33,2,0,0,2,2,1,8,18,1,0,0,11,0,0,13,5,4,1,1,2,3,0,14,5,3,0,0,8,3,0,13,10,4,0,0,4,15,0,8,9,5,0,0,0,12,0,20,2,9,0,0,1,14,0,2,12,6,0,0,0,15,0,15,5,8,0,0,3,10,0,19,22,2,0,0,0,9,0,6,8,5,0,0,0,3,0,30,13,25,0,0,1,1,2,18,28,18,0,4,1,5,1,13,51,23,0,1,13,2,4,31,65,3,0,0,6,3,5,47,102,4,0,0,4,32,9,40,210,5,1,1,8,14,4,32,291,6,2,1,13,29,18,35,306,5,0,0,10,33,21,99,269,22,0,0,32,46,46,51,323,39,0,0,34,44,28,127,229,4,0,1,74,37,41,171,441,20,0,0,96,96,67,120,189,29,0,2,98,61,76,123,240,37,1,4,155,99,0,92,486,55,3,2,142,115,133,177,464,39,1,1,163,101,144,107,480,19,0,0,206,105,102,124,432,34,0,0,180,220,148,174,501,135,16,0,190,208,100,177,353,39,29,2,113,238,33,215,369,33,11,0,191,224,82,228,308,68,19,0,53,222,42,222,214,56,5,0,73,120,29,182,176,51,2,1,77,173,20,162,87,47,0,0,86,148,14,177,61,48,4,0,57,176,6,147,49,31,0,0,59,144,6,107,33,51,1,0,26,93,3,65,40,28,2,0,16,53,9,104,8,24,1,0,14,81,2,100,14,18,0,0,15,60,5,65,15,3,0,0,10,51,7,92,15,9,0,0,7,46,3,63,8,3,0,0,1,54,3,48,7,9,0,0,5,36,0,119,8,1,0,0,6,15,3,62,9,3,1,0,6,45,4,72,2,3,0,0,14,32,2,40,2,5,0,0,11,21,5,47,2,6,0,0,6,17,2,45,0,0,0,0,6,23,2,42,0,4,0,0,8,6,0,47,1,8,0,0,3,10,1,26,8,5,0,0,2,26,0,52,3,2,0,0,4,44,0,64,0,7,0,0,10,24,0,110,0,8,0,0,6,63,1,155,0,18,0,0,11,39,0,139,0,7,0,0,10,78,5,174,0,4,2,0,3,120,2,240,12,14,0,0,2,85,4,226,1,2,0,0,13,130,16,226,10,15,0,0,16,114,17,311,4,9,0,0,46,193,23,359,4,14,0,0,54,234,39,350,4,22,0,0,65,259,42,441,19,17,0,1,68,297,93,352,25,21,0,0,70,269,169,368,37,56,1,11,77,357,207,304,57,51,1,9,118,458,286,352,75,81,13,10,107,442,375,315,125,82,0,0,196,764,560,404,249,122,5,0,251,828,703,477,333,175,3,9,296,810,848,553,446,204,5,14,479,1029,1066,623,550,373,2,14,395,1166,1084,686,700,538,14,22,466,1196,844,648,604,486,5,23,395,1068,832,664,637,653,7,35,349,1154,601,574,506,628,0,37,303,981,387,564,692,647,4,21,205,1006,426,466,408,640,1,72,205,766,237,378,412,606,4,26,137,987,132,338,447,608,8,54,153,673,95,365,186,623,8,65,136,531,45,250,183,439,7,49,94,270,24,207,146,342,4,49,52,193,13,153,64,308,2,46,61,222,12,124,106,291,2,41,29,196,1,80,92,222,3,21,20,76,2,80,61,173,6,13,23,53,4,40,43,192,0,28,10,40,0,32,43,91,1,13,6,64,0,42,18,100,1,11,7,32,0,29,21,67,3,12,2,18,0,7,17,46,4,7,1,26,0,17,70,56,2,11,0,8,0,27,3,33,14,11,0,7,0,12,13,39,6,4,2,1,0,9,1,28,0,8,4,4,0,4,8,31,9,10,36,13,0,3,5,32,5,24,2,1,0,0,0,77,12,18,6,3,0,14,2,58,11,9,2,1,0,7,1,35,28,7,1,1,0,1,0,47,20,4,1,1,0,5,0,22,18,2,1,0,0,0,0,19,13,6,5,2,0,8,14,56,55,12,0,1,0,4,4,69,21,21,0,1,0,11,33,59,18,8,3,4,0,18,12,93,10,9,4,2,0,20,4,162,24,24,0,3,1,48,0,108,19,16,2,21,4,98,1,172,42,19,11,4,2,68,0,243,46,17,8,11,4,99,1,306,52,37,36,36,1,86,9,394,42,25,2,10,2,113,2,299,29,36,6,26,1,78,8,378,91,35,26,59,1,62,4,324,35,40,3,44,1,101,13,415,36,45,22,74,3,112,17,540,54,83,19,117,2,160,28,654,42,78,27,134,2,136,29,826,90,67,44,179,6,172,82,923,70,83,36,94,6,166,38,1026,92,91,33,146,17,195,69,886,90,86,46,96,12,182,53,954,108,83,49,157,16,167,3,1031,85,95,57,92,21,198,54,1208,71,59,43,113,17,188,15,1188,85,77,52,92,14,194,21,1084,64,63,31,121,4,163,72,1105,64,40,15,44,4,166,68,1057,47,46,43,93,8,122,34,1021,48,82,20,57,6,124,44,704,36,91,26,86,2,123,22,840,31,89,30,35,1,109,17,842,24,37,25,44,0,53,44,601,33,42,23,36,0,49,17,626,43,50,11,17,1,24,28,474,26,25,10,21,0,34,21,356,19,16,3,11,2,17,6,284,8,19,1,16,2,17,4,216,10,14,0,9,1,37,2,198,12,8,4,20,0,15,6,132,11,16,3,5,0,16,0,188,4,0,6,15,0,6,0,185,6,1,3,20,0,6,6,93,5,2,5,3,0,1,5,75,5,1,0,30,0,2,23,64,2,7,2,25,0,4,1,54,0,0,0,7,0,4,0,59,0,0,3,10,0,1,1,84,0,0,0,1,0,20,1,51,0,0,0,2,0,4,3,71,0,0,0,5,0,3,3,43,0,0,22,7,0,4,0,77,0,0,2,5,1,6,0,36,0,0,1,19,0,11,0,56,2,0,1,20,0,0,0,49,0,0,1,10,0,4,0,96,0,0,2,41,1,4,0,25,0,0,1,53,0,9,11,127,0,0,9,28,0,13,16,128,0,1,7,65,1,21,49,193,2,4,1,87,1,21,20,195,2,0,23,111,0,38,47,296,3,0,26,153,2,40,49,402,2,1,42,215,2,60,78,455,5,1,39,186,0,45,92,623,6,1,106,273,0,84,105,620,14,5,142,347,5,106,74,731,14,12,236,370,8,93,94,857,8,14,175,370,8,117,167,904,3,31,261,479,6,152,149,1161,36,25,264,566,20,190,162,1134,1,31,344,630,6,174,176,1342,5,18,227,711,12,209,154,1376,7,55,241,789,9,238,168,1303,4,24,318,676,9,255,163,1258,4,33,264,532,9,286,132,1208,8,13,257,608,12,289,206,1228,12,23,143,537,8,289,208,1182,13,36,179,590,11,305,219,1282,5,40,174,726,17,331,207,1310,6,36,137,851,19,313,179,1157,8,24,116,687,6,291,125,797,7,55,115,667,9,338,67,958,3,1,70,454,7,236,58,764,5,22,36,349,8,236,33,598,5,26,16,254,7,173,27,492,2,1,18,212,1,181,15,395,6,24,8,204,5,158,33,284,4,4,3,205,0,155,16,376,12,3,3,162,0,164,13,202,16,13,1,115,0,112,11,173,11,0,6,86,1,139,0,109,15,3,6,87,0,115,16,107,13,0,3,65,0,87,8,83,16,8,0,75,0,88,16,54,27,0,1,66,0,69,12,75,23,0,1,34,0,85,5,85,18,0,0,36,3,90,2,41,17,0,0,30,2,97,3,46,6,0,0,37,6,105,5,29,2,0,1,43,1,80,7,36,4,0,4,21,0,76,12,26,14,0,7,26,5,91,7,52,5,0,4,79,9,87,1,32,7,0,1,42,1,86,16,47,20,0,0,78,21,108,9,54,1,0,3,34,17,99,16,24,13,0,3,63,33,153,51,57,9,0,1,87,32,202,16,92,1,0,7,107,28,302,13,84,6,0,8,124,61,267,49,122,11,0,7,134,60,333,124,141,12,1,30,236,62,319,123,63,17,3,49,191,81,332,47,108,12,4,97,190,99,438,121,123,16,5,111,176,115,435,206,110,18,0,141,243,209,579,291,127,17,34,147,251,211,818,364,144,29,16,209,270,394,608,414,115,23,53,262,244,378,704,595,151,25,38,266,240,849,638,619,124,43,71,374,350,1131,795,965,183,26,83,444,278,1076,1005,795,148,62,56,484,409,1138,1034,860,180,44,59,486,299,823,1089,772,125,46,79,570,441,1514,1063,1118,182,58,90,591,493,896,886,1251,142,50,36,558,451,1036,1177,1021,212,36,43,386,503,498,981,852,221,33,43,392,454,287,1010,589,293,27,47,238,481,208,691,360,309,20,112,158,412,108,499,427,453,15,41,190,424,32,455,288,279,26,16,138,385,24,420,199,164,11,91,142,316,24,249,145,176,30,12,96,247,12,291,133,105,15,26,89,179,6,203,110,103,17,5,31,108,3,130,69,80,8,10,43,63,2,104,62,84,11,16,24,54,2,128,40,64,13,2,24,47,2,52,34,25,10,4,10,33,2,41,32,19,11,7,17,23,2,31,38,12,11,11,13,34,0,23,23,16,6,0,11,13,0,2,9,7,6,2,9,7,0,12,7,8,3,1,11,10,0,19,2,3,2,1,8,7,0,9,0,9,0,0,31,11,0,8,3,0,3,7,8,2,2,18,2,5,0,1,10,3,0,10,0,4,0,0,7,4,0,7,0,3,0,1,29,5,0,21,5,5,0,0,29,10,0,22,2,21,0,0,41,8,0,3,2,12,0,2,12,10,0,9,1,5,0,0,6,4,0,6,0,7,0,3,13,5,3,9,3,0,0,1,34,6,0,12,0,10,0,3,26,5,0,18,8,17,0,0,48,12,0,8,0,13,0,0,30,18,0,7,2,11,2,6,44,13,0,11,1,32,1,8,8,13,1,12,1,29,1,4,9,27,3,9,1,20,0,0,3,7,0,5,7,19,3,20,8,14,0,14,5,36,1,13,6,25,0,7,5,35,4,43,4,18,1,9,3,25,2,13,11,22,1,7,2,22,1,18,5,12,5,12,1,49,1,21,9,33,4,13,5,82,2,11,6,49,5,18,1,23,2,29,6,32,0,8,3,28,5,9,0,26,0,3,13,18,3,3,12,31,2,9,3,34,0,4,7,16,1,11,10,24,5,8,9,44,1,2,3,33,1,13,7,19,5,2,8,38,2,13,22,21,5,9,7,37,5,10,11,20,2,5,2,15,1,10,9,25,2,1,1,42,8,8,1,14,2,5,2,0,0,33,3,21,2,4,1,26,7,22,1,2,0,5,4,17,4,0,1,5,1,1,2,1,4,11,0,0,0,2,2,1,3,14,1,3,0,1,1,16,1,16,0,10,1,7,1,25,2,1,0,4,0,0,0,8,0,5,0,1,0,0,0,3,7,0,0,2,0,0,0,0,4,0,0,0,0,0,0,0,5,0,0,2,0,0,0,0,3,0,0,1,1,0,0,0,0,0,0,3,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2]},"columns":[{"id":"year","name":"year","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"week","name":"week","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"region","name":"region","type":"factor","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"cases","name":"cases","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"}],"resizable":true,"defaultPageSize":10,"highlight":true,"bordered":true,"striped":true,"nowrap":true,"theme":{"borderColor":"#e1f2f2","borderWidth":"1.5px","stripedColor":"#f2f7f7","cellPadding":"2px 5px 2px 5px"},"dataKey":"d987db40cc7ba0dcfc1f9975497e5390"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>The <strong><code>nigerm</code></strong> data frame has 4 variables (or columns):</p>
+<ol type="1">
+<li><p><strong><code>year</code></strong>: Calendar year (ranges from 1995 to 2005)</p></li>
+<li><p><strong><code>week</code></strong>: Week of the year (ranges from 1 to 52)</p></li>
+<li><p><strong><code>region</code></strong>: Region in which the cases were recorded (see figure below)</p></li>
+<li><p><strong><code>cases</code></strong>: Number of measles cases reported</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/niger_administrative_divisions.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Administrative divisions of Niger: Districts and Regions</figcaption>
+</figure>
+</div>
+<p>Several papers have investigated these trends, linking measles to human activity, migration, and seasonality.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-B863326A.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Research articles that have used this dataset, and analyzed it in R!</figcaption>
+</figure>
+</div>
+<p>These studies are much more complex than what we will do there, but let’s see if we can find any patterns even with basic <strong>exploratory data visualization</strong>.</p>
+<p>We can get some information about patterns in this data by inspecting summary statistics given by the <strong><code>summary()</code></strong> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nigerm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      year           week           region         cases       
+ Min.   :1995   Min.   : 1.00   Agadez : 572   Min.   :   0.0  
+ 1st Qu.:1997   1st Qu.:13.75   Diffa  : 572   1st Qu.:   1.0  
+ Median :2000   Median :26.50   Dosso  : 572   Median :  16.0  
+ Mean   :2000   Mean   :26.50   Maradi : 572   Mean   : 100.3  
+ 3rd Qu.:2003   3rd Qu.:39.25   Niamey : 572   3rd Qu.:  86.0  
+ Max.   :2005   Max.   :52.00   Tahoua : 572   Max.   :1887.0  
+                                (Other):1144                   </code></pre>
+</div>
+</div>
+<p>This gives us values for the maximum, minimum, and quartiles of each numeric variable, and the number of observations (rows) for each region. This is summary useful, but it omits a large amount information contained in the dataset.</p>
+<p>Keep in mind that summary statistics can be highly misleading, and a simple plot can reveal a lot more.</p>
+<p>The easiest and clearest way to analyze patterns from this dataset is to visualize it!</p>
+<p>The best way to do this in R is with {ggplot2}. So let’s see how that works.</p>
+</section>
+<section id="the-layered-grammar-of-graphics" class="level3" data-number="17.4.2">
+<h3 data-number="17.4.2" class="anchored" data-anchor-id="the-layered-grammar-of-graphics"><span class="header-section-number">17.4.2</span> The layered Grammar of Graphics</h3>
+<p>The <code>gg</code> in <code>ggplot</code> is short for “<code>g</code>rammar of <code>g</code>raphics”, which is the data visualization philosophy that {ggplot2} is based on.</p>
+<p>The <strong>grammar of graphics</strong> is a theoretical framework which deconstructs the process of producing a graph.</p>
+<p>Think of how we construct and form sentences in written and spoken languages by combining different elements, like nouns, verbs, articles, subjects, objects, etc. We can’t just combine these elements in any arbitrary order; we must do so following a set of rules known as a linguistic grammar.</p>
+<p>Similarly, the grammar of graphics (GG) defines a set of rules for constructing <em>graphics</em> by combining different types of elements, known as <em>layers</em>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gglayers.png" class="img-fluid figure-img" width="392"></p>
+<figcaption class="figure-caption">The grammar of graphics framework dissects a graph into individual components, which belong to these seven distinct layers. We take these different layers and combine them together to build a plot.</figcaption>
+</figure>
+</div>
+<p>The three layers at the bottom of this figure - <strong>data</strong>, <strong>aesthetics</strong>, and <strong>geometries</strong> - are required for building any plot.</p>
+<p>Let’s define what they mean:</p>
+<ol type="1">
+<li><p><strong><code>data</code></strong>: the dataset containing the variables of interest.</p>
+<p><img src="images/gglayers_data.png" class="img-fluid" width="450"></p></li>
+<li><p><strong><code>aes</code></strong>thetics: things we can see that visually communicate information in our data.</p>
+<p><img src="images/gglayers_aes.png" class="img-fluid" width="450"></p></li>
+<li><p><strong><code>geom</code></strong>etry: the geometric shape used to represent data in a plot: points, lines, bars, etc.</p>
+<p><img src="images/gglayers_geom.png" class="img-fluid" width="450"></p></li>
+</ol>
+<p>You might be wondering why we wrote <code>data</code>, <code>geom</code>, and <code>aes</code> in a computer code type font. You’ll see very shortly that we use these terms in R code to represent GG layers.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Challenge">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The terms and syntax used for <code>ggplot</code> functions, arguments, and layers can be hard to keep up with at first, but as you gain experience using these terms to make plots in R, you will become fluent in no time.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="working-through-the-essential-layers" class="level2" data-number="17.5">
+<h2 data-number="17.5" class="anchored" data-anchor-id="working-through-the-essential-layers"><span class="header-section-number">17.5</span> Working through the essential layers</h2>
+<p>In this section, we will work towards a first plot with {ggplot2}. It will be a scatter plot using data from <code>nigerm</code>.</p>
+<p>For easier plotting in this lesson, we will use a smaller subsets of the <code>nigerm</code> data frame at a time.</p>
+<p>First let’s create one called <code>nigerm96</code>, which only contains measles case data for the year 1996. Running the code below will create <code>nigerm96</code> and add it to your RStudio Environment:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Create nigerm96 data frame</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>nigerm96 <span class="ot">&lt;-</span> nigerm <span class="sc">%&gt;%</span>   </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1996</span>)  <span class="sc">%&gt;%</span> <span class="co"># filter to only include rows from 1996</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>year) <span class="co"># remove the year column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>select()</code> and <code>filter()</code> functions are part of the {dplyr} package for data manipulation, which is a core package of the {tidyverse}. These topics are covered in the Data Wrangling course. See The GRAPH Courses <a href="https://thegraphcourses.org/">website</a> for more.</p>
+</div>
+</div>
+<p>Let’s look at our new dataframe, <code>nigerm96</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Print nigerm96</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>nigerm96</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="reactable html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3286c56c3b16a20adca0" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-3286c56c3b16a20adca0">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"week":[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52],"region":["Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder"],"cases":[120,75,98,123,0,113,42,25,120,96,96,128,0,102,115,66,114,46,76,139,0,144,118,83,111,54,126,151,0,108,74,115,110,70,133,256,10,164,99,146,89,44,132,327,8,282,5,294,72,175,159,349,5,473,157,496,72,204,180,371,10,436,172,446,54,225,106,402,9,590,102,714,51,250,99,411,5,629,339,632,68,277,115,726,26,636,208,929,49,242,193,686,8,716,135,1147,45,145,90,650,18,587,209,1493,24,154,126,907,0,494,269,1599,51,153,110,891,19,591,167,1462,28,105,129,936,34,692,101,1778,31,130,125,843,28,634,171,1836,17,73,134,913,26,514,245,1801,21,84,122,909,27,569,92,1742,39,69,72,1089,26,529,84,1887,8,73,85,932,17,324,113,1666,19,58,119,959,12,430,82,1512,5,24,46,777,4,354,63,1028,2,32,32,574,1,274,80,910,0,27,26,475,7,175,73,697,0,8,11,389,3,165,32,454,12,21,35,248,2,132,41,310,0,10,16,235,2,126,54,242,0,9,27,237,3,107,25,199,0,11,21,139,0,50,12,116,0,4,7,114,0,88,19,94,6,3,3,96,0,57,23,91,0,0,11,87,0,34,9,102,0,2,0,81,0,24,12,110,1,1,4,102,0,22,9,56,0,3,2,56,0,25,18,52,0,0,4,65,8,21,7,45,0,0,1,69,0,7,1,28,0,0,0,100,0,14,6,21,0,0,5,78,0,26,4,15,0,0,1,133,2,30,11,17,0,1,0,165,1,26,13,19,2,0,0,136,0,19,1,20,0,0,0,101,0,7,4,32,0,0,2,102,0,13,0,26,0,0,0,128,0,9,2,19,0,0,0,137,1,6,0,46,0,0,0,156,0,9,1,37,0,0,0,185,0,49,0,62,1,0,12,181,0,134,0,56,0,0,10,201,0,91,0,102,0,0,0,207,0,20,0,120]},"columns":[{"id":"week","name":"week","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"region","name":"region","type":"factor","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"cases","name":"cases","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"}],"resizable":true,"defaultPageSize":5,"highlight":true,"bordered":true,"striped":true,"nowrap":true,"theme":{"borderColor":"#e1f2f2","borderWidth":"1.5px","stripedColor":"#f2f7f7","cellPadding":"2px 5px 2px 5px"},"dataKey":"968e5ebc18781e1e40c2f7be48eab504"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<section id="building-a-ggplot-in-steps" class="level3" data-number="17.5.1">
+<h3 data-number="17.5.1" class="anchored" data-anchor-id="building-a-ggplot-in-steps"><span class="header-section-number">17.5.1</span> Building a <code>ggplot()</code> in steps</h3>
+<p>Time to start building a <code>ggplot</code> in increments! We’ll do this by starting with a blank canvas and then adding one layer at a time.</p>
+<p><strong>Step 0: Call the <code>ggplot()</code> function</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Call the `ggplot()` function</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As you can see, this gives us nothing but a blank canvas. But not to worry, we’re about to add some more elements.</p>
+<p><strong>Step 1: Provide data</strong></p>
+<p>The first input we need to supply the <code>ggplot()</code> function is the data layer (i.e., a data frame), by filling in the <code>data</code> argument (<code>data = DF_NAME</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Data layer</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96)  <span class="co"># what data to use</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This gives us blank plot again, since we’ve only supplied one out of the three inputs required for a complete graphic. Next we need to assign variables to aesthetic mappings.</p>
+<p><strong>Step 2: Define the variables</strong></p>
+<p>What should we plot on our axes? Let’s say we want to make an epidemic time series plot. To do that, we plot time (in weeks) on the x-axis, and disease incidence (number of reported cases) on the y-axis. In <code>ggplot</code>-speak, we are <code>mapping</code> the variable <code>cases</code> to the <code>x</code> aesthetic, and <code>week</code> to the <code>y</code> aesthetic.</p>
+<p>Let’s tell <code>ggplot()</code> which variables to to plot on the aesthetics layer with a <code>mapping</code> argument, using this syntax: <code>mapping = aes(x = VAR1, y = VAR2)</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Aesthetics layer: x and y position</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, <span class="co"># what data to use</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(   <span class="co"># supply a mapping in the form of an 'aesthetic'</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> week,      <span class="co"># which variable to map onto the x-axis</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> cases))    <span class="co"># which variable to map onto the y-axis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There’s still no data plotted, but the axis scales, titles, and labels are present. The x-axis marks weeks of the year from 1 to 52, and the y-axis shows that the number of weekly reported cases per region ranges from 0 to around 2000.</p>
+<p>The plot is still lacking the required geometry layer.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key Point">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Point
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>aes()</code> stands for aesthetics - things we can see. Variables are always inside the <code>aes()</code> function, which in return is inside a <code>ggplot()</code>. Take a moment to observe the double closing brackets <strong><code>))</code></strong> - the first one belongs to <code>aes()</code>, the second one to <code>ggplot()</code>.</p>
+</div>
+</div>
+<p><strong>Step 3: Specify which type of plot to create</strong></p>
+<p>Finally, we add a geometry layer using a <code>geom_*</code> function. This determines which geometric objects - or visual markers - should be used to map the data.</p>
+<p>Since we are looking at the relationship of two numerical variables, it makes sense to use a <strong>scatter plot</strong>. The geometric objects used to represent data on scatter plots are <strong>points</strong>, and the <code>geom_*</code> function for scatter plots is conveniently named <strong><code>geom_point()</code></strong>. We’ll add this function as new layer using a <strong><code>+</code></strong> sign:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Geometries layer: points</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, <span class="co"># what data to use</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(   <span class="co"># define mapping</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> week,      <span class="co"># which variable to map onto the x-axis</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> cases)) <span class="sc">+</span>  <span class="co"># which variable to map onto the y-axis</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()          <span class="co"># add a geom of type `point` (for scatter plot)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Points have been added, and this is now a complete scatter plot! There are 8 points per week, representing each of the 8 regions (but at this point we cannot tell which point is from which region).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>aes</code>thetic function is nested inside the <code>ggplot()</code> function, so be sure to close the brackets for both functions before adding the <code>+</code> sign for the <code>geom_*</code> function, or your code will not run correctly.</p>
+</div>
+</div>
+<p>It’s your turn to practice plotting with <code>ggplot()</code>! For practice exercises in this lesson, you will be using a different subset of <code>nigerm</code> called <strong><code>nigerm04</code></strong>, which contains only data from the year 2004:</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="reactable html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-f169cd2fb04bb800aaf5" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-f169cd2fb04bb800aaf5">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"week":[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,18,18,18,18,18,18,18,18,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,30,30,30,31,31,31,31,31,31,31,31,32,32,32,32,32,32,32,32,33,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,36,36,36,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,41,41,41,41,41,41,41,41,42,42,42,42,42,42,42,42,43,43,43,43,43,43,43,43,44,44,44,44,44,44,44,44,45,45,45,45,45,45,45,45,46,46,46,46,46,46,46,46,47,47,47,47,47,47,47,47,48,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,50,50,50,50,50,50,50,50,51,51,51,51,51,51,51,51,52,52,52,52,52,52,52,52],"region":["Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder","Agadez","Diffa","Dosso","Maradi","Niamey","Tahoua","Tillaberi","Zinder"],"cases":[11,0,7,134,60,333,124,141,12,1,30,236,62,319,123,63,17,3,49,191,81,332,47,108,12,4,97,190,99,438,121,123,16,5,111,176,115,435,206,110,18,0,141,243,209,579,291,127,17,34,147,251,211,818,364,144,29,16,209,270,394,608,414,115,23,53,262,244,378,704,595,151,25,38,266,240,849,638,619,124,43,71,374,350,1131,795,965,183,26,83,444,278,1076,1005,795,148,62,56,484,409,1138,1034,860,180,44,59,486,299,823,1089,772,125,46,79,570,441,1514,1063,1118,182,58,90,591,493,896,886,1251,142,50,36,558,451,1036,1177,1021,212,36,43,386,503,498,981,852,221,33,43,392,454,287,1010,589,293,27,47,238,481,208,691,360,309,20,112,158,412,108,499,427,453,15,41,190,424,32,455,288,279,26,16,138,385,24,420,199,164,11,91,142,316,24,249,145,176,30,12,96,247,12,291,133,105,15,26,89,179,6,203,110,103,17,5,31,108,3,130,69,80,8,10,43,63,2,104,62,84,11,16,24,54,2,128,40,64,13,2,24,47,2,52,34,25,10,4,10,33,2,41,32,19,11,7,17,23,2,31,38,12,11,11,13,34,0,23,23,16,6,0,11,13,0,2,9,7,6,2,9,7,0,12,7,8,3,1,11,10,0,19,2,3,2,1,8,7,0,9,0,9,0,0,31,11,0,8,3,0,3,7,8,2,2,18,2,5,0,1,10,3,0,10,0,4,0,0,7,4,0,7,0,3,0,1,29,5,0,21,5,5,0,0,29,10,0,22,2,21,0,0,41,8,0,3,2,12,0,2,12,10,0,9,1,5,0,0,6,4,0,6,0,7,0,3,13,5,3,9,3,0,0,1,34,6,0,12,0,10,0,3,26,5,0,18,8,17,0,0,48,12,0,8,0,13,0,0,30,18,0,7,2,11,2,6,44,13,0,11,1,32]},"columns":[{"id":"week","name":"week","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"region","name":"region","type":"factor","html":true,"na":"NA","align":"left","className":"border-left"},{"id":"cases","name":"cases","type":"numeric","html":true,"na":"NA","align":"left","className":"border-left"}],"resizable":true,"defaultPageSize":5,"highlight":true,"bordered":true,"striped":true,"nowrap":true,"theme":{"borderColor":"#e1f2f2","borderWidth":"1.5px","stripedColor":"#f2f7f7","cellPadding":"2px 5px 2px 5px"},"dataKey":"15802375c5b4fcc51511b231574e8de9"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Plotting with a different set of data will also allow you to explore if the patterns we see for 1996 is also true for 2004.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the <code>nigerm04</code> data frame, write <code>ggplot</code> code that will create a scatter plot displaying the relationship between <code>cases</code> on the y-axis and <code>week</code> on the x-axis.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="modifying-the-layers" class="level2" data-number="17.6">
+<h2 data-number="17.6" class="anchored" data-anchor-id="modifying-the-layers"><span class="header-section-number">17.6</span> Modifying the layers</h2>
+<p>Generally speaking, the grammar of graphics allows for a high degree of customization of plots and also a consistent framework for easily updating and modifying them.</p>
+<p>We can tinker with our existing code to switch up the data, aesthetics, and geometry inputs supplied to <code>ggplot()</code>, and create variations of the original plot. In fact, you’ve already done this by changing the dataset from <code>nigerm96</code> to <code>nigerm04</code> in the practice question.</p>
+<p>Similarly, the <code>aes</code>thetics and <code>geom</code>etry inputs can also be changed to create different visualizations. In the next few sections we will take the scatter plot we built in the previous section, and make incremental changes to modify different elements of the original code.</p>
+<section id="changing-aesthetic-mappings" class="level3" data-number="17.6.1">
+<h3 data-number="17.6.1" class="anchored" data-anchor-id="changing-aesthetic-mappings"><span class="header-section-number">17.6.1</span> Changing <code>aes</code>thetic mappings</h3>
+<p>We created a scatter plot of <code>cases</code> vs <code>week</code> for <code>nigerm96</code> with this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases)) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>If we copy the same code and change just one thing - by replacing the <code>x</code> variable <code>week</code> (numerical) with <code>region</code> (categorical) - we get what’s called a <strong>strip plot</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> region, <span class="co"># change which variable to map on the x-axis </span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases)) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>While the y-axis values of the points are the same as before, their x-axis mappings have changed significantly. They are now mapped to 8 separate positions along the x-axis, each corresponding to a discrete category of the <code>region</code> variable.</p>
+</section>
+<section id="changing-geom_-functions" class="level3" data-number="17.6.2">
+<h3 data-number="17.6.2" class="anchored" data-anchor-id="changing-geom_-functions"><span class="header-section-number">17.6.2</span> Changing <code>geom_*</code> functions</h3>
+<p>Similarly, we can modify the geometry layer to create a different type of plot, while still using the same aesthetic mappings.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/geoms.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">{ggplot2} has a variety of different <code>geom_*</code> functions and geometric objects which you can use to visualize your data. Here are some examples of different types of geoms that can be used with <code>ggplot()</code>.</figcaption>
+</figure>
+</div>
+<p>Let’s copy and paste the original scatter plot code once again, but this time we will replace the <code>geom_*</code> function instead of the <code>x</code> aesthetic. If we change <code>geom_point()</code> to <strong><code>geom_col()</code></strong>, we get a <strong>bar plot</strong> (sometimes called a <code>col</code>umn chart):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases)) <span class="sc">+</span>  </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()  <span class="co"># declare that we want a bar plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Again, the rest of the code is still the same - we just changed the key word of the <code>geom_*</code> function. However, the plot is significantly different that either the scatter plot or the strip plot.</p>
+<p>Notice that the y-axis has been rescaled. The height of each bar represents the cumulative number of weekly cases, i.e, the total number of cases reported from all eight regions that week, rather than showing 8 separate data points for each region.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Error">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Error
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Not all plot types are interchangeable. Using a <code>geom_*</code> function that is not compatible with the variables you defined in <code>aes()</code> will give you an error. For example, let’s replace <code>geom_point()</code> with <code>geom_histogram()</code> instead:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases)) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is because a histogram shows the distribution of one numerical variable. <code>ggplot()</code> can’t map two variables to both the <code>x</code> and <code>y</code>-axis positions with a histogram, so it throws an error.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the <code>nigerm04</code> data frame to create a bar plot of weekly cases with the <code>geom_col()</code> function. Map <code>cases</code> on the y-axis and <code>week</code> on the x-axis.</p>
+</div>
+</div>
+</section>
+<section id="additional-aesthetic-mappings-inside-aes" class="level3" data-number="17.6.3">
+<h3 data-number="17.6.3" class="anchored" data-anchor-id="additional-aesthetic-mappings-inside-aes"><span class="header-section-number">17.6.3</span> Additional aesthetic mappings inside <code>aes()</code></h3>
+<p>So far, we have only mapped variables to the <code>x</code> and <code>y</code> aesthetic attributes. We can also map variables to other aesthetics like color, size, or shape.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/common_aesthetics_1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Common aesthetic attributes used in <code>ggplot</code> graphics.</figcaption>
+</figure>
+</div>
+<p>Let’s return to our original scatter plot (<code>cases</code> vs <code>week</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases)) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There are other aesthetics we can add, like color or size.</p>
+<p><img src="images/paste-72D5BE04.png" class="img-fluid"></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Pro Tip">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pro Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To see the full list of aesthetics that can be used with a particular <code>geom_*</code> function look it up the function documentation. You can do this by pressing F1 on a function, e.g., <code>geom_point()</code> to open the Help tab, and scroll down to the “Aesthetics” section. If F1 is hard to summon on your keyboard, type and run <code>?geom_point</code> in your Console tab.</p>
+</div>
+</div>
+<p>Let’s add color to our scatter plot. We can map the categorical variable <code>region</code> to the <code>color</code> aesthetic. We can do this by modifying the original code to add a new argument inside <code>mapping = aes()</code>. Let’s see what happens when we add <code>color = region</code> inside <code>aes()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96,      </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week,  </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases,   </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> region)) <span class="sc">+</span>  <span class="co"># use a different color for each region</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()               </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now we have a colorful scatter plot! Each point is colored according to the region it belongs to. This allows us to better distinguish between regions.</p>
+<p>Note that <code>ggplot()</code> automatically provides a color legend on the left.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The colors are from {ggplot2}’s default rainbow color palette. In later lessons we will learn how to customize color scales and palettes, including making figures colorblind-friendly.</p>
+</div>
+</div>
+<p>By examining the color patterns in the plot, you can make out the classic bell-shaped epidemic curves showing a rise and fall in measles incidence in each region.</p>
+<p>Zinder had the largest number of cases and the steepest epidemic curve, followed by Maradi and Niamey.</p>
+<p>While the colorful plot provides more insight into measles patterns at the regional level than the scatter plot with no color mapping, this graph still looks busy and is not the most intuitive to read. A different plot type could help with this.</p>
+<p>Next we will try a bar plot, then a line graph.</p>
+<p>Let’s try the same <code>color = region</code> aesthetic mapping with <code>geom_col()</code> instead:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> region)) <span class="sc">+</span>  <span class="co"># use a different outline color for each region</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This gives us a stacked bar plot, where the bars are divided into smaller sections. This shows us the proportional contribution of individual regions (i.e., the height or length of each subsection represents how much each region contributes to the total number of cases that week).</p>
+<p>The stacked bar plot here is outlined by color. This is because the <code>color</code> aesthetic in {ggplot2} generally refers to the border around a shape. This did not apply to the default shapes in our scatter plot created with <code>geom_point()</code> because they are solid dots (not hollow), but you can see that it does apply to the bars in a bar chart created <code>geom_col()</code>. However, the grey filling is not very pretty.</p>
+<p>We might want to color the inside of the bars instead. This is done by mapping our variable to the <code>fill</code> aesthetic. We can copy the code above and simply change <code>color</code> to <code>fill</code> inside <code>aes()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases, </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill =</span> region)) <span class="sc">+</span>  <span class="co"># use a different fill color for each region</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Voila! The inside of the bars are now filled with colors.</p>
+<p>Now practice using the <code>color</code> aesthetic mapping with a new plot type: line graphs. Line graphs are generally considered one of the best plot types for time series data.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the <code>nigerm04</code> data frame to create a line graph of weekly cases, colored by <code>region</code>. Map <code>cases</code> on the y-axis, <code>week</code> on the x-axis, and <code>region</code> to color. The <code>geom_*</code> function for a line graph is called <strong><code>geom_line()</code></strong>.</p>
+</div>
+</div>
+</section>
+<section id="fixed-aesthetics-outside-aes" class="level3" data-number="17.6.4">
+<h3 data-number="17.6.4" class="anchored" data-anchor-id="fixed-aesthetics-outside-aes"><span class="header-section-number">17.6.4</span> Fixed aesthetics outside <code>aes()</code></h3>
+<p>It is very important to understand the difference between <strong>aesthetic mappings</strong> and <strong>fixed aesthetics</strong>. The main aesthetics in <code>ggplot</code> are: <code>x</code>, <code>y</code>, <code>color</code>, <code>fill</code>, and <code>size</code>, and any of these could be either a mapping or a fixed value. This depends on whether they appear inside or outside the <code>aes()</code> function.</p>
+<p>When we apply an aesthetic to modify the geometric objects according to a variable (e.g., the color of points changes according to the region variable), that’s an aesthetic mapping. This must always be defined <strong>inside</strong> <code>mapping = aes()</code>, like we just did in previous examples.</p>
+<p>But if you want to apply a visual modification to <em>all</em> the geometric objects evenly (e.g., manually change the color of all points to be one color), that’s a fixed aesthetic. We must set fixed aesthetics to a constant value <strong>outside</strong> <code>mapping = aes()</code> and directly inside the <code>geom_*</code> function - e.g., <code>geom_point(color = "COLOR_NAME")</code>.</p>
+<p>Here let’s change the color of all the points in our scatter plot to blue:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cases)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>)        <span class="co"># use the same color for all points</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This colors each point with the same R color (“blue”). In this plot, the color aesthetic does not represent any values from the data frame. Note that the color names in R are character strings, so it needs to go inside quotation marks.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’re curious, run <code>colors()</code> in your console to see all possible choice of colors in R! To find out exactly how many options that is, try running <code>colors() %&gt;% length()</code>.</p>
+</div>
+</div>
+<p>Now let’s add a fixed aesthetic called <code>size</code>. The default line width used by <code>geom_line()</code> is 0.5 mm, which looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">y =</span> cases,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> region)) <span class="sc">+</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To make all of the lines in our figure a little thicker, let’s fix this aesthetic at 1 mm. We do this by adding <code>size = 1</code> inside the <code>geom_line()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">y =</span> cases,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> region)) <span class="sc">+</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>All the lines in the plot have been made thicker, and the line width is set to a constant value of 1 mm. Note that here the value of size is numeric, so it should not be in quotation marks.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Watch Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Watch Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember that fixed aesthetics are manually set to constant value (as opposed to a variable from the data), and goes directly in the <code>geom_*</code> function, <strong>not</strong> inside <code>aes()</code>. If you try to put a fixed aesthetic in <code>aes()</code>, you might get a weird result. For example, let’s try moving the <code>size = 1</code> aesthetic from <code>geom_line()</code> to <code>aes()</code> to see how it can go wrong:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nigerm96, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">y =</span> cases,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> region,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">size =</span> <span class="dv">1</span>)) <span class="sc">+</span>     <span class="co"># INCORRECT placement</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>aes()</code> is a mapping function that modifies plots based on variables from the data. Since there is no variable called “1” in the <code>nigerm96</code> data frame, <code>aes()</code> cannot process or map this aesthetic correctly.</p>
+</div>
+</div>
+<p>Practice using <code>fill</code> as a fixed aesthetic for a bar plot.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the <code>nigerm04</code> data frame to create a bar graph of weekly cases, and fill all bars with the same color. Map <code>cases</code> on the y-axis, <code>week</code> on the x-axis, and fix the <code>color</code> aesthetic of the bars to the R color “hotpink”.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="additional-gg-layers" class="level2" data-number="17.7">
+<h2 data-number="17.7" class="anchored" data-anchor-id="additional-gg-layers"><span class="header-section-number">17.7</span> Additional GG layers</h2>
+<p>In this lesson, we kept things simple and only worked with the three required layers. As you start to delve deeper into plotting with {ggplot2}, you’ll start to encounter the other layers more frequently.</p>
+<p>Soon you’ll be able to create more complex plots, like this one:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="data_on_display_ls01_gg_intro_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Recap">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Recap
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To build a complete <code>ggplot</code>, you must first supply a data frame using the <strong><code>data</code></strong> argument of <code>ggplot()</code>, and define variables and map them to aesthetics inside <code>aes()</code> using the <strong><code>mapping</code></strong> argument of <code>ggplot()</code>. Then start a new layer with a <strong><code>+</code></strong> sign and specify the type of plot you want using an appropriate <strong><code>geom_*</code></strong> function. You can copy this code template and adapt it to create different <code>ggplot</code> graphics:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> DF_NAME,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">AES1 =</span> VAR1,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">AES2 =</span> VAR2, </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">AES3 =</span> VAR3, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                     ...)) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_FUCNTION</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="learning-outcomes" class="level2" data-number="17.8">
+<h2 data-number="17.8" class="anchored" data-anchor-id="learning-outcomes"><span class="header-section-number">17.8</span> Learning outcomes</h2>
+<ol type="1">
+<li><p>You can recall and explain how the <strong>{ggplot2}</strong> package for data visualization is based on a theoretical framework called the <strong>grammar of graphics</strong>.</p></li>
+<li><p>You can name and describe the 3 essential layers for building a graph: <strong>data</strong>, <strong>aesthetics</strong>, and <strong>geometries</strong>.</p></li>
+<li><p>You can write code to <strong>build a complete <code>ggplot</code></strong> <strong>graphic</strong> by correctly supplying the 3 essential layers to the <strong><code>ggplot()</code></strong> <strong>function</strong>.</p></li>
+<li><p>You can create different types of plots such as <strong>scatter plots</strong>, <strong>line graphs</strong>, and <strong>bar graphs</strong>.</p></li>
+<li><p>You can add or modify aesthetics of a plot such as the <strong>color</strong>, and <strong>size</strong>.</p></li>
+</ol>
+</section>
+<section id="references" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="references">References</h2>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li><p>Blake, Alexandre, Ali Djibo, Ousmane Guindo, and Nita Bharti. 2020. “Investigating Persistent Measles Dynamics in Niger and Associations with Rainfall.” <em>Journal of The Royal Society Interface</em> 17 (169): 20200480. <a href="https://doi.org/10.1098/rsif.2020.0480" class="uri">https://doi.org/10.1098/rsif.2020.0480</a>.</p></li>
+<li><p>Cmprince.&nbsp;<em>Administrative divisions of Niger: Departments and Regions</em>. 29 October 2017. Wikimedia Commons. Accessed October 14, 2022. <a href="https://commons.wikimedia.org/wiki/File:Niger_administrative_divisions.svg" class="uri">https://commons.wikimedia.org/wiki/File:Niger_administrative_divisions.svg</a></p></li>
+<li><p>DeBruine, Lisa, and Dale Barr. 2022. <em>Chapter 3 Data Visualisation | Data Skills for Reproducible Research</em>. <a href="https://psyteachr.github.io/reprores-v3/ggplot.html" class="uri">https://psyteachr.github.io/reprores-v3/ggplot.html</a>.</p></li>
+<li><p>Franke, Michael. n.d. <em>6 Data Visualization | An Introduction to Data Analysis</em>. Accessed October 12, 2022. <a href="https://michael-franke.github.io/intro-data-analysis/Chap-02-02-visualization.html" class="uri">https://michael-franke.github.io/intro-data-analysis/Chap-02-02-visualization.html</a>.</p></li>
+<li><p>Geography Now, dir. 2019. <em>Geography Now! NIGER</em>. <a href="https://www.youtube.com/watch?v=AHeq99pojLo" class="uri">https://www.youtube.com/watch?v=AHeq99pojLo</a>.</p></li>
+<li><p>Giroux-Bougard, Xavier, Maxwell Farrell, Amanda Winegardner, Étienne Low-Decarie and Monica Granados. 2020. <em>Workshop 3: Introduction to Data Visualisation with Ggplot2</em>. <a href="http://r.qcbs.ca/workshop03/book-en/" class="uri">http://r.qcbs.ca/workshop03/book-en/</a>.</p></li>
+<li><p>Ismay, Chester, and Albert Y. Kim. 2022. <em>A ModernDive into R and the Tidyverse</em>. <a href="https://moderndive.com/" class="uri">https://moderndive.com/</a>.</p></li>
+<li><p>Kabacoff, Rob. 2020. <em>Data Visualization with R</em>. <a href="https://rkabacoff.github.io/datavis/" class="uri">https://rkabacoff.github.io/datavis/</a>.</p></li>
+<li><p>Lisa DeBruine. 2020. <em>Basic Plots</em>. <a href="https://www.youtube.com/watch?v=tOFQFPRgZ3M" class="uri">https://www.youtube.com/watch?v=tOFQFPRgZ3M</a>.</p></li>
+<li><p>Pius, Ewen Harrison and Riinu. n.d. <em>R for Health Data Science</em>. Accessed October 11, 2022. <a href="https://argoshare.is.ed.ac.uk/healthyr_book/" class="uri">https://argoshare.is.ed.ac.uk/healthyr_book/</a>.</p></li>
+<li><p>Prabhakaran, Selva. 2016. “How to Make Any Plot in Ggplot2? | Ggplot2 Tutorial.” 2016. <a href="http://r-statistics.co/ggplot2-Tutorial-With-R.html" class="uri">http://r-statistics.co/ggplot2-Tutorial-With-R.html</a>.</p></li>
+</ul>
+</section>
+<section id="solutions" class="level2" data-number="17.9">
+<h2 data-number="17.9" class="anchored" data-anchor-id="solutions"><span class="header-section-number">17.9</span> Solutions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_nigerm04_scatter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ggplot(data = nigerm04,
+             mapping = aes(x = week, 
+                           y = cases)) +
+      geom_point()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_nigerm04_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ggplot(data = nigerm04, 
+          mapping = aes(x = week, 
+                        y = cases)) + 
+     geom_col()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_nigerm04_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ggplot(data = nigerm04,
+         mapping = aes(x = week,
+                       y = cases,
+                       color = region)) + 
+    geom_line()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.SOLUTION_nigerm04_pinkbar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ggplot(data = nigerm04, 
+          mapping = aes(x = week, 
+                        y = cases)) +
+      geom_col(fill = "hotpink")</code></pre>
+</div>
+</div>
+<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution Share Alike</a> license. <a class="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">     <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./untangled_ls08_advanced_pivoting.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./data_on_display_ls02_scatter.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

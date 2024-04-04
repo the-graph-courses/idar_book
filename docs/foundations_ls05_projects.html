@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Data Analysis with R (IDAR) - 5&nbsp; RStudio projects</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundations_ls06_rmarkdown.html" rel="next">
+<link href="./foundations_ls04_data_dive_ebola_sierra_leone.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundations_ls01_setting_up.html">Foundations</a></li><li class="breadcrumb-item"><a href="./foundations_ls05_projects.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Data Analysis with R (IDAR)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls01_setting_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting up R and RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls02_using_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using RStudio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls03_coding_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Coding basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls05_projects.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls06_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls07_data_structures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundations_ls08_01_using_chatgpt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lesson Notes | Using ChatGPT for Data Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Manipulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls01_select_rename.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Selecting and renaming columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls02_filter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Filtering rows</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls03_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Mutating columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls04_conditional_mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conditional mutating</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls05_groupby_summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Grouping and summarizing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls06_group_by_other_verbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Grouped filter, mutate and arrange</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls07_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Pivoting data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./untangled_ls08_advanced_pivoting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Advanced pivoting</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Data Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls01_gg_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Intro to ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls02_scatter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Scatter plots and smoothing lines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls03_line_graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Lines, scales, and labels</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls04_histograms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Histograms with {ggplot2}</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_on_display_ls05_boxplots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Boxplots with {ggplot2}</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">5.1</span> Learning objectives</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">5.2</span> Introduction</a></li>
+  <li><a href="#creating-a-new-rstudio-project" id="toc-creating-a-new-rstudio-project" class="nav-link" data-scroll-target="#creating-a-new-rstudio-project"><span class="header-section-number">5.3</span> Creating a new RStudio Project</a>
+  <ul class="collapse">
+  <li><a href="#on-rstudio-cloud" id="toc-on-rstudio-cloud" class="nav-link" data-scroll-target="#on-rstudio-cloud"><span class="header-section-number">5.3.1</span> On RStudio Cloud</a></li>
+  <li><a href="#on-a-local-computer" id="toc-on-a-local-computer" class="nav-link" data-scroll-target="#on-a-local-computer"><span class="header-section-number">5.3.2</span> On a local computer</a></li>
+  </ul></li>
+  <li><a href="#creating-project-subfolders" id="toc-creating-project-subfolders" class="nav-link" data-scroll-target="#creating-project-subfolders"><span class="header-section-number">5.4</span> Creating Project subfolders</a></li>
+  <li><a href="#adding-a-dataset-to-the-data-folder" id="toc-adding-a-dataset-to-the-data-folder" class="nav-link" data-scroll-target="#adding-a-dataset-to-the-data-folder"><span class="header-section-number">5.5</span> Adding a dataset to the “data” folder</a>
+  <ul class="collapse">
+  <li><a href="#on-rstudio-cloud-1" id="toc-on-rstudio-cloud-1" class="nav-link" data-scroll-target="#on-rstudio-cloud-1"><span class="header-section-number">5.5.1</span> On RStudio Cloud</a></li>
+  <li><a href="#on-a-local-computer-1" id="toc-on-a-local-computer-1" class="nav-link" data-scroll-target="#on-a-local-computer-1"><span class="header-section-number">5.5.2</span> On a local computer</a></li>
+  </ul></li>
+  <li><a href="#creating-a-script-in-the-scripts-folder" id="toc-creating-a-script-in-the-scripts-folder" class="nav-link" data-scroll-target="#creating-a-script-in-the-scripts-folder"><span class="header-section-number">5.6</span> Creating a script in the “scripts” folder</a></li>
+  <li><a href="#importing-data-from-the-data-folder" id="toc-importing-data-from-the-data-folder" class="nav-link" data-scroll-target="#importing-data-from-the-data-folder"><span class="header-section-number">5.7</span> Importing data from the “data” folder</a>
+  <ul class="collapse">
+  <li><a href="#using-herehere" id="toc-using-herehere" class="nav-link" data-scroll-target="#using-herehere"><span class="header-section-number">5.7.1</span> Using <code>here::here()</code></a></li>
+  </ul></li>
+  <li><a href="#exporting-data-to-the-outputs-folder" id="toc-exporting-data-to-the-outputs-folder" class="nav-link" data-scroll-target="#exporting-data-to-the-outputs-folder"><span class="header-section-number">5.8</span> Exporting data to the “outputs” folder</a>
+  <ul class="collapse">
+  <li><a href="#overwriting-data" id="toc-overwriting-data" class="nav-link" data-scroll-target="#overwriting-data"><span class="header-section-number">5.8.1</span> Overwriting data</a></li>
+  </ul></li>
+  <li><a href="#exporting-plots-to-the-outputs-folder" id="toc-exporting-plots-to-the-outputs-folder" class="nav-link" data-scroll-target="#exporting-plots-to-the-outputs-folder"><span class="header-section-number">5.9</span> Exporting plots to the “outputs” folder</a></li>
+  <li><a href="#sharing-a-project" id="toc-sharing-a-project" class="nav-link" data-scroll-target="#sharing-a-project"><span class="header-section-number">5.10</span> Sharing a Project</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up"><span class="header-section-number">5.11</span> Wrapping up</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">RStudio projects</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="learning-objectives" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">5.1</span> Learning objectives</h2>
+<ol type="1">
+<li><p>You can set up an RStudio Project and create sub-directories for input data, scripts and analytic outputs.</p></li>
+<li><p>You can import and export data within an RStudio Project.</p></li>
+<li><p>You understand the difference between relative and absolute file paths.</p></li>
+<li><p>You recognize the value of Projects for organizing and sharing your analyses.</p></li>
+</ol>
+</section>
+<section id="introduction" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">5.2</span> Introduction</h2>
+<p>Previously, you walked through some of the essential steps of data analysis, from importing data to calculating basic statistics. But you skipped over one crucial step: setting up a data analysis <em>project</em>.</p>
+<p>Experienced data analysts keep all the files associated with a specific analysis—input data, R scripts and analytic outputs—together in a single folder. These folders are called <em>projects</em> (small p)<em>,</em> and RStudio has built-in support for them via RStudio <em>Projects</em> (capital P).</p>
+<p>In this lesson you will learn how to use these RStudio Projects to organize your data analysis coherently, and improve the reproducibility of your work. You will replicate some of the analysis you did in the last data dive lesson, but in the context of an RStudio Project.</p>
+<p>Let’s get started.</p>
+</section>
+<section id="creating-a-new-rstudio-project" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="creating-a-new-rstudio-project"><span class="header-section-number">5.3</span> Creating a new RStudio Project</h2>
+<p>Creating a new RStudio Project looks different if you are on a local computer and if you are on RStudio Cloud. Jump to the section that is relevant for you.</p>
+<section id="on-rstudio-cloud" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="on-rstudio-cloud"><span class="header-section-number">5.3.1</span> On RStudio Cloud</h3>
+<p>If you are using RStudio Cloud, you have probably <em>already</em> created a project, because you can’t do any analysis without projects.</p>
+<p>The steps are pretty simple: go to your Cloud homepage, <a href="https://rstudio.cloud/">rstudio.cloud</a>, and click on the “New Project” button.</p>
+<p><img src="images/new_project_rstudio_cloud.png" class="img-fluid" width="447"></p>
+<p>Name your Project something like <code>ebola_analysis</code> or <code>ebola_analysis_proj</code> if you already have a project named <code>ebola_analysis</code>.</p>
+<p><img src="images/name_project_rstudio_cloud.png" class="img-fluid" width="453"></p>
+<p>The RStudio Project you have now created is just a folder on a virtual computer, which has a .Rproj file within it (and maybe a .RHistory file). You should be able to see this .Rproj file in the Files pane of RStudio:</p>
+<p><img src="images/rstudio_project_files_pane.png" class="img-fluid" width="459"></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key Point">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Point
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The .RProj file is what turns a regular computer folder into an “RStudio Project”.</p>
+</div>
+</div>
+</section>
+<section id="on-a-local-computer" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="on-a-local-computer"><span class="header-section-number">5.3.2</span> On a local computer</h3>
+<p>If you are on a local computer, open RStudio, then on the RStudio menu, go to <code>File &gt; New Project</code>. Your options may look a little different from the screenshots below depending on your operating system.</p>
+<p><img src="images/new_project.png" class="img-fluid" width="250"></p>
+<p>Choose “New directory”</p>
+<p><img src="images/rstudio_project_1.png" class="img-fluid" width="376"></p>
+<p>Then choose “New Project”:</p>
+<p><img src="images/rstudio_project_2.png" class="img-fluid" width="379"></p>
+<p>You can call your Project something like “ebola_analysis” and make it a “subdirectory” of a folder that is easy to find, such as your desktop. (The phrase “Create project as subdirectory of” sounds scary, but it’s not; RStudio is simply asking: “where should I put the project folder”?)</p>
+<p><img src="images/rstudio_project_3.png" class="img-fluid" width="373"></p>
+<p>The RStudio Project you have created is just a folder with a .Rproj file within it (and maybe a .RHistory file). You should be able to see this .Rproj file in the Files pane of RStudio:</p>
+<p><img src="images/rstudio_project_files_pane.png" class="img-fluid" width="366"></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key Point">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Point
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Click on the .Rproj file to open your project</strong></p>
+<p>The .RProj file is what turns a regular computer folder into an “RStudio Project”.</p>
+<p>From now on, to open your project, you should double click on this .RProj file from your computer’s Finder/File Explorer.</p>
+<p>On Windows, here is an example of what a .Rproj file will look like from the File Explorer:</p>
+<p><img src="images/windows_open_project.png" class="img-fluid" style="width:30.0%"></p>
+<p>On macOS, here is an example of what a .Rproj file will look like from Finder:</p>
+<p><img src="images/mac_open_project.png" class="img-fluid" style="width:40.0%"></p>
+</div>
+</div>
+<p>Note also that there is a header at the top right of RStudio window that tells you which Project you currently have open. Clicking on this gives you some additional Project options. You can create a new project, close a project and open recent projects, among other options.</p>
+<p><img src="images/active_project_indicator.png" class="img-fluid" width="300"></p>
+</section>
+</section>
+<section id="creating-project-subfolders" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="creating-project-subfolders"><span class="header-section-number">5.4</span> Creating Project subfolders</h2>
+<p>Data analysis projects usually have at least three sub-folders: one for data, another for scripts, and a third for outputs, as seen below:</p>
+<p><img src="images/rstudio_project_structure.png" class="img-fluid" width="305"></p>
+<p>Let’s look at the sub-folders one by one:</p>
+<ul>
+<li><p><strong>data:</strong> This contains the source (raw) data files that you will use in the analysis. These could be CSV or Excel files, for example.</p></li>
+<li><p><strong>scripts:</strong> This sub-folder is where you keep your R scripts. You can also save RMarkdown files in this folder. (You will learn about RMarkdown files soon.)</p></li>
+<li><p><strong>outputs:</strong> Here, you save the outputs of your analysis, like plots and summary tables. These outputs should be <em>disposable</em> and <em>reproducible</em>. That is, you should be able to regenerate the outputs by running the code in your scripts. You will understand this better soon.</p></li>
+</ul>
+<hr>
+<p>Now go ahead and create these three sub-folders, “data”, “scripts” and “outputs”. within your RStudio Project folder. You should use the “New Folder” button on the RStudio Files pane to do this:</p>
+<p><img src="images/new_folder_icon.png" width="247" height="76"></p>
+</section>
+<section id="adding-a-dataset-to-the-data-folder" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="adding-a-dataset-to-the-data-folder"><span class="header-section-number">5.5</span> Adding a dataset to the “data” folder</h2>
+<p>Next, you should move the Ebola dataset you downloaded in the previous lesson to the newly-created “data” sub-folder (you can re-download that dataset at <a href="https://bit.ly/ebola-data" target="_blank">bit.ly/ebola-data</a> if you can’t find where you stored it).</p>
+<p>The procedure for moving this dataset to the “data” folder is different for RStudio Cloud users and those using a local computer. Jump to the section that is relevant for you.</p>
+<section id="on-rstudio-cloud-1" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="on-rstudio-cloud-1"><span class="header-section-number">5.5.1</span> On RStudio Cloud</h3>
+<p>If you are on RStudio Cloud, adding the dataset to your “data” folder is straightfoward. Simply navigate to the folder within the Files pane, then click the “Upload” button:</p>
+<p><img src="images/rstudio_cloud_upload_data.png" class="img-fluid" width="420"></p>
+<p>This will bring up a dialog box where you can select the file for upload.</p>
+</section>
+<section id="on-a-local-computer-1" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="on-a-local-computer-1"><span class="header-section-number">5.5.2</span> On a local computer</h3>
+<p>On a local computer, this step has to be done with your computer’s File Explorer/Finder.</p>
+<ul>
+<li><p>First, locate the Project folder with your computer’s File Explorer/Finder. If you’re having trouble locating this, RStudio can help: go to the “Files” tab, click on “More” (the gear icon), then click “Show Folder in New Window”.</p>
+<p><img src="images/show_folder_in_new_window.png" class="img-fluid" width="276"></p>
+<p>This will bring you to the Project folder in your computer’s File Explorer/Finder.</p></li>
+<li><p>Now, move the Ebola dataset you downloaded in the previous lesson to the newly-created “data” sub-folder.</p>
+<p>Here is what moving the file might look like on macOS:</p>
+<p><img src="images/drag_from_downloads_to_data.png" class="img-fluid" width="498"></p></li>
+</ul>
+</section>
+</section>
+<section id="creating-a-script-in-the-scripts-folder" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="creating-a-script-in-the-scripts-folder"><span class="header-section-number">5.6</span> Creating a script in the “scripts” folder</h2>
+<p>Next, create and save a new R script within the “scripts” folder. You can call this “main_analysis” or something similar. To create a new R script within a folder, first navigate to that folder in the Files pane, then click the “New Blank File” button and select “R script” in the dropdown:</p>
+<p><img src="images/rstudio_new_script.png" class="img-fluid" width="504"></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that this is different from what you have done so far when creating a new script (before, you used the menu option, <code>File &gt; New File &gt; New Script</code>). The old way is still valid; but this “New Blank File” button will probably be faster for you.</p>
+</div>
+</div>
+<hr>
+<p>Great work so far! Now your Project folder should have the structure shown below, with the “ebola_sierra_leone.csv” dataset in the “data” folder and the “main_analysis.R” script (still empty) in the “scripts” folder:</p>
+<p><img src="images/project_folder_structure.png" class="img-fluid" width="361"></p>
+<p>This is a process you should go through at the start of every data analysis project: set up an RStudio Project, create the needed sub-folders, and put your datasets and scripts in the appropriate sub-folders. It can be a bit painful, but it will pay off in the long run.</p>
+<hr>
+<p>The rest of this lesson will teach you how to conduct your analysis in the context of this folder setup. At the end, you will have an overall flow of data and outputs that resembles the diagram below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/project_folder_structure_flow.png" class="img-fluid figure-img" width="544"></p>
+<figcaption class="figure-caption">Figure: Data flow in an R project. Scripts in the “scripts” folder import data from “data” folder and export data and plots to the “outputs” folder</figcaption>
+</figure>
+</div>
+<p>You should refer back to this diagram as you proceed through the sections below to help orient yourself.</p>
+</section>
+<section id="importing-data-from-the-data-folder" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="importing-data-from-the-data-folder"><span class="header-section-number">5.7</span> Importing data from the “data” folder</h2>
+<p>We will use the code snippet below to demonstrate the flow of data through a Project. Copy and paste this snippet into your “main_analysis.R” script (but don’t run it yet). The code replicates parts of the analysis from the data dive lesson.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Ebola Sierra Leone analysis</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## John Sample-Name Doe</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 2024-01-01</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages ----</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  tidyverse,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  janitor,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  inspectdf,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  here <span class="co"># new package we will use soon</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Load data ----</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">""</span>) <span class="co"># DATA PENDING! WE WILL UPDATE THIS BELOW.</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Cases by district ----</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>district_tab <span class="ot">&lt;-</span> <span class="fu">tabyl</span>(ebola_sierra_leone, district)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>district_tab</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize categorical variables ----</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>categ_vars_plot<span class="ot">&lt;-</span> <span class="fu">show_plot</span>(<span class="fu">inspect_cat</span>(ebola_sierra_leone))</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>categ_vars_plot</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize numeric variables ----</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>num_vars_plot <span class="ot">&lt;-</span> <span class="fu">show_plot</span>(<span class="fu">inspect_num</span>(ebola_sierra_leone))</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>num_vars_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>First run the “Load packages” section to install and/or load any needed packages.</p>
+<p>Then proceed to the “Load data” section, which looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load data ----</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">""</span>) <span class="co"># DATA PENDING! WE WILL UPDATE THIS BELOW.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here you want to import the Ebola dataset that you previously placed inside the Project’s “data” folder. To do this, you need to supply the file path of that dataset as the first argument of <code>read_csv()</code>.</p>
+<p>Because you are using an RStudio Project, this path can be obtained very easily: place your cursor inside the quotation marks within the <code>read_csv()</code> function, and press the <code>Tab</code> key on your keyboard. You should see a list of the sub-folders available in your Project. Something like this:</p>
+<p><img src="images/rstudio_find_file_dropdown.png" class="img-fluid" width="558"></p>
+<p>Click on the “data” folder, then press <code>Tab</code> again. Since you only have one file in the “data” folder, RStudio should automatically fill in it’s name. You should now see:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/ebola_sierra_leone.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wonderful! Run this line of code now to import the data.</p>
+<p>If this is successful, you should see the data appear in the Environment tab of RStudio:</p>
+<p><img src="images/environment_with_ebola_data.png" class="img-fluid" width="450"></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key Point">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Point
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Relative paths</strong></p>
+<p>The path you have used here, “data/ebola_sierra_leone.csv”, is called a <em>relative</em> path, because it is relative to the <em>root</em> (or the <em>base</em>) of your Project.</p>
+<p>How does R know where the root of your Project is? That’s where the .RProj file comes in. This file, which lives in the “ebola_analysis” folder tells R “here! Here! I am in the ‘ebola_analysis’ folder so this must be the root!”. Thus, you only need to specify path components that are <em>deeper</em> than this root.</p>
+<p>RStudio Projects, and the relative paths they allow you to use, are important for reproducibility. Projects that use relative paths can be run on anyone’s computer, and the importing and exporting code should work without any hiccups. This means that you can send someone an RStudio Project folder and the code should run on their machine just as it ran on yours!</p>
+<p>This would not be the case if you were to use an <em>absolute</em> path, something like “~/Desktop/my_data_analysis/learning_r/ebola_sierra_leone.csv”, in your script. Absolute paths give the full address of a file, and will not usually work on someone else’s computer, where files and folders will be arranged differently.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="RStudio Cloud">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+RStudio Cloud
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that if you are using RStudio Cloud, you are <em>forced</em> to use relative paths, because you cannot access the general file system of the virtual computer; you can only work within specific Project folders.</p>
+</div>
+</div>
+<section id="using-herehere" class="level3" data-number="5.7.1">
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="using-herehere"><span class="header-section-number">5.7.1</span> Using <code>here::here()</code></h3>
+<p>As you have now seen, RStudio Projects simplify the data import process and improve the reproducibility of your analysis, primarily because they allow you to use relative paths.</p>
+<p>But there is one more step we recommend when using relative paths: rather than leave your path <em>naked</em>, wrap it in the <code>here()</code> function from the {here} package.</p>
+<p>So, in the data import section of your script, change <code>read_csv()</code>’s input from <code>"data/ebola_sierra_leone.csv"</code> to <code>here("data/ebola_sierra_leone.csv")</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/ebola_sierra_leone.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What is the point of wrapping the path in <code>here()</code>? Well, technically, this is no real point in doing this in an <em>R</em> script; the importing code works fine without it. But it <em>will</em> be necessary when you start using <em>RMarkdown</em> scripts (which you will soon be introduced to), because paths not wrapped in <code>here()</code> are problematic in the RMarkdown context.</p>
+<p>So to keep things consistent, we always recommend you use <code>here()</code> when pointing to paths, whether in an R script or an RMarkdown script</p>
+</section>
+</section>
+<section id="exporting-data-to-the-outputs-folder" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="exporting-data-to-the-outputs-folder"><span class="header-section-number">5.8</span> Exporting data to the “outputs” folder</h2>
+<p>Importing data is not the only benefit of RStudio Projects; data export is also streamlined when you use Projects. Let’s look at this now.</p>
+<p>In the “Cases by district” section of your script, you should have:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Cases by district ----</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>district_tab <span class="ot">&lt;-</span> <span class="fu">tabyl</span>(ebola_sierra_leone, district)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>district_tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Run this code now; you should get the following tabular output:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      district   n percent
+            Bo   2   0.010
+      Kailahun 155   0.775
+        Kambia   1   0.005
+        Kenema  34   0.170
+          Kono   2   0.010
+     Port Loko   2   0.010
+ Western Urban   4   0.020</code></pre>
+</div>
+</div>
+<p>Now, imagine that you want to export this table as a CSV. It would be nice if there was a specific folder designated for such exports. Well, there is! It’s the “outputs” folder you created earlier. Let’s export your table there now. Type out the code below (but don’t run it yet):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> district_tab, <span class="at">file =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With the <code>write_csv()</code> function, you are going to “write” (or “save”) the <code>district_tab</code> table as a CSV file.</p>
+<p>The <code>x</code> argument of <code>write_csv()</code> takes in the object to be saved (in this case <code>district_tab</code>). And the <code>file</code> argument takes in the target file path. This target file path can be a simple relative path: “outputs/district_table.csv”. (And, as mentioned before, we should wrap the path in <code>here()</code>.) Type this up and run it now:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> district_tab, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"outputs/district_table.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The path “outputs/district_table.csv” tells <code>write_csv()</code> to save the plot as a CSV file named “districts_table” in the “outputs” folder of the Project.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Side Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can replace “district_table.csv” with any other appropriate name, for example “freq table across districts.csv”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> district_tab, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"outputs/freq table across districts.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<hr>
+<p>Great work! Now, if you go to the Files tab and navigate to the outputs folder of your Project, you should see this newly created file:</p>
+<p><img src="images/ebola_data_in_folder.png" class="img-fluid" width="450"></p>
+<p>You can click on the file to view it within RStudio as a raw CSV:</p>
+<p><img src="images/view_file_as_csv.png" class="img-fluid" width="450"></p>
+<p>This should bring up an RStudio viewer window:</p>
+<p><img src="images/district_table_as_csv.png" class="img-fluid" width="246"></p>
+<p>If you instead want to view the CSV in Microsoft Excel, you can navigate to the same file in your computer’s Finder/File Explorer and double-click on it from there.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To locate your Project folder in your computer’s Finder/File Explorer, go the “Files” tab, click on the gear icon, then click “Show Folder in New Window”.</p>
+<p><img src="images/show_folder_in_new_window.png" class="img-fluid" width="289"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="RStudio Cloud">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+RStudio Cloud
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you are on RStudio cloud, then you won’t be able to view the CSV in Microsoft Excel until you have “exported” it. Use the “Export” menu option in the Files tab. If this is not immediately visible, click on the gear icon to bring up “More” options, then scroll through to find the “Export” option.</p>
+</div>
+</div>
+<section id="overwriting-data" class="level3" data-number="5.8.1">
+<h3 data-number="5.8.1" class="anchored" data-anchor-id="overwriting-data"><span class="header-section-number">5.8.1</span> Overwriting data</h3>
+<p>If you need to update the output CSV, you can simply rerun the <code>write_csv()</code> function with the updated data object.</p>
+<p>To test this, replace the “Cases by district” section of your script with the following code. It uses the <code>arrange()</code> function to arrange the table in order of the number of cases, <code>n</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Cases by district ----</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>district_tab <span class="ot">&lt;-</span> <span class="fu">tabyl</span>(ebola_sierra_leone, district)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>district_tab_arranged <span class="ot">&lt;-</span> <span class="fu">arrange</span>(district_tab, <span class="sc">-</span>n)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>district_tab_arranged</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>( <code>-n</code> means “sort in descending order of the <code>n</code> variable”; we will introduce you to the arrange function properly later on.)</p>
+<p>The output should be:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      district   n percent
+      Kailahun 155   0.775
+        Kenema  34   0.170
+ Western Urban   4   0.020
+            Bo   2   0.010
+          Kono   2   0.010
+     Port Loko   2   0.010
+        Kambia   1   0.005</code></pre>
+</div>
+</div>
+<p>You can now overwrite the old “district_table.csv” file by re-running the write_csv function with the <code>district_tab</code> object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> district_tab_arranged, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"outputs/district_table.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To verify that the dataset was actually updated, observe the “Modified” time stamp in the RStudio Files pane:</p>
+<p><img src="images/last_modified_time.png" class="img-fluid" width="436"></p>
+</section>
+</section>
+<section id="exporting-plots-to-the-outputs-folder" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="exporting-plots-to-the-outputs-folder"><span class="header-section-number">5.9</span> Exporting plots to the “outputs” folder</h2>
+<p>Finally, let’s look at plot exporting in the context of an RStudio Project.</p>
+<p>In the “Visualize categorical variables” section of your script, you should have:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize categorical variables ----</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>categ_vars_plot<span class="ot">&lt;-</span> <span class="fu">show_plot</span>(<span class="fu">inspect_cat</span>(ebola_sierra_leone))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>categ_vars_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Running these code lines should give you this output:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="foundations_ls05_projects_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Below these lines, type up the <code>ggsave()</code> command below (but don’t run it yet):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">""</span>, <span class="at">plot =</span> categ_vars_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This command uses the <code>ggsave()</code> function to export the <code>categ_vars_plot</code> figure. The <code>plot</code> argument of <code>ggsave()</code> takes in the object to be saved (in this case <code>categ_vars_plot</code>), and the <code>filename</code> argument takes in the target file path for the plot.</p>
+<p>As you saw when exporting data, this target file path is quite simple because you are working in an RStudio Project. In this case, you have:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"outputs/categorical_plot.png"</span>, <span class="at">plot =</span> categ_vars_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Run this <code>ggsave()</code> command now. The path “outputs/categorical_plot.png” tells <code>ggsave()</code> to save the plot as a PNG file named “categorical_plot” in the “outputs” folder of the Project.</p>
+<p>To see this newly-saved plot, navigate to the Files tab. You can click on it to open it with your computer’s default image viewer:</p>
+<p><img src="images/click_on_plot_to_open.png" class="img-fluid" width="436"></p>
+<p>Also note that the the <code>ggsave()</code> function lets you save plots to multiple image formats. For example, you could instead write:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"outputs/categorical_plot.pdf"</span>, <span class="at">plot =</span> categ_vars_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>to save the plot as a PDF. Run <code>?ggsave</code> to see what other formats are possible.</p>
+<hr>
+<p>Now let’s export the second plot, the numerical summary. In the section of your script called “Visualize numeric variables”, you should have:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize numeric variables ----</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>num_vars_plot <span class="ot">&lt;-</span> <span class="fu">show_plot</span>(<span class="fu">inspect_num</span>(ebola_sierra_leone))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>num_vars_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Running these code lines should give you this output:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="foundations_ls05_projects_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To export this plot, type up and run the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r tgc-code-block code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"outputs/numeric_plot.png"</span>, <span class="at">plot =</span> num_vars_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wonderful!</p>
+</section>
+<section id="sharing-a-project" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="sharing-a-project"><span class="header-section-number">5.10</span> Sharing a Project</h2>
+<p>Projects are also great for sharing your analysis with collaborators.</p>
+<p>You can zip up your Project folder and send it to a colleague through email or through a file sharing service like Dropbox. The colleague can then unzip the folder, click on the .Rproj file to open the Project in RStudio, and re-do and edit all your analysis steps.</p>
+<p>This is a decent setup, but sending projects back and forth may not be ideal for long-term collaboration. So experienced analysts use a technology called <em>git</em> to collaborate on projects. But this topic is a bit too advanced for this course; we will cover it in detail in a future course. If you are impatient, you can check out this book chapter: <a href="https://intro2r.com/github_r.html" class="uri">https://intro2r.com/github_r.html</a></p>
+</section>
+<section id="wrapping-up" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="wrapping-up"><span class="header-section-number">5.11</span> Wrapping up</h2>
+<p>Congratulations! You now know how to set up and use RStudio Projects!</p>
+<p>Hopefully you see the value of organizing your analysis scripts, data and outputs in this way. Projects are a coherent way to structure your analyses, and make it easy to revisit, revise and share your work. They will be the foundation for much of your work as a data analyst going forward.</p>
+<p>That’s it for now. See you in the next lesson.</p>
+<!-- Only team members who contributed "substantially" to a specific lesson should be listed here -->
+<!-- See https://tinyurl.com/icjme-authorship for notes on "substantial" contribution-->
+</section>
+<section id="references" class="level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered anchored" data-anchor-id="references">References</h2>
+<p>Some material in this lesson was adapted from the following sources:</p>
+<ul>
+<li>Wickham, H., &amp; Grolemund, G. (n.d.). <em>R for data science</em>. 8 Workflow: projects | R for Data Science. Retrieved May 31, 2022, from <a href="https://r4ds.had.co.nz/workflow-projects.html" class="uri">https://r4ds.had.co.nz/workflow-projects.html</a></li>
+</ul>
+<!-- (Chicago format. You can use https://www.citationmachine.net) -->
+<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution Share Alike</a> license. <a class="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">     <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundations_ls04_data_dive_ebola_sierra_leone.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data dive: Ebola in Sierra Leone</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundations_ls06_rmarkdown.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R Markdown</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
