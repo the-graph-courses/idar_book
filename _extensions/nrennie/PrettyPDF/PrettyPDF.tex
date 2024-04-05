@@ -9,28 +9,36 @@
 \usepackage{titlesec}
 
 
-%% Set page size with a wider right margin
-\geometry{a4paper, total={170mm,257mm}, left=15mm, top=20mm, bottom=25mm, right=25mm}
+% %% Set page size with a wider right margin
+\geometry{a4paper, total={170mm,257mm}}
 
 %% Let's define some colours
 \definecolor{light}{HTML}{edf7fa}
 \definecolor{highlight}{HTML}{2c6d7d}
 \definecolor{dark}{HTML}{336882}
 
-%% Let's add the border on the right hand side 
-\AddToShipoutPicture{% 
-    \AtPageLowerLeft{% 
-        \put(\LenToUnit{\dimexpr\paperwidth-1.75cm},0){% 
-            \color{light}\rule{3cm}{\LenToUnit\paperheight}%
-          }%
-     }%
-     % logo
-    % \AtPageLowerLeft{% start the bar at the bottom right of the page
-    %     \put(\LenToUnit{\dimexpr\paperwidth-1.5cm},27.2cm){% move it to the top right
-    %         \color{light}\includegraphics[width=1.2cm]{_extensions/nrennie/PrettyPDF/logo.png}
-    %       }%
-    %  }%
-}
+% 
+% % Custom command for logo
+% \newcommand{\logoinclude}[2][]{%
+% \includegraphics[#1]{#2}%
+% }
+% 
+% % Let's add the border on the right-hand side
+% \AddToShipoutPicture{%
+% \AtPageLowerLeft{%
+% \put(\LenToUnit{\dimexpr\paperwidth-1.75cm},0){%
+% \color{light}\rule{3cm}{\LenToUnit{\paperheight}}%
+% }%
+% }%
+% % logo
+% \AtPageLowerLeft{% start the bar at the bottom right of the page
+% \put(\LenToUnit{\dimexpr\paperwidth-1cm},27.2cm){% move it to the top right
+% \logoinclude[width=1.2cm]{_extensions/nrennie/PrettyPDF/logo.png}%
+% }%
+% }%
+% }
+
+
 
 %% Style the page number
 \fancypagestyle{mystyle}{

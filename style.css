@@ -9,7 +9,6 @@ img {
 }
 
 
-
 /*-------- Background color & body font --------*/
 body {
   color: black;
@@ -18,4 +17,10 @@ body {
 
 #quarto-sidebar {
   background-color: #F9FAFD;
+}
+
+
+footer {
+  color: black;
+  background-color: #F9FAFD; 
 }
