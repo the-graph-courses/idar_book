@@ -169,11 +169,6 @@ You should now have access to R and RStudio, so you're all set to begin the jour
 
 
 ```{r echo = F, message = F}
-tgc_contributors_list(ids = c("kendavidn", 
-                              "ondieki", 
-                              "michals", 
-                              "elmuko",
-                              "olivia"))
 ```
 
 ## References {.unlisted .unnumbered}

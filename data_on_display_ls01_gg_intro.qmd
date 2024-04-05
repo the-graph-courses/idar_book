@@ -359,7 +359,7 @@ Again, the rest of the code is still the same - we just changed the key word of 
 
 Notice that the y-axis has been rescaled. The height of each bar represents the cumulative number of weekly cases, i.e, the total number of cases reported from all eight regions that week, rather than showing 8 separate data points for each region.
 
-::: {.callout-caution title='Error'}
+::: {.callout-caution title='Caution'}
 Not all plot types are interchangeable. Using a `geom_*` function that is not compatible with the variables you defined in `aes()` will give you an error. For example, let's replace `geom_point()` with `geom_histogram()` instead:
 
 ```{r eval=FALSE}

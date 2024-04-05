@@ -957,7 +957,6 @@ With your new knowledge of R objects, R functions and the packages that function
 
 
 
-`r tgc_contributors_list(ids = c("kendavidn", "ondieki", "olivia"))`
 
 
 

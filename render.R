@@ -36,14 +36,17 @@ convert_callouts <- function(line) {
 
 remove_contributors <- function(line) {
   purrr::keep(line, ~!str_detect(., "(#|##) Contributors")) %>%
-    purrr::keep(~!str_detect(., "team members contributed to this lesson"))
+    purrr::keep(~!str_detect(., "team members contributed to this lesson")) %>% 
+    purrr::keep(~!str_detect(., "tgc_contributors_list"))
+  
 }
 
 
 # Function to replace heading like "Lesson notes | Coding basics" with "Coding basics"
 replace_title <- function(line) {
   line %>% 
-    str_remove_all("Lesson notes \\| ")
+    str_remove_all("Lesson notes \\| ") %>% 
+    str_remove_all("Lesson Notes \\| ")
 }
 
 ### Import R foundations things ----

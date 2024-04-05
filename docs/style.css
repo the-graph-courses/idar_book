@@ -1,0 +1,21 @@
+
+img {
+  
+  /* ----------image borders ------------ */
+
+  border:3px solid #32849425;
+  border-style: solid;
+
+}
+
+
+
+/*-------- Background color & body font --------*/
+body {
+  color: black;
+  background-color: #F9FAFD; 
+}
+
+#quarto-sidebar {
+  background-color: #F9FAFD;
+}

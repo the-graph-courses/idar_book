@@ -1,5 +1,5 @@
 ---
-title: 'Using ChatGPT for Data Analysis'
+title: 'Lesson Notes | Using ChatGPT for Data Analysis'
 output:
   html_document:
     number_sections: true
@@ -17,12 +17,12 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set()
 
-## Load necessary packages 
+# Load necessary packages 
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(tidyverse)
 ```
 
-## Introduction
+# Introduction
 
 ChatGPT, developed by OpenAI, is a language model that can be used to assist data analysts in various tasks. It can:
 
@@ -38,7 +38,7 @@ ChatGPT, developed by OpenAI, is a language model that can be used to assist dat
 
 Let's get started and see how it works!
 
-## Models
+# Models
 
 As at our last check, ChatGPT comes in two main versions, both available at [chat.openai.com](https://chat.openai.com):
 
@@ -52,7 +52,7 @@ Both models have their advantages and use cases. GPT-3.5 is suitable for simple 
 Bing's AI chat service also uses GPT-4 under the hood (last checked in September 2023), so you can go to Bing if you want GPT-4 access without paying. The Bing interface is a bit clunky for data analysis tasks though, so if you can afford to pay for GPT-4, we highly recommend it.
 
 
-## 1. Explain Unfamiliar Code
+# 1. Explain Unfamiliar Code
 
 ChatGPT can explain unfamiliar code. For instance, if you encounter the following code:
 
@@ -81,7 +81,7 @@ So, in summary, the code takes the `trees` data frame, selects only the "Height"
 :::
 
 
-## 2. Debug Simple Errors
+# 2. Debug Simple Errors
 
 ChatGPT can assist in debugging straightforward errors. You can ask ChatGPT, "Please help me understand why the code is not working," then paste in both your code and the error message.
 
@@ -123,7 +123,7 @@ With this corrected code, it should work as expected and summarize the `data_sub
 
 :::
 
-## 3. Add Code Comments
+# 3. Add Code Comments
 
 ChatGPT can also assist in adding comments to your code. For instance, you can say, "Add comments to the following code," then paste in your code.
 
@@ -143,17 +143,17 @@ ChatGPT3.5 response:
 Certainly! Here's the code with comments added to explain each step:
 
 ```{r eval = F}
-## Select the 'Height' column from the 'trees' dataset 
-## and create a new dataset 'data_subset_2'
+# Select the 'Height' column from the 'trees' dataset 
+# and create a new dataset 'data_subset_2'
 data_subset_2 <- 
   trees %>%
   select(Height) %>%
   
-## Filter 'data_subset_2' to retain only rows where 'Height' is greater than 80
+# Filter 'data_subset_2' to retain only rows where 'Height' is greater than 80
   filter(Height > 80)
 
-## Display a summary of 'data_subset_2'
-## including statistics like mean, median, and quartiles
+# Display a summary of 'data_subset_2'
+# including statistics like mean, median, and quartiles
 summary(data_subset_2)
 ```
 
@@ -161,7 +161,7 @@ These comments provide a clear explanation of what each line of code does, makin
 
 :::
 
-## 4. Reformat Code
+# 4. Reformat Code
 
 ChatGPT can help in reformatting code. For example, consider the following code:
 
@@ -188,7 +188,7 @@ I've added line breaks and indentation to make the code more readable and visual
 
 :::
 
-## 5. Make Plots
+# 5. Make Plots
 
 ChatGPT can assist in creating plots with ggplot2. For instance, you might ask:
 
@@ -219,10 +219,10 @@ library(ggplot2)
 3. Create the scatter plot using the `ggplot()` function and the `geom_point()` function to add the points:
 
 ```{r eval = F}
-## Assuming you have already loaded the dataset
-## If not, you can load it using data(trees)
+# Assuming you have already loaded the dataset
+# If not, you can load it using data(trees)
 
-## Create the scatter plot
+# Create the scatter plot
 ggplot(trees, aes(x = Girth, y = Height)) +
   geom_point() +
   labs(x = "Girth", y = "Height") +
@@ -254,18 +254,18 @@ scatter_plot <- ggplot(trees, aes(x = Girth, y = Height)) +
   ggtitle("Scatter Plot of Height vs Girth") +
   theme(plot.title = element_text(hjust = 0.5))
 
-## Calculate mean values
+# Calculate mean values
 mean_girth <- mean(trees$Girth)
 mean_height <- mean(trees$Height)
 
-## Add mean points
+# Add mean points
 scatter_plot <- scatter_plot +
   geom_point(data = data.frame(Girth = mean_girth, Height = mean_height), 
              color = "red", size = 3) +
   annotate("text", x = mean_girth, y = mean_height, label = "Mean", 
            color = "red", vjust = -1)
 
-## Print the scatter plot
+# Print the scatter plot
 print(scatter_plot)
 ```
 
@@ -281,17 +281,17 @@ Here is GPT4's response:
 library(tidyverse)
 library(scales)
 
-## Calculate means
+# Calculate means
 mean_girth <- mean(trees$Girth)
 mean_height <- mean(trees$Height)
 
-## Fit a linear model to calculate the equation of the line
+# Fit a linear model to calculate the equation of the line
 fit <- lm(Height ~ Girth, data = trees)
 slope <- coef(fit)[2]
 intercept <- coef(fit)[1]
 eq <- paste("y = ", round(slope, 2), "x + ", round(intercept, 2))
 
-## Generate the plot
+# Generate the plot
 p <- ggplot(trees, aes(x = Girth, y = Height)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE, color = "red", 
@@ -313,7 +313,7 @@ p
 
 With GPT-4, you get exactly what you want, including the equation in the caption at the bottom right of the plot.
 
-## 6. Simple Data Wrangling
+# 6. Simple Data Wrangling
 
 ChatGPT can help with simple data wrangling tasks. For instance:
 
@@ -331,7 +331,7 @@ ChatGPT3.5 gives us this code:
 
 ```{r eval = F}
 
-## Use summarise_all to compute mean and median for each column
+# Use summarise_all to compute mean and median for each column
 result <- trees %>%
   summarise_all(
     .funs = list(mean = mean, median = median),
@@ -344,7 +344,7 @@ print(result)
 
 :::
 
-## 7. Translate Language
+# 7. Translate Language
 
 ChatGPT can help translate text in your tutorial or documentation from one language to another, while preserving the code. If you use other translators, they often translate your code as well, which is undesirable.
 
@@ -381,7 +381,7 @@ library(dplyr)
 
 You can verify the validity of this translation by translating it back into English in a different session.
 
-## 8. Translate Programming Languages
+# 8. Translate Programming Languages
 
 ChatGPT can help translate between different programming languages. For example, you can say:
 
@@ -398,7 +398,7 @@ ChatGPT 3.5 response:
 In R, you can achieve the same recoding of the "age" variable into an "agegroup" variable using the `cut()` function. Here's the equivalent R code:
 
 ```{r eval = F}
-## Assuming you have a dataframe called "data" with an "age" variable
+# Assuming you have a dataframe called "data" with an "age" variable
 data$agegroup <- cut(data$age, breaks = c(18, 35, 50), labels = c(1, 2), 
                      include.lowest = TRUE)
 ```
@@ -415,7 +415,7 @@ This code will create a new "agegroup" variable in your dataframe, similar to wh
 
 :::
 
-## 9. Fluid Find and Replace
+# 9. Fluid Find and Replace
 
 Lastly, ChatGPT can help you refactor your code in situations where a simple find and replace with your IDE would be time-consuming. For example, if "Afghanistan" is written in three different ways (with a capital "A", in lowercase letters, and as a country code inthe title, "AF"), you could replace all instances with "Ghana". 
 
@@ -501,7 +501,7 @@ This refactored code now refers to "Ghana" instead of "Afghanistan".
 
 :::
 
-## Limitations of ChatGPT
+# Limitations of ChatGPT
 
 While ChatGPT is a powerful tool for data analysts, it has some limitations:
 

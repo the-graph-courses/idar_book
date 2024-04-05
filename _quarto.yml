@@ -7,6 +7,8 @@ book:
   subtitle: "With Examples from Public Health and Epidemiology"
   author: "The GRAPH Courses"
   cover-image: cover.jpg
+  favicon: logo.png
+  repo-url: https://github.com/the-graph-courses/idar_book
   chapters:
     - index.qmd
     - part: "Foundations"
@@ -45,8 +47,13 @@ format:
     keep-tex: true
     toc: true
   html:
-    theme: cosmo
+    theme: 
+      - cosmo
+      # - custom.scss
+    css: style.css
   pdf:
     documentclass: scrreprt
 
 editor: source
+
+

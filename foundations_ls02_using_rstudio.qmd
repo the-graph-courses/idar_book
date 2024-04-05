@@ -377,7 +377,6 @@ See you in the next lesson!
 
 
 
-`r tgc_contributors_list(ids = c("kendavidn", "ondieki"))`
 
 ## References
 

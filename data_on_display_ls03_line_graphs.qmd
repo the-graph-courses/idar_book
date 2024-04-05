@@ -947,7 +947,6 @@ Hope you found this lesson helpful!
 
 
 
-`r tgc_contributors_list(ids = c("joy", "admin"))`
 
 ## References {.unlisted .unnumbered}
 
