@@ -105,13 +105,23 @@ Next, use the `p_load()` function from {pacman} to load the packages you will be
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(
   tidyverse, # meta-package
-  inspectdf,
   plotly,
   janitor,
   visdat,
   esquisse
 )
+pacman::p_load_current_gh("the-graph-courses/inspectdf")
 ```
+
+::: {.callout-warning title='⚠️ NOTICE ⚠️'}
+There's currently an issue with the `inspectdf` package on CRAN. That's why, instead of including `inspectdf` in the regular `p_load()` command above, we load it separately with:
+
+```{r eval = F}
+pacman::p_load_current_gh("the-graph-courses/inspectdf")
+```
+
+This installs the working version directly from GitHub.
+:::
 
 ::: {.callout-note title='Reminder'}
 Remember that the *full signifier* of a function includes both the package name and the function name, `package::function()`. This full signifier is handy if you want to use a function before you have loaded its source package. This is the case in the code chunk above: we want use `p_load()` from {pacman} without formally loading the {pacman} package, so we type `pacman::p_load()`
@@ -191,11 +201,11 @@ Your R script should look similar to this:
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(
   tidyverse,
-  inspectdf,
   plotly,
   janitor,
   visdat
 )
+pacman::p_load_current_gh("the-graph-courses/inspectdf")
 
 ## Load data ----
 ebola_sierra_leone <- read_csv("~/Downloads/ebola_sierra_leone.csv")

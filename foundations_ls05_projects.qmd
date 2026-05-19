@@ -18,7 +18,8 @@ editor_options:
 ```{r, include = FALSE, warning = FALSE, message = FALSE}
 ## Load packages 
 if(!require(pacman)) install.packages("pacman")
-pacman::p_load(tidyverse, knitr, here, janitor, inspectdf)
+pacman::p_load(tidyverse, knitr, here, janitor)
+pacman::p_load_current_gh("the-graph-courses/inspectdf")
 
 ## Source functions 
 source(here("global/functions/misc_functions.R"))
@@ -207,9 +208,9 @@ if(!require(pacman)) install.packages("pacman")
 pacman::p_load(
   tidyverse,
   janitor,
-  inspectdf,
   here # new package we will use soon
 )
+pacman::p_load_current_gh("the-graph-courses/inspectdf")
 
 
 ## Load data ----
@@ -227,6 +228,16 @@ categ_vars_plot
 num_vars_plot <- show_plot(inspect_num(ebola_sierra_leone))
 num_vars_plot
 ```
+
+::: {.callout-warning title='⚠️ NOTICE ⚠️'}
+There's currently an issue with the `inspectdf` package on CRAN. That's why, instead of including `inspectdf` in the regular `p_load()` command above, we load it separately with:
+
+```{r eval = F}
+pacman::p_load_current_gh("the-graph-courses/inspectdf")
+```
+
+This installs the working version directly from GitHub.
+:::
 
 First run the "Load packages" section to install and/or load any needed packages.
 
